@@ -2,6 +2,7 @@
 title:  "Welcome to Data Imaginist!"
 description: "This is the opening post of my site, where I denounce any attempt at perfection."
 date: '2016-09-18'
+slug: "wellcome-to-data-imaginist"
 ---
 
 I have tried - real hard (really) - to get this site going for some time now. It probably all boils down to not having a lot of time and having way to many projects, which I think we can all relate to. I'd rather spend time developing a tool than telling the world about it (safe for 140 character advertisements on Twitter). Still, there is something alluring about having a bit more room to explain yourself and make your points and I have always been impressed by the likes of [David Robinson](http://varianceexplained.org) and [Oliver Keyes](https://ironholds.org) and how they simply just throw inspiring prose at you, so the wish to try it out for myself has persisted.
