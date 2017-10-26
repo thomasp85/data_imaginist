@@ -6,7 +6,7 @@ large_thumb: no
 tags:
 - R
 - ggplot2
-categories: R
+categories: [R]
 ---
 
 ```{r, include=FALSE}
