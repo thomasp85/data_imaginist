@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "https://tutor-church-15580.netlify.com"
+baseurl = "https://tutor-church-15580.netlify.com/"
 # HTML Language Code Reference, such as en, zh-cn
 languageCode = "en"
 title = "Data Imaginist"
