@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "http://www.data-imaginist.com/"
+baseurl = "https://tutor-church-15580.netlify.com"
 # HTML Language Code Reference, such as en, zh-cn
 languageCode = "en"
 title = "Data Imaginist"
@@ -76,6 +76,6 @@ enableEmoji = true
 
 # Add additional social link entries underneath
 [social]
-	facebook-square = "your_facebook_link"
-  twitter-square = "thomasp85"
-  github-square = "thomasp85"
+  twitter-square = "https://twitter.com/thomasp85"
+  github-square = "https://github.com/thomasp85"
+  linkedin-square = "https://www.linkedin.com/in/thomas-lin-pedersen-9b17572/"
