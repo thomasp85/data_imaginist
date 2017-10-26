@@ -79,3 +79,11 @@ enableEmoji = true
   twitter-square = "https://twitter.com/thomasp85"
   github-square = "https://github.com/thomasp85"
   linkedin-square = "https://www.linkedin.com/in/thomas-lin-pedersen-9b17572/"
+
+[outputs]
+home = [ "RSS"]
+
+[outputFormats]
+[outputFormats.RSS]
+mediatype = "application/rss"
+baseName = "feed"
