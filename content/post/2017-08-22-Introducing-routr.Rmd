@@ -1,0 +1,215 @@
+---
+title: "Introducing routr - Routing of HTTP and WebSocket in R"
+description: "I'm happy to finally be able to announce that routr is on CRAN, thus completing the standard fiery stack trifecta"
+date: '2017-08-22'
+tags: [R, routr, fiery, webserver]
+categories: [R]
+large_thumb: true
+img:
+    thumb: "/assets/images/routr_logo.png"
+---
+
+<img src="/assets/images/routr_logo_small.png" align="right" style="width:50%"/>
+
+`routr` is now available on CRAN, and I couldn't be happier. It's release marks
+the completion of an idea that stretches back longer than my attempts to bring
+network visualization and `ggplot2` together ([see this post for ref](`r blogdown::shortcode('ref', '\\"2016-10-31-Becoming-the-intern.md\\"')`)).
+While my PhD was still concerned with proteomics a began developing GUI's based
+on `shiny` for managing different parts of the proteomics workflow. I soon came
+to realize that I was spending an inordinate amount of time battling `shiny` 
+itself because I wanted more than it was meant for. Thus began my idea of 
+creating an expressive and powerful web server framework for R in the veins of
+express.js and the likes that could be made to do anything. The idea lingered in
+my head for a long time and went through several iterations until I finally 
+released `fiery` in the late summer of 2016. `fiery` was never meant to stand 
+alone though and I boldly proclaimed that `routr` would come next. That didn't
+seem to happen. I spend most of the following year developing tools for
+visualization and network analysis while having guilty consciousness about the
+project I'd put on hold. Fortunately I've been able to put in some time for
+taking up development for the `fiery` ecosystem once again, so without further 
+ado...
+
+## routr
+While I spend some time in the introduction to talk about the whole development
+path of `fiery`, I would like to start here with saying that `routr` is a server
+agnostic tool. Sure, I've build it for use with `fiery` but I've been very 
+deliberate in making it completely independent of it, except for the code that 
+is involved in the `fiery` plugin functionality. So, you're completely free to
+use `routr` with whatever server framework you wish (e.g. hook it directly to
+an `httpuv` instance). But how does it work? read on...
+
+### The design
+`routr` is basically build up of two different concepts: *routes* and 
+*route stacks*. Routes are a collection of handlers attached to specific HTTP
+request methods (e.g. GET, POST, PUT) and paths. When a request lands at a route
+one of the handlers is chosen and called, based on the nature of the request. A
+route stack is a collection of routes. When a request lands at a route stack it
+will pass it through all the routes it contains sequentially, potentially 
+stopping if one of the handlers signals it. In the following these two concepts
+will be discussed in detail.
+
+### Routes
+In its essence a router is a decision mechanism for redirection HTTP requests 
+into the correct handler function based on the request URL. It makes sure that
+e.g. requests for `http://example.com/info` ends up in a different handler than
+`http://example.com/users/thomasp85`. This functionality is encapsulated in the
+`Route` class. The basic use is illustrated below:
+
+```{r}
+library(routr)
+route <- Route$new()
+route$add_handler('get', '/info', function(request, response, keys, ...) {
+  response$status <- 200L
+  response$body <- list(h1 = 'This is a test server')
+  TRUE
+})
+route$add_handler('get', '/users/thomasp85', function(request, response, keys, ...) {
+  response$status <- 200L
+  response$body <- list(h1 = 'This is the user information for thomasp85')
+  TRUE
+})
+route
+```
+
+Let's walk through what happened here. First we created a new `Route` object and
+then we added two handlers to it, using the eponymous `add_handler()` method. 
+Both of the handlers responds to the `GET` method, but differs in the path they
+are listening for. `routr` uses `reqres` under the hood so each handler method 
+is passed a `Request` and `Response` pair (we'll get back to the `keys` 
+argument). Lastly, each handler must return either `TRUE` indicating that the
+next route should be called, or `FALSE` indicating no further routes should be 
+called. As the request and response objects are `R6` objects any changes to them
+will be kept outside of the handler and there is thus no need to return them.
+
+Now, consider the situation where I have build my super fancy web service into a
+thriving business with millions of users - would I need to add a handler for
+every user? No. This would be a case for a parameterized path.
+
+```{r}
+route$add_handler('get', '/users/:user_id', function(request, response, keys, ...) {
+  response$status <- 200L
+  response$body <- list(h1 = paste0('This is the user information for ', keys$user_id))
+  TRUE
+})
+route
+```
+
+As can be seen, prefixing a path element with `:` will make it into a variable,
+matching anything that is put in there and adds it as an element to the `keys` 
+argument. Paths can contain as many variable elements as wanted in order to 
+reuse handlers as efficiently as possible.
+
+There's a last piece of path functionality left to discuss: The wildcard. While
+parameterized path elements only matches as single element (e.g. 
+`/users/:user_id` will match `/users/johndoe` but not `/users/johndoe/settings`)
+the wildcard matches anything. Let's try one of these:
+
+```{r}
+route$add_handler('get', '/setting/*', function(request, response, keys, ...) {
+  response$status_with_text(403L) # Forbidden
+  FALSE
+})
+route$add_handler('get', '/*', function(request, response, keys, ...) {
+  response$status <- 404L
+  response$body <- list(h1 = 'We really couldn\'t find your page')
+  FALSE
+})
+route
+```
+
+Here we add two new handlers, one preventing access to anything under the 
+`/settings` location, and one implementing a custom `404 - Not found` page. Both
+returns `FALSE` as they are meant to prevent any further processing.
+
+Now there's a slight pickle with the current situation. If I ask for 
+`/users/thomasp85` it can match three different handlers: `/users/thomasp85`, 
+`/users/:user_id`, and `/*`. Which to chose? `routr` decides on the handler 
+based on path specificity, where handlers are prioritized based on number of 
+elements in the path (the more the better), number of parameterized elements 
+(the less the better), and existence of wildcards (better with none). In the
+above case it means that the `/users/thomasp85` will be chosen. The handler
+priority can always be seen when printing the `Route` object.
+
+The request method is less complicated than the path. It simply matches the 
+method used in the request, ignoring the case. There's one special method: 
+`all`. This one will match any method, but only if a handler does not exist for
+that specific method.
+
+### Route Stacks
+Conceptually, route stacks are much simpler than routes, in that they are just
+a sequential collection of routes, with the means to pass requests through them.
+Let's create some additional routes and collect them in a `RouteStack`:
+
+```{r}
+parser <- Route$new()
+parser$add_handler('all', '/*', function(request, response, keys, ...) {
+  request$parse(reqres::default_parsers)
+})
+formatter <- Route$new()
+formatter$add_handler('all', '/*', function(request, response, keys, ...) {
+  response$format(reqres::default_formatters)
+})
+
+router <- RouteStack$new()
+router$add_route(parser, 'request_prep')
+router$add_route(route, 'app_logic')
+router$add_route(formatter, 'response_finish')
+router
+```
+
+Now, when our router receives a request it will  first pass it to the parser
+route and attempt to parse the body. If it is unsuccessful it will abort (the 
+`parse()` method returns `FALSE` if it fails), if not it will pass the request 
+on to the route we build up in the prior section. If the chosen handler returns
+`TRUE` the request will then end up in the formatter route and the response body
+will be formatted based on content negotiation with the request. As can be seen
+route stacks are an effective way to extract common functionality into well 
+defined handlers.
+
+If you're using `fiery`. `RouteStack` objects are also what will be used as 
+plugins. Whether to use the router for `request`, `header`, or `message` 
+(WebSocket) events is decided by the `attach_to` field.
+
+```{r}
+app <- fiery::Fire$new()
+app$attach(router)
+app
+```
+
+## Predefined routes
+Lastly, `routr` comes with a few predefined routes, which I will briefly 
+mention: The `ressource_route` maps files on the server to handlers. If you wish
+to serve static content in some way, this facilitates it, and takes care of a 
+lot of HTTP header logic such as caching. It will also automatically serve 
+compressed files if they exist and the client accepts them:
+
+```{r}
+static_route <- ressource_route('/' = system.file(package = 'routr'))
+router$add_route(static_route, 'static', after = 1)
+router
+```
+
+Now, you can get the package description file by visiting `/DESCRIPTION`. If a 
+file is found it will return `FALSE` in order to simply return the file. If 
+nothing is found it will return `TRUE` so that other routes can decide what to 
+do.
+
+If you wish to limit the size of requests, you can use the `sizelimit_route` and
+e.g. attach it to the `header` event in a `fiery` app, so that requests that are 
+too big will get rejected before the body is fetched.
+
+```{r}
+sizelimit <- sizelimit_route(10 * 1024^2) # 10 mb
+reject_router <- RouteStack$new(size = sizelimit)
+reject_router$attach_to <- 'header'
+app$attach(reject_router)
+app
+```
+
+## Wrapping up
+As I started by saying, the release of `routr` marks a point of maturity for my
+`fiery` ecosystem. I'm extremely happy with this, but it is in no way the end of
+development. I will pivot to working on more specialized plugins now concerned
+with areas such as security and scalability, but the main approach to building
+`fiery` server side logic is now up and running - I hope you'll take it for a 
+spin.

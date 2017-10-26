@@ -1,0 +1,279 @@
+---
+title: "Introducing reqres"
+description: "A modern R interface to HTTP messages"
+date: '2017-08-13'
+tags: [R, reqres, HTTP, webserver]
+categories: [R]
+large_thumb: true
+img:
+    thumb: "/assets/images/reqres_logo.png"
+---
+
+<img src="/assets/images/reqres_logo_small.png" align="right" style="width:50%"/>
+
+I'm very happy to announce that `reqres` has been released on CRAN. `reqres` is
+a new (in R context) approach to working with HTTP messages, that is, the 
+**req**uests you send to a server and the **res**pons it returns. The 
+uunderlying mechanics of a web server is seldom something that R users comes 
+into contact with, indeed the most popular way of using R code for the web is 
+[`Shiny`](http://shiny.rstudio.com) by RStudio and 
+[`OpenCPU`](https://www.opencpu.org) by Jeroen Ooms, both of which abstracts the
+actual HTTP messaging away in order to provide a more friendly and R-native
+interface to building web apps and services. 
+
+*So why bother with HTTP in R at all?*  
+Both of the above frameworks favors *ease-of-use* over control, and sometimes 
+you just want control. Maybe you don't need the overhead that comes with 
+full-fledged web app frameworks, maybe the high abstraction level makes it 
+difficult to achieve what you want, or maybe you're the developer of Shiny or
+OpenCPU and wants to declutter your codebase `r emo::ji('wink')`. I'm of course
+here to tell you to take a look at [`fiery`](http://github.com/thomasp85/fiery)
+(which I'm developing) if you can give a nod to the two former reasons. I'm not
+going to spend more time on how and why to build a web server (that will happen
+in another series of blog posts), but simply state that there are very valid 
+reasons for working directly with HTTP messaging in R and that `reqres` is here
+to soothe the pain of it, should you ever be in that position.
+
+## An overview of *reqres*
+There are two main objects in `reqres` that the developer should know about. The
+`Request` class and the `Response` class. Both of these are build on 
+[`R6`](https://github.com/r-lib/R6) and heavily inspired by the request and 
+response classes in [Express.js](http://expressjs.com) (a web server framework
+for [Node.js](https://nodejs.org/en/)) to the point of seeming very familiar if
+you've ever worked with Express.
+
+### The *Request* class
+When a HTTP request is recieved on the server the most likely way it ends up in
+R is through the [`httpuv`](https://github.com/rstudio/httpuv) package, a 
+minimal web server build upon libuv (which were developed for Node - we're 
+beginning to owe the JavaScript crowd a beer). `httpuv` passes the request on as
+a Rook compliant environment ([Rook](https://github.com/jeffreyhorner/Rook) 
+being an earlier web server specification developed by Jeffrey Horner) and this
+is the point where `reqres` can intercept it and make your life easier. 
+
+In order to showcase the `Request` class we need a HTTP request. Thankfully 
+`fiery` provides a function for mocking Rook requests, so we can play around 
+with `reqres` without building up a true server.
+
+```{r}
+library(reqres)
+rook <- fiery::fake_request(
+    'http://www.data-imaginist.com/reqres/demo?user=Thomas+Lin+Pedersen&id=123',
+    method = 'get',
+    content = '{"numbers":[1,2,3],"letters":["a","b", "c"]}',
+    headers = list(
+        Content_Type = 'application/json',
+        Accept = 'application/json, application/xml, text/*',
+        Accept_Encoding = 'gzip',
+        Cookie = 'session=321'
+    )
+)
+
+request <- Request$new(rook)
+request
+```
+
+We now have a supercharged `Request` object. Being an `R6` class it uses 
+reference semantics and there will thus only exist one version of this request
+no matter how many times we reassign it to a new variable. We can ask the 
+request all sorts on things about itself, such as the method, full url, path 
+(the part of the url following the host address), the query (the optional part
+of the url following the `?`).
+
+```{r}
+request$method
+request$url
+request$path
+request$query
+```
+
+As can be seen the query gets parsed automatically into a list. The same is true
+for cookies. One surprise might come when we try to look at the body.
+
+```{r}
+request$body
+```
+
+The body is only parsed on request. The reason for this is that the request body
+can be in all sorts of formats, some not even understandable by R. The format of
+the body is advertised in the `Content-Type` header (here `application/json`)
+and we can ask the request whether it is of a certain format.
+
+```{r}
+request$is('html')
+request$is('json')
+```
+
+This can be used to determine the correct approach to reading the body. An 
+easier way is through the `parser()` method that takes multiple different 
+parsing functions and chooses the correct (if present) and fills in the body. 
+`reqres` already comes with a list of parsers for the standard formats so often
+this is a very easy task.
+
+```{r}
+request$parse(default_parsers)
+request$body
+```
+
+The method returns `TRUE` if successful and `FALSE` otherwise. One little magic
+feature is that the body is automatically decompressed if compressed (e.g. 
+gzipped).
+
+Arbitrary headers can be extracted with the `get_header()` method.
+
+```{r}
+request$get_header('Accept-Encoding')
+```
+
+The last major feature of the `Request` class is content negotiation. It is 
+expected that the client informs the server what format, encoding, etc it 
+understands and prefers and the server then choses the best one it can do (this
+is communicated through the `Accept(-*)` headers). The `Request` class has a 
+range of methods that helps you chose the correct format of the response body.
+
+```{r}
+request$accepts(c('html', 'text/plain'))
+```
+
+While the content negotiation seems relatively simple in our little contrived
+example, it can easily end up being hairy as each format can be weighted by a
+priority score and wildcards should be prioritized less. The `accepts()` method
+takes care of all of this for you and simply returns the prefered choice out of
+the given.
+
+### The *Response* class
+While the `Request` class is mainly meant for parsing and reading the intend of
+the client, `Response` class is meant for manipulation, ultimately resulting in
+an answer to the `Request`. A response is always linked to a request and cannot 
+exist in solitude. While it can be created using the standard `R6` 
+`Response$new()` ideom, it is recommended to create one from the request 
+instead.
+
+```{r}
+response <- request$respond()
+response
+```
+
+The reason why this is recommended is that the `respond()` method will always
+return a response, either creating one or returning the one already exisiting.
+`Response$new()` will throw an error if a response has already been created for
+the request.
+
+```{r}
+try(Response$new(request))
+identical(response, request$respond())
+```
+
+Responses are initialised to `404- Not Found` with an empty body but it is often 
+desirable to change this (unless, of course, the requested ressource is not 
+found). Status codes can be manipulated with the `status` field or the 
+`status_with_text()` method which will also update the body to contain the name
+of the status code, e.g.
+
+```{r}
+response$status_with_text(416)
+response$body
+```
+
+Headers can be set with the `set_header()` and `append_header()` method and 
+retrieved with `get_header()`.
+
+```{r}
+response$set_header('Server', 'fiery-0.2.3')
+response$get_header('Server')
+```
+
+The `set_header()` method is the lowest common denominator when it comes to 
+adding headers to your response. In addition there are a range of helpers for 
+specific common headers.
+
+```{r}
+response$timestamp()
+response$get_header('Date')
+response$type <- 'json'
+response$get_header('Content-Type')
+response$set_links(alternative = '/feed')
+response$get_header('Link')
+```
+
+Furtermore, there's a special method for setting cookies. While cookies are set
+with the `Set-Cookie` header, they live in a separate container until the 
+response is ready to be send in order to facilitate lookup by cookie name.
+
+```{r}
+response$set_cookie('session', uuid::UUIDgenerate(), max_age = 9000, secure = TRUE)
+response$get_header('Set-Cookie')
+response$has_cookie('session')
+response$as_list()$headers[['Set-Cookie']]
+```
+
+Apart from the headers, the each response also contains their own data store 
+that can contain any data. This facilitate communication between different 
+middleware (code that modify the HTTP messages on the server). The data store is
+used pretty much like the headers.
+
+```{r}
+response$set_data('alphabet', letters)
+response$has_data('alphabet')
+response$get_data('alphabet')
+response$remove_data('alphabet')
+```
+
+The data contained in the data store will never become part of the actual 
+response so anything can be added here safely.
+
+Often the server responds with a file, e.g. a HTML file defining the web page 
+the client requested. Files are easily added with the `file` field, which will
+take care of setting the `Content-Type` and `Last-Modified` headers as well as
+checking that the file actually exists.
+
+```{r}
+response$file <- system.file('NEWS.md', package = 'reqres')
+response$type
+response$get_header('Last-Modified')
+```
+
+If the file is meant for download rather than display the `attach()` method will
+set the correct headers to indicate to the browser that it should initiate a 
+download.
+
+```{r}
+response$attach(system.file('help', 'figures', 'reqres_logo.png', package = 'reqres'))
+response$type
+response$get_header('Content-Disposition')
+```
+
+Lastly, the response body is accessible in the `body` field. It can be 
+absolutely anything you wish as until the response is send of, but should be
+formatted to either a raw vector or a string prior to handing the response of to
+e.g. `httpuv`. Thankfully there's a parallel to `Request$parse()` in the form of
+`Response$format` that performs content negotiation based on the supplied 
+formatters, chooses the prefered one and applies it, finally applying 
+compression if the client permits it. To make life easier the standard 
+formatters have been collected in `default_formatters` so this step is 
+easy-peasy (headers will of course be set for you).
+
+```{r}
+response$body <- mtcars
+head(response$body)
+response$format(default_formatters, compress = FALSE)
+response$body
+response$compress()
+head(response$body, 30)
+response$type
+response$get_header('Content-Encoding')
+```
+
+## Wrapping up
+As I hope I've made clear, working directly with HTTP messages does not need to
+be a drag. Sure, there's a sea of conventions around headers and status codes 
+that can seem daunting, but `reqres` takes care of the minimum requirements for
+you, letting you focus on the server logic instead.
+
+### Whats next
+I obviously hope `reqres` will become pervasive in the world of R web 
+technologies as I think it will make everyones life easier. `fiery` already uses
+it in the development version on GitHub, as does `routr` so if you're going to
+use either of these packages you'll automatically become aquainted. Furthermore
+I've heard expression of interest from other developers so hopefully it will be
+adopted beyond my own packages.

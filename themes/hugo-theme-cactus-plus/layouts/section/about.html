@@ -1,0 +1,25 @@
+{{ partial "head.html" . }}
+<body>
+{{ partial "nav.html" . }}
+{{ partial "profile.html" . }}
+
+<section id="wrapper" class="home">
+    {{ .Content }}
+
+    {{ if .Site.Params.enableDisqus }}
+        {{ if ne .Params.disabledisqus "true" }}
+            {{ partial "disqus.html" . }}
+        {{ end }}
+    {{ end }}
+
+    {{ if .Site.Params.enableDuoshuo }}
+        {{ if ne .Params.disableduoshuo "true" }}
+            {{ partial "duoshuo.html" . }}
+        {{ end }}
+    {{ end }}
+
+    {{ partial "footer.html" . }}
+</section>
+
+{{ partial "js.html" . }}
+</body>

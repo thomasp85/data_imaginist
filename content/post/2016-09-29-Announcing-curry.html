@@ -1,0 +1,153 @@
+---
+title: "Announcing curry: Operator based currying and partial application"
+description: "curry is a new package just released on CRAN, that allows you to perform currying and partial application of functions using a range of operators."
+date: '2016-09-29'
+tags: [R, package, announcement, curry]
+categories: [R]
+---
+
+
+
+<p>I am pleased to announce the release of <code>curry</code> - a small package I’ve developed as part of improving my meta-programming skills. <code>curry</code> is yet another attempt at providing a native currying/partial application mechanism in R. Other examples of implementations of this can be found in <a href="https://CRAN.R-project.org/package=purrr"><code>purrr</code></a> and <a href="https://CRAN.R-project.org/package=functional"><code>functional</code></a> (and probably others). <code>curry</code> sets itself apart in the manner it is used and in the functions it creates. <code>curry</code> is operator based and a partially applied function retains named arguments for easier autocomplete etc. <code>curry</code> provides three mechanisms for partial application: <code>%&lt;%</code> (<code>curry()</code>), <code>%-&lt;%</code> (<code>tail_curry()</code>), and <code>%&gt;&lt;%</code> (<code>partial()</code>), as well as a true currying operator (<code>%&lt;!%</code>) and a <em>“weak partial application”</em> (<code>%&lt;?%</code>) - read on to see the differences.</p>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+<p>Below I’ll show the different usages of the <code>curry</code> operators</p>
+<div id="currying" class="section level3">
+<h3>Currying</h3>
+<p>Currying is the reduction of the arity of a function by fixing the first argument, returning a new function lacking this (<a href="#real-currying">no it’s not - read on or click here</a>).</p>
+<pre class="r"><code># Equivalent to curry(`+`, 5)
+add_5 &lt;- `+` %&lt;% 5
+add_5(10)
+#&gt; [1] 15
+
+# ellipsis are retained when currying
+bind_5 &lt;- cbind %&lt;% 5
+bind_5(1:10)
+#&gt;       [,1] [,2]
+#&gt;  [1,]    5    1
+#&gt;  [2,]    5    2
+#&gt;  [3,]    5    3
+#&gt;  [4,]    5    4
+#&gt;  [5,]    5    5
+#&gt;  [6,]    5    6
+#&gt;  [7,]    5    7
+#&gt;  [8,]    5    8
+#&gt;  [9,]    5    9
+#&gt; [10,]    5   10</code></pre>
+</div>
+<div id="tail-currying" class="section level3">
+<h3>Tail currying</h3>
+<p>Tail currying is just like currying except it reduces the arity of the function from the other end by fixing the last argument.</p>
+<pre class="r"><code># Equivalent to tail_curry(`/`, 5)
+divide_by_5 &lt;- `/` %-&lt;% 5
+divide_by_5(10)
+#&gt; [1] 2
+
+no_factors &lt;- data.frame %-&lt;% FALSE
+df &lt;- no_factors(x = letters[1:5])
+class(df$x)
+#&gt; [1] &quot;character&quot;</code></pre>
+</div>
+<div id="partial-function-application" class="section level3">
+<h3>Partial function application</h3>
+<p>When the argument you wish to fix is not in either end of the argument list it is necessary to use a more generalised approach. Using <code>%&gt;&lt;%</code> (or <code>partial()</code>) it is possible to fix any (and multiple) arguments in a function using a list of values to fix.</p>
+<pre class="r"><code>dummy_lengths &lt;- vapply %&gt;&lt;% list(FUN = length, FUN.VALUE = integer(1))
+test_list &lt;- list(a = 1:5, b = 1:10)
+dummy_lengths(test_list)
+#&gt;  a  b 
+#&gt;  5 10</code></pre>
+<p>Other efforts in this has the drawback of returning a new function with just an ellipsis, making argument checks and autocomplete impossible. With <code>curry</code> the returned functions retains named arguments (minus the fixed ones).</p>
+<pre class="r"><code>args(no_factors)
+#&gt; function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, 
+#&gt;     fix.empty.names = TRUE) 
+#&gt; NULL
+args(dummy_lengths)
+#&gt; function (X, ..., USE.NAMES = TRUE) 
+#&gt; NULL</code></pre>
+</div>
+<div id="real-currying" class="section level3">
+<h3>Real currying</h3>
+<p>The above uses a very loose (incorrect) definition of currying. The correct definition is that currying a function returns a function taking a single argument (the first from the original function). Calling a curried function will return a new function accepting the second argument of the original function and so on. Once all arguments of the original function has been consumed it evaluates the call and returns the result. Thus:</p>
+<pre class="r"><code># Correct currying
+foo(arg1)(arg2)(arg3)
+
+# Incorrect currying
+foo(arg1)(arg2, arg3)</code></pre>
+<p>True currying is less useful in R as it does not play nice with function containing <code>...</code> as the argument list will never be consumed. Still, it is available in <code>curry</code> using the <code>Curry()</code> function or the <code>%&lt;!%</code> operator:</p>
+<pre class="r"><code>testfun &lt;- function(x = 10, y, z) {
+  x + y + z
+}
+curriedfun &lt;- Curry(testfun)
+curriedfun(1)(2)(3)
+#&gt; [1] 6
+
+# Using the operator
+testfun %&lt;!% 1 %&lt;!% 2 %&lt;!% 3
+#&gt; [1] 6
+
+# The strict operator is only required for the first call
+testfun %&lt;!% 1 %&lt;% 2 %&lt;% 3
+#&gt; [1] 6</code></pre>
+<p>As with the partial application functionality the strict currying retains argument names and defaults at each step of the currying sequence:</p>
+<pre class="r"><code>args(curriedfun)
+#&gt; function (x = 10) 
+#&gt; NULL</code></pre>
+</div>
+<div id="weak-partial-function-application" class="section level3">
+<h3>Weak partial function application</h3>
+<p>The last functionality provided by <code>curry</code> is a <em>“weak”</em> partial function application in the sense that it sets (or changes) argument defaults. Thus, compared to partial application it returns a function with the same arguments, but if the defaulted arguments are ignored it will be equivalent to a partial application. Defaults can be set or changed using the <code>set_defaults()</code> function or the <code>%&lt;?%</code> operator:</p>
+<pre class="r"><code>testfun &lt;- function(x = 1, y = 2, z = 3) {
+  x + y + z
+}
+testfun()
+#&gt; [1] 6
+testfun2 &lt;- testfun %&lt;?% list(y = 10)
+testfun3 &lt;- testfun %&gt;&lt;% list(y = 10)
+testfun2()
+#&gt; [1] 14
+testfun3()
+#&gt; [1] 14
+
+testfun2(y = 20)
+#&gt; [1] 24
+testfun3(y = 20)
+#&gt; Error in testfun3(y = 20): unused argument (y = 20)</code></pre>
+</div>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p><code>curry</code> can be installed from CRAN:</p>
+<pre class="r"><code>install.packages(&#39;curry&#39;)</code></pre>
+<p>but for the latest and greatest use GitHub:</p>
+<pre class="r"><code>if (!require(devtools)) {
+    install.packages(devtools)
+}
+devtools::install_github(&#39;thomasp85/curry&#39;)</code></pre>
+</div>
+<div id="performance" class="section level2">
+<h2>Performance</h2>
+<p><code>curry</code> adds a layer around the manipulated functions adding some overhead, but the overhead is not accumulative (currying or partially applying multiple times does not add additional overhead). depending on the runtime of the function the overhead can seem large but as the complexity of the call increases, the effect of the overhead will decrease:</p>
+<pre class="r"><code>library(microbenchmark)
+meanP &lt;- mean %&gt;&lt;% list(na.rm = TRUE)
+
+data &lt;-  sample(1000)
+microbenchmark(mean(data, na.rm = TRUE), meanP(data))
+#&gt; Unit: microseconds
+#&gt;                      expr    min      lq     mean median     uq     max
+#&gt;  mean(data, na.rm = TRUE) 14.771 24.9595 25.34084 25.776 26.528  44.450
+#&gt;               meanP(data) 36.238 49.2365 54.83883 50.175 51.166 294.523
+#&gt;  neval cld
+#&gt;    100  a 
+#&gt;    100   b
+
+data &lt;- sample(1e6)
+microbenchmark(mean(data, na.rm = TRUE), meanP(data))
+#&gt; Unit: milliseconds
+#&gt;                      expr      min       lq    mean   median       uq
+#&gt;  mean(data, na.rm = TRUE) 13.27656 17.49515 26.0982 19.42340 22.04273
+#&gt;               meanP(data) 14.62820 19.05385 33.2815 20.60651 23.92322
+#&gt;       max neval cld
+#&gt;  168.1320   100   a
+#&gt;  162.6583   100   a</code></pre>
+<p>Happy coding!</p>
+</div>

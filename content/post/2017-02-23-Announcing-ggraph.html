@@ -1,0 +1,93 @@
+---
+title: "Announcing ggraph: A grammar of graphics for relational data"
+description: "ggraph, a package for creating network and tree visualizations using the ggplot2 API has just been released on CRAN"
+date: '2017-02-23'
+tags: [R, package, announcement, ggraph, ggplot2, visualization]
+categories: [R]
+large_thumb: true
+img:
+    thumb: "/assets/images/ggraph_announce.png"
+---
+
+
+
+<p>I am absolutely thrilled to announce that <code>ggraph</code> has finally been released on CRAN. <code>ggraph</code> is my most ambitious package to date and its very early genesis has been described in a <a href="{{% ref \"2016-10-31-Becoming-the-intern.md\" %}}">prior post</a>. If any mention of <code>ggraph</code> is completely new to you, then in short terms <code>ggraph</code> is an extension of the <code>ggplot2</code> API to support relational data such as networks and trees. I feel fairly confident in saying that <code>ggraph</code> is the most powerful way to create static network based visualizations in R. Leading up to the release, the three main concepts of <code>ggraph</code> has been described in detail in their own blog posts (<a href="{{% ref \"2017-02-06-ggraph-introduction-layouts.html\" %}}">layouts</a>, <a href="{{% ref \"2017-02-10-ggraph-introduction-nodes.html\" %}}">nodes</a>, and <a href="{{% ref \"2017-02-16-ggraph-introduction-edges.html\" %}}">edges</a>) so this will not be reiterated here. Instead I’ll talk a bit about the philosophy behind the package as well as show of some of the features that do not fall into any of the three main concepts.</p>
+<div id="the-philosophy" class="section level2">
+<h2>The Philosophy</h2>
+<p>There is no shortage of software for creating network visualizations and there is no shortage of said visualizations themselves. Often though, the visualizations are more impressive than informative and it is easy to feel that their main task is to show that we are really dealing with some complex data. All of this has led to a certain disdain for classic network visualizations perfectly encapsulated in the nickname <em>hairballs</em>. It does not have to be like this! The greatness of <code>ggplot2</code> lies in how it allows users to quickly iterate over visualization approaches, thus better ensuring that the best visualization approach is reached. If this was extended to relational data it is my belief that users would be more likely to try to make plots that are more meaningful. After all we all want interpretability, right? Consider having to try out 7 different network visualization packages with different APIs versus just mixing and matching layouts and geoms in an iterative process — I know which way I prefer.</p>
+<p>The goal of <code>ggraph</code> is thus clear — provide everything related to visualizations of relational data in a <code>ggplot2</code>-like API to lessen the cognitive load on experimenting with different visual representations. I’m not there yet, but I feel the current version represents a solid foundation where most users will not feel many limitations — on the contrary I believe most users will feel like the chains have come off and they are set free.</p>
+<div id="future-focus" class="section level3">
+<h3>Future focus</h3>
+<p>As I pointed out, <code>ggraph</code> is far from done. I’ll try to keep my development focus in the open by putting things on the road-map as <a href="https://github.com/thomasp85/ggraph/issues">GitHub issues</a>. Honorable mentions include matrix, d3-force and sankey layout, expanded support for edge endings (more choices than <code>grid::arrow()</code> provides), edge routing (avoid node collision), and textbox nodes. I welcome all suggestions as the world of network visualizations is moving fast and I cannot keep on top of everything.</p>
+</div>
+</div>
+<div id="features-besides-layouts-nodes-and-edges" class="section level2">
+<h2>Features besides layouts, nodes, and edges</h2>
+<p>Understanding the node and edge geoms along with how layouts are defined will get you a long way towards visualizing networks. Still, <code>ggraph</code> has more to offer, some of which will be discussed here:</p>
+<div id="theme_graph" class="section level3">
+<h3>theme_graph()</h3>
+<p>Consider the following plot:</p>
+<pre class="r"><code>library(ggraph)
+library(igraph)
+graph &lt;- graph_from_data_frame(highschool)
+
+p &lt;- ggraph(graph, layout = &#39;kk&#39;) + 
+    geom_edge_link(aes(colour = factor(year))) + 
+    geom_node_point() + 
+    ggtitle(&#39;An example&#39;)
+    
+p</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>While the <code>ggplot2</code> heritage clearly shows due to the grey background with white grid lines, the whole concept of x and y axes is often redundant in network visualizations and are just a distraction. <code>ggraph</code> provides its own theme optimized for network visualizations called <code>theme_graph()</code>, that facilitates clean and beautiful visualizations:</p>
+<pre class="r"><code>p + theme_graph()</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><code>theme_graph()</code>, besides removing axes, grids, and border, changes the font to <em>Arial Narrow</em> (this can be overridden). Furthermore, it makes it easy to change the coloring of the plot:</p>
+<pre class="r"><code>p + theme_graph(background = &#39;grey20&#39;, text_colour = &#39;white&#39;)</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Adding the same theme to every plot is tedious and <code>ggraph</code> provides a way to avoid this. Using <code>set_graph_style()</code> the <code>theme_graph()</code> is set as default. As an extra benefit all text-based geoms gets their defaults updated so the text automatically uses the same style as the theme.</p>
+<pre class="r"><code>set_graph_style()
+
+p</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="facetting" class="section level3">
+<h3>Facetting</h3>
+<p>A powerful but underutilized way of gaining insight into networks is by using small multiples. This technique can reduce edge over-plotting in a very meaningful way by spreading nodes and edges out based on their attributes. The benefits of small multiples are not unique to relational data, as the popularity of <code>ggplot2</code>s facetting functionality shows. The base facetting functions provided by <code>ggplot2</code> is a bad fit for networks though, as we are working with two very distinct types of data. If you facet on a node attribute, all edges would be plotted in all panels, despite the terminal nodes not being present which is not what you expect. Because of this <code>ggraph</code> comes with its own set of facetting functions tailored to network data:</p>
+<div id="facet_nodes-and-facet_edges" class="section level4">
+<h4>facet_nodes() and facet_edges()</h4>
+<p>These two functions are equivalent to <code>facet_wrap()</code> in functionality, but they only address node and edge data respectively. When using <code>facet_nodes()</code> edges are only drawn in a panel if both terminal nodes are present there. When using <code>facet_edges()</code> nodes are always drawn in all panels even if the node data contains an attribute named the same as the one used for the edge facetting.</p>
+<pre class="r"><code># Assign each node to a random class
+V(graph)$class &lt;- sample(letters[1:4], gorder(graph), TRUE)
+# Make year a character
+E(graph)$year &lt;- as.character(E(graph)$year)
+
+p &lt;- ggraph(graph, layout = &#39;kk&#39;) + 
+    geom_edge_fan(aes(alpha = ..index.., colour = year)) + 
+    geom_node_point(aes(shape = class)) + 
+    scale_edge_alpha(guide = &#39;none&#39;)
+
+p + facet_edges(~year)</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Often, when working with small multiples it is nice to have some visual separation between each plot — setting a foreground color in <code>theme_graph()</code> will add strip background and border (you can also use the <code>th_foreground()</code> helper for this):</p>
+<pre class="r"><code>p + facet_nodes(~class) + th_foreground(foreground = &#39;grey80&#39;, border = TRUE)</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>
+# Lets not have to add this everytime
+set_graph_style(foreground = &#39;grey80&#39;)</code></pre>
+</div>
+<div id="facet_graph" class="section level4">
+<h4>facet_graph</h4>
+<p>Facetting on two variables simultaneously is very powerful and something that is supported in <code>ggplot2</code> with <code>facet_grid()</code>. In <code>ggraph</code> the same is possible using <code>facet_graph()</code> that takes the behavior of <code>facet_nodes()</code> and <code>facet_edges()</code> and combines them:</p>
+<pre class="r"><code>p + facet_graph(year ~ class)</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>As with <code>facet_grid()</code> marginal plots are supported as well:</p>
+<pre class="r"><code>p + facet_graph(year ~ class, margins = TRUE)</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>While the default is to put facet the rows on edges and the columns on nodes, this is free to change using the <code>row_type</code> and <code>col_type</code> arguments. There is nothing stopping you from facetting on the same type in each dimension either:</p>
+<pre class="r"><code># Facet edge by the class of their start node as well as year
+p + facet_graph(year ~ node1.class, col_type = &#39;edge&#39;)</code></pre>
+<p><img src="/post/2017-02-23-Announcing-ggraph_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>I hope I have convinced you that facetting in the context of relational data is both very easy, as well as extremely powerful. Avoiding the hairball is one of the prime goal of network visualizations and using small multiples is a fantastic way of cutting down on the number of nodes and edges while still getting the full picture.</p>
+</div>
+</div>
+</div>

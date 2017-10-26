@@ -1,0 +1,185 @@
+---
+title: "Introducing reqres"
+description: "A modern R interface to HTTP messages"
+date: '2017-08-13'
+tags: [R, reqres, HTTP, webserver]
+categories: [R]
+large_thumb: true
+img:
+    thumb: "/assets/images/reqres_logo.png"
+---
+
+
+
+<p><img src="/assets/images/reqres_logo_small.png" align="right" style="width:50%"/></p>
+<p>I’m very happy to announce that <code>reqres</code> has been released on CRAN. <code>reqres</code> is a new (in R context) approach to working with HTTP messages, that is, the <strong>req</strong>uests you send to a server and the <strong>res</strong>pons it returns. The uunderlying mechanics of a web server is seldom something that R users comes into contact with, indeed the most popular way of using R code for the web is <a href="http://shiny.rstudio.com"><code>Shiny</code></a> by RStudio and <a href="https://www.opencpu.org"><code>OpenCPU</code></a> by Jeroen Ooms, both of which abstracts the actual HTTP messaging away in order to provide a more friendly and R-native interface to building web apps and services.</p>
+<p><em>So why bother with HTTP in R at all?</em><br />
+Both of the above frameworks favors <em>ease-of-use</em> over control, and sometimes you just want control. Maybe you don’t need the overhead that comes with full-fledged web app frameworks, maybe the high abstraction level makes it difficult to achieve what you want, or maybe you’re the developer of Shiny or OpenCPU and wants to declutter your codebase 😉. I’m of course here to tell you to take a look at <a href="http://github.com/thomasp85/fiery"><code>fiery</code></a> (which I’m developing) if you can give a nod to the two former reasons. I’m not going to spend more time on how and why to build a web server (that will happen in another series of blog posts), but simply state that there are very valid reasons for working directly with HTTP messaging in R and that <code>reqres</code> is here to soothe the pain of it, should you ever be in that position.</p>
+<div id="an-overview-of-reqres" class="section level2">
+<h2>An overview of <em>reqres</em></h2>
+<p>There are two main objects in <code>reqres</code> that the developer should know about. The <code>Request</code> class and the <code>Response</code> class. Both of these are build on <a href="https://github.com/r-lib/R6"><code>R6</code></a> and heavily inspired by the request and response classes in <a href="http://expressjs.com">Express.js</a> (a web server framework for <a href="https://nodejs.org/en/">Node.js</a>) to the point of seeming very familiar if you’ve ever worked with Express.</p>
+<div id="the-request-class" class="section level3">
+<h3>The <em>Request</em> class</h3>
+<p>When a HTTP request is recieved on the server the most likely way it ends up in R is through the <a href="https://github.com/rstudio/httpuv"><code>httpuv</code></a> package, a minimal web server build upon libuv (which were developed for Node - we’re beginning to owe the JavaScript crowd a beer). <code>httpuv</code> passes the request on as a Rook compliant environment (<a href="https://github.com/jeffreyhorner/Rook">Rook</a> being an earlier web server specification developed by Jeffrey Horner) and this is the point where <code>reqres</code> can intercept it and make your life easier.</p>
+<p>In order to showcase the <code>Request</code> class we need a HTTP request. Thankfully <code>fiery</code> provides a function for mocking Rook requests, so we can play around with <code>reqres</code> without building up a true server.</p>
+<pre class="r"><code>library(reqres)
+rook &lt;- fiery::fake_request(
+    &#39;http://www.data-imaginist.com/reqres/demo?user=Thomas+Lin+Pedersen&amp;id=123&#39;,
+    method = &#39;get&#39;,
+    content = &#39;{&quot;numbers&quot;:[1,2,3],&quot;letters&quot;:[&quot;a&quot;,&quot;b&quot;, &quot;c&quot;]}&#39;,
+    headers = list(
+        Content_Type = &#39;application/json&#39;,
+        Accept = &#39;application/json, application/xml, text/*&#39;,
+        Accept_Encoding = &#39;gzip&#39;,
+        Cookie = &#39;session=321&#39;
+    )
+)
+
+request &lt;- Request$new(rook)
+request</code></pre>
+<pre><code>## A HTTP request
+## ==============
+## Trusted: No
+##  Method: get
+##     URL: http://www.data-imaginist.com:80/reqres/demo?user=Thomas+Lin+Pedersen&amp;id=123</code></pre>
+<p>We now have a supercharged <code>Request</code> object. Being an <code>R6</code> class it uses reference semantics and there will thus only exist one version of this request no matter how many times we reassign it to a new variable. We can ask the request all sorts on things about itself, such as the method, full url, path (the part of the url following the host address), the query (the optional part of the url following the <code>?</code>).</p>
+<pre class="r"><code>request$method</code></pre>
+<pre><code>## [1] &quot;get&quot;</code></pre>
+<pre class="r"><code>request$url</code></pre>
+<pre><code>## [1] &quot;http://www.data-imaginist.com:80/reqres/demo?user=Thomas+Lin+Pedersen&amp;id=123&quot;</code></pre>
+<pre class="r"><code>request$path</code></pre>
+<pre><code>## [1] &quot;/reqres/demo&quot;</code></pre>
+<pre class="r"><code>request$query</code></pre>
+<pre><code>## $user
+## [1] &quot;Thomas Lin Pedersen&quot;
+## 
+## $id
+## [1] 123</code></pre>
+<p>As can be seen the query gets parsed automatically into a list. The same is true for cookies. One surprise might come when we try to look at the body.</p>
+<pre class="r"><code>request$body</code></pre>
+<pre><code>## NULL</code></pre>
+<p>The body is only parsed on request. The reason for this is that the request body can be in all sorts of formats, some not even understandable by R. The format of the body is advertised in the <code>Content-Type</code> header (here <code>application/json</code>) and we can ask the request whether it is of a certain format.</p>
+<pre class="r"><code>request$is(&#39;html&#39;)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>request$is(&#39;json&#39;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>This can be used to determine the correct approach to reading the body. An easier way is through the <code>parser()</code> method that takes multiple different parsing functions and chooses the correct (if present) and fills in the body. <code>reqres</code> already comes with a list of parsers for the standard formats so often this is a very easy task.</p>
+<pre class="r"><code>request$parse(default_parsers)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>request$body</code></pre>
+<pre><code>## $numbers
+## [1] 1 2 3
+## 
+## $letters
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
+<p>The method returns <code>TRUE</code> if successful and <code>FALSE</code> otherwise. One little magic feature is that the body is automatically decompressed if compressed (e.g. gzipped).</p>
+<p>Arbitrary headers can be extracted with the <code>get_header()</code> method.</p>
+<pre class="r"><code>request$get_header(&#39;Accept-Encoding&#39;)</code></pre>
+<pre><code>## [1] &quot;gzip&quot;</code></pre>
+<p>The last major feature of the <code>Request</code> class is content negotiation. It is expected that the client informs the server what format, encoding, etc it understands and prefers and the server then choses the best one it can do (this is communicated through the <code>Accept(-*)</code> headers). The <code>Request</code> class has a range of methods that helps you chose the correct format of the response body.</p>
+<pre class="r"><code>request$accepts(c(&#39;html&#39;, &#39;text/plain&#39;))</code></pre>
+<pre><code>## [1] &quot;html&quot;</code></pre>
+<p>While the content negotiation seems relatively simple in our little contrived example, it can easily end up being hairy as each format can be weighted by a priority score and wildcards should be prioritized less. The <code>accepts()</code> method takes care of all of this for you and simply returns the prefered choice out of the given.</p>
+</div>
+<div id="the-response-class" class="section level3">
+<h3>The <em>Response</em> class</h3>
+<p>While the <code>Request</code> class is mainly meant for parsing and reading the intend of the client, <code>Response</code> class is meant for manipulation, ultimately resulting in an answer to the <code>Request</code>. A response is always linked to a request and cannot exist in solitude. While it can be created using the standard <code>R6</code> <code>Response$new()</code> ideom, it is recommended to create one from the request instead.</p>
+<pre class="r"><code>response &lt;- request$respond()
+response</code></pre>
+<pre><code>## A HTTP response
+## ===============
+##         Status: 404 - Not Found
+##   Content type: text/plain
+## 
+## In response to: http://www.data-imaginist.com:80/reqres/demo?user=Thomas+Lin+Pedersen&amp;id=123</code></pre>
+<p>The reason why this is recommended is that the <code>respond()</code> method will always return a response, either creating one or returning the one already exisiting. <code>Response$new()</code> will throw an error if a response has already been created for the request.</p>
+<pre class="r"><code>try(Response$new(request))
+identical(response, request$respond())</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Responses are initialised to <code>404- Not Found</code> with an empty body but it is often desirable to change this (unless, of course, the requested ressource is not found). Status codes can be manipulated with the <code>status</code> field or the <code>status_with_text()</code> method which will also update the body to contain the name of the status code, e.g.</p>
+<pre class="r"><code>response$status_with_text(416)
+response$body</code></pre>
+<pre><code>## [1] &quot;Range Not Satisfiable&quot;</code></pre>
+<p>Headers can be set with the <code>set_header()</code> and <code>append_header()</code> method and retrieved with <code>get_header()</code>.</p>
+<pre class="r"><code>response$set_header(&#39;Server&#39;, &#39;fiery-0.2.3&#39;)
+response$get_header(&#39;Server&#39;)</code></pre>
+<pre><code>## [1] &quot;fiery-0.2.3&quot;</code></pre>
+<p>The <code>set_header()</code> method is the lowest common denominator when it comes to adding headers to your response. In addition there are a range of helpers for specific common headers.</p>
+<pre class="r"><code>response$timestamp()</code></pre>
+<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;default/Europe/
+## Copenhagen&#39;</code></pre>
+<pre><code>## Warning in format.POSIXlt(as.POSIXlt(x, tz), format, usetz, ...): unknown
+## timezone &#39;default/Europe/Copenhagen&#39;</code></pre>
+<pre class="r"><code>response$get_header(&#39;Date&#39;)</code></pre>
+<pre><code>## [1] &quot;Thu, 26 Oct 2017 11:01:20 GMT&quot;</code></pre>
+<pre class="r"><code>response$type &lt;- &#39;json&#39;
+response$get_header(&#39;Content-Type&#39;)</code></pre>
+<pre><code>## [1] &quot;application/json&quot;</code></pre>
+<pre class="r"><code>response$set_links(alternative = &#39;/feed&#39;)
+response$get_header(&#39;Link&#39;)</code></pre>
+<pre><code>## [1] &quot;&lt;/feed&gt;; rel=\&quot;alternative\&quot;&quot;</code></pre>
+<p>Furtermore, there’s a special method for setting cookies. While cookies are set with the <code>Set-Cookie</code> header, they live in a separate container until the response is ready to be send in order to facilitate lookup by cookie name.</p>
+<pre class="r"><code>response$set_cookie(&#39;session&#39;, uuid::UUIDgenerate(), max_age = 9000, secure = TRUE)
+response$get_header(&#39;Set-Cookie&#39;)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>response$has_cookie(&#39;session&#39;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>response$as_list()$headers[[&#39;Set-Cookie&#39;]]</code></pre>
+<pre><code>## [1] &quot;session=ef064802-f1be-46b8-9ae8-a4618b6bf8f0; Max-Age=9000; Secure&quot;</code></pre>
+<p>Apart from the headers, the each response also contains their own data store that can contain any data. This facilitate communication between different middleware (code that modify the HTTP messages on the server). The data store is used pretty much like the headers.</p>
+<pre class="r"><code>response$set_data(&#39;alphabet&#39;, letters)
+response$has_data(&#39;alphabet&#39;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>response$get_data(&#39;alphabet&#39;)</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;
+## [18] &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<pre class="r"><code>response$remove_data(&#39;alphabet&#39;)</code></pre>
+<p>The data contained in the data store will never become part of the actual response so anything can be added here safely.</p>
+<p>Often the server responds with a file, e.g. a HTML file defining the web page the client requested. Files are easily added with the <code>file</code> field, which will take care of setting the <code>Content-Type</code> and <code>Last-Modified</code> headers as well as checking that the file actually exists.</p>
+<pre class="r"><code>response$file &lt;- system.file(&#39;NEWS.md&#39;, package = &#39;reqres&#39;)</code></pre>
+<pre><code>## Warning in format.POSIXlt(as.POSIXlt(x, tz), format, usetz, ...): unknown
+## timezone &#39;default/Europe/Copenhagen&#39;</code></pre>
+<pre class="r"><code>response$type</code></pre>
+<pre><code>## [1] &quot;text/markdown&quot;</code></pre>
+<pre class="r"><code>response$get_header(&#39;Last-Modified&#39;)</code></pre>
+<pre><code>## [1] &quot;Wed, 25 Oct 2017 12:59:58 GMT&quot;</code></pre>
+<p>If the file is meant for download rather than display the <code>attach()</code> method will set the correct headers to indicate to the browser that it should initiate a download.</p>
+<pre class="r"><code>response$attach(system.file(&#39;help&#39;, &#39;figures&#39;, &#39;reqres_logo.png&#39;, package = &#39;reqres&#39;))</code></pre>
+<pre><code>## Warning in format.POSIXlt(as.POSIXlt(x, tz), format, usetz, ...): unknown
+## timezone &#39;default/Europe/Copenhagen&#39;</code></pre>
+<pre class="r"><code>response$type</code></pre>
+<pre><code>## [1] &quot;image/png&quot;</code></pre>
+<pre class="r"><code>response$get_header(&#39;Content-Disposition&#39;)</code></pre>
+<pre><code>## [1] &quot;attachment; filename=reqres_logo.png&quot;</code></pre>
+<p>Lastly, the response body is accessible in the <code>body</code> field. It can be absolutely anything you wish as until the response is send of, but should be formatted to either a raw vector or a string prior to handing the response of to e.g. <code>httpuv</code>. Thankfully there’s a parallel to <code>Request$parse()</code> in the form of <code>Response$format</code> that performs content negotiation based on the supplied formatters, chooses the prefered one and applies it, finally applying compression if the client permits it. To make life easier the standard formatters have been collected in <code>default_formatters</code> so this step is easy-peasy (headers will of course be set for you).</p>
+<pre class="r"><code>response$body &lt;- mtcars
+head(response$body)</code></pre>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<pre class="r"><code>response$format(default_formatters, compress = FALSE)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>response$body</code></pre>
+<pre><code>## [{&quot;mpg&quot;:21,&quot;cyl&quot;:6,&quot;disp&quot;:160,&quot;hp&quot;:110,&quot;drat&quot;:3.9,&quot;wt&quot;:2.62,&quot;qsec&quot;:16.46,&quot;vs&quot;:0,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Mazda RX4&quot;},{&quot;mpg&quot;:21,&quot;cyl&quot;:6,&quot;disp&quot;:160,&quot;hp&quot;:110,&quot;drat&quot;:3.9,&quot;wt&quot;:2.875,&quot;qsec&quot;:17.02,&quot;vs&quot;:0,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Mazda RX4 Wag&quot;},{&quot;mpg&quot;:22.8,&quot;cyl&quot;:4,&quot;disp&quot;:108,&quot;hp&quot;:93,&quot;drat&quot;:3.85,&quot;wt&quot;:2.32,&quot;qsec&quot;:18.61,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Datsun 710&quot;},{&quot;mpg&quot;:21.4,&quot;cyl&quot;:6,&quot;disp&quot;:258,&quot;hp&quot;:110,&quot;drat&quot;:3.08,&quot;wt&quot;:3.215,&quot;qsec&quot;:19.44,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Hornet 4 Drive&quot;},{&quot;mpg&quot;:18.7,&quot;cyl&quot;:8,&quot;disp&quot;:360,&quot;hp&quot;:175,&quot;drat&quot;:3.15,&quot;wt&quot;:3.44,&quot;qsec&quot;:17.02,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Hornet Sportabout&quot;},{&quot;mpg&quot;:18.1,&quot;cyl&quot;:6,&quot;disp&quot;:225,&quot;hp&quot;:105,&quot;drat&quot;:2.76,&quot;wt&quot;:3.46,&quot;qsec&quot;:20.22,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Valiant&quot;},{&quot;mpg&quot;:14.3,&quot;cyl&quot;:8,&quot;disp&quot;:360,&quot;hp&quot;:245,&quot;drat&quot;:3.21,&quot;wt&quot;:3.57,&quot;qsec&quot;:15.84,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Duster 360&quot;},{&quot;mpg&quot;:24.4,&quot;cyl&quot;:4,&quot;disp&quot;:146.7,&quot;hp&quot;:62,&quot;drat&quot;:3.69,&quot;wt&quot;:3.19,&quot;qsec&quot;:20,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:4,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Merc 240D&quot;},{&quot;mpg&quot;:22.8,&quot;cyl&quot;:4,&quot;disp&quot;:140.8,&quot;hp&quot;:95,&quot;drat&quot;:3.92,&quot;wt&quot;:3.15,&quot;qsec&quot;:22.9,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:4,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Merc 230&quot;},{&quot;mpg&quot;:19.2,&quot;cyl&quot;:6,&quot;disp&quot;:167.6,&quot;hp&quot;:123,&quot;drat&quot;:3.92,&quot;wt&quot;:3.44,&quot;qsec&quot;:18.3,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:4,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Merc 280&quot;},{&quot;mpg&quot;:17.8,&quot;cyl&quot;:6,&quot;disp&quot;:167.6,&quot;hp&quot;:123,&quot;drat&quot;:3.92,&quot;wt&quot;:3.44,&quot;qsec&quot;:18.9,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:4,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Merc 280C&quot;},{&quot;mpg&quot;:16.4,&quot;cyl&quot;:8,&quot;disp&quot;:275.8,&quot;hp&quot;:180,&quot;drat&quot;:3.07,&quot;wt&quot;:4.07,&quot;qsec&quot;:17.4,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:3,&quot;_row&quot;:&quot;Merc 450SE&quot;},{&quot;mpg&quot;:17.3,&quot;cyl&quot;:8,&quot;disp&quot;:275.8,&quot;hp&quot;:180,&quot;drat&quot;:3.07,&quot;wt&quot;:3.73,&quot;qsec&quot;:17.6,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:3,&quot;_row&quot;:&quot;Merc 450SL&quot;},{&quot;mpg&quot;:15.2,&quot;cyl&quot;:8,&quot;disp&quot;:275.8,&quot;hp&quot;:180,&quot;drat&quot;:3.07,&quot;wt&quot;:3.78,&quot;qsec&quot;:18,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:3,&quot;_row&quot;:&quot;Merc 450SLC&quot;},{&quot;mpg&quot;:10.4,&quot;cyl&quot;:8,&quot;disp&quot;:472,&quot;hp&quot;:205,&quot;drat&quot;:2.93,&quot;wt&quot;:5.25,&quot;qsec&quot;:17.98,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Cadillac Fleetwood&quot;},{&quot;mpg&quot;:10.4,&quot;cyl&quot;:8,&quot;disp&quot;:460,&quot;hp&quot;:215,&quot;drat&quot;:3,&quot;wt&quot;:5.424,&quot;qsec&quot;:17.82,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Lincoln Continental&quot;},{&quot;mpg&quot;:14.7,&quot;cyl&quot;:8,&quot;disp&quot;:440,&quot;hp&quot;:230,&quot;drat&quot;:3.23,&quot;wt&quot;:5.345,&quot;qsec&quot;:17.42,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Chrysler Imperial&quot;},{&quot;mpg&quot;:32.4,&quot;cyl&quot;:4,&quot;disp&quot;:78.7,&quot;hp&quot;:66,&quot;drat&quot;:4.08,&quot;wt&quot;:2.2,&quot;qsec&quot;:19.47,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Fiat 128&quot;},{&quot;mpg&quot;:30.4,&quot;cyl&quot;:4,&quot;disp&quot;:75.7,&quot;hp&quot;:52,&quot;drat&quot;:4.93,&quot;wt&quot;:1.615,&quot;qsec&quot;:18.52,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Honda Civic&quot;},{&quot;mpg&quot;:33.9,&quot;cyl&quot;:4,&quot;disp&quot;:71.1,&quot;hp&quot;:65,&quot;drat&quot;:4.22,&quot;wt&quot;:1.835,&quot;qsec&quot;:19.9,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Toyota Corolla&quot;},{&quot;mpg&quot;:21.5,&quot;cyl&quot;:4,&quot;disp&quot;:120.1,&quot;hp&quot;:97,&quot;drat&quot;:3.7,&quot;wt&quot;:2.465,&quot;qsec&quot;:20.01,&quot;vs&quot;:1,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Toyota Corona&quot;},{&quot;mpg&quot;:15.5,&quot;cyl&quot;:8,&quot;disp&quot;:318,&quot;hp&quot;:150,&quot;drat&quot;:2.76,&quot;wt&quot;:3.52,&quot;qsec&quot;:16.87,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Dodge Challenger&quot;},{&quot;mpg&quot;:15.2,&quot;cyl&quot;:8,&quot;disp&quot;:304,&quot;hp&quot;:150,&quot;drat&quot;:3.15,&quot;wt&quot;:3.435,&quot;qsec&quot;:17.3,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:2,&quot;_row&quot;:&quot;AMC Javelin&quot;},{&quot;mpg&quot;:13.3,&quot;cyl&quot;:8,&quot;disp&quot;:350,&quot;hp&quot;:245,&quot;drat&quot;:3.73,&quot;wt&quot;:3.84,&quot;qsec&quot;:15.41,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Camaro Z28&quot;},{&quot;mpg&quot;:19.2,&quot;cyl&quot;:8,&quot;disp&quot;:400,&quot;hp&quot;:175,&quot;drat&quot;:3.08,&quot;wt&quot;:3.845,&quot;qsec&quot;:17.05,&quot;vs&quot;:0,&quot;am&quot;:0,&quot;gear&quot;:3,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Pontiac Firebird&quot;},{&quot;mpg&quot;:27.3,&quot;cyl&quot;:4,&quot;disp&quot;:79,&quot;hp&quot;:66,&quot;drat&quot;:4.08,&quot;wt&quot;:1.935,&quot;qsec&quot;:18.9,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:1,&quot;_row&quot;:&quot;Fiat X1-9&quot;},{&quot;mpg&quot;:26,&quot;cyl&quot;:4,&quot;disp&quot;:120.3,&quot;hp&quot;:91,&quot;drat&quot;:4.43,&quot;wt&quot;:2.14,&quot;qsec&quot;:16.7,&quot;vs&quot;:0,&quot;am&quot;:1,&quot;gear&quot;:5,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Porsche 914-2&quot;},{&quot;mpg&quot;:30.4,&quot;cyl&quot;:4,&quot;disp&quot;:95.1,&quot;hp&quot;:113,&quot;drat&quot;:3.77,&quot;wt&quot;:1.513,&quot;qsec&quot;:16.9,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:5,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Lotus Europa&quot;},{&quot;mpg&quot;:15.8,&quot;cyl&quot;:8,&quot;disp&quot;:351,&quot;hp&quot;:264,&quot;drat&quot;:4.22,&quot;wt&quot;:3.17,&quot;qsec&quot;:14.5,&quot;vs&quot;:0,&quot;am&quot;:1,&quot;gear&quot;:5,&quot;carb&quot;:4,&quot;_row&quot;:&quot;Ford Pantera L&quot;},{&quot;mpg&quot;:19.7,&quot;cyl&quot;:6,&quot;disp&quot;:145,&quot;hp&quot;:175,&quot;drat&quot;:3.62,&quot;wt&quot;:2.77,&quot;qsec&quot;:15.5,&quot;vs&quot;:0,&quot;am&quot;:1,&quot;gear&quot;:5,&quot;carb&quot;:6,&quot;_row&quot;:&quot;Ferrari Dino&quot;},{&quot;mpg&quot;:15,&quot;cyl&quot;:8,&quot;disp&quot;:301,&quot;hp&quot;:335,&quot;drat&quot;:3.54,&quot;wt&quot;:3.57,&quot;qsec&quot;:14.6,&quot;vs&quot;:0,&quot;am&quot;:1,&quot;gear&quot;:5,&quot;carb&quot;:8,&quot;_row&quot;:&quot;Maserati Bora&quot;},{&quot;mpg&quot;:21.4,&quot;cyl&quot;:4,&quot;disp&quot;:121,&quot;hp&quot;:109,&quot;drat&quot;:4.11,&quot;wt&quot;:2.78,&quot;qsec&quot;:18.6,&quot;vs&quot;:1,&quot;am&quot;:1,&quot;gear&quot;:4,&quot;carb&quot;:2,&quot;_row&quot;:&quot;Volvo 142E&quot;}]</code></pre>
+<pre class="r"><code>response$compress()
+head(response$body, 30)</code></pre>
+<pre><code>##  [1] 1f 8b 08 00 00 00 00 00 00 03 9d 97 dd 6e e3 36 10 85 5f 85 d0 b5 57
+## [24] 10 c9 a1 48 f9 ae 6b</code></pre>
+<pre class="r"><code>response$type</code></pre>
+<pre><code>## [1] &quot;application/json&quot;</code></pre>
+<pre class="r"><code>response$get_header(&#39;Content-Encoding&#39;)</code></pre>
+<pre><code>## [1] &quot;gzip&quot;</code></pre>
+</div>
+</div>
+<div id="wrapping-up" class="section level2">
+<h2>Wrapping up</h2>
+<p>As I hope I’ve made clear, working directly with HTTP messages does not need to be a drag. Sure, there’s a sea of conventions around headers and status codes that can seem daunting, but <code>reqres</code> takes care of the minimum requirements for you, letting you focus on the server logic instead.</p>
+<div id="whats-next" class="section level3">
+<h3>Whats next</h3>
+<p>I obviously hope <code>reqres</code> will become pervasive in the world of R web technologies as I think it will make everyones life easier. <code>fiery</code> already uses it in the development version on GitHub, as does <code>routr</code> so if you’re going to use either of these packages you’ll automatically become aquainted. Furthermore I’ve heard expression of interest from other developers so hopefully it will be adopted beyond my own packages.</p>
+</div>
+</div>

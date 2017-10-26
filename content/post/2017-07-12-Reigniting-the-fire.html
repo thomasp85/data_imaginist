@@ -1,0 +1,44 @@
+---
+title: "Reigniting the fire: A roadmap for fiery"
+description: "The fiery package has laid relatively dormant since its introduction a year ago, despite my best attempts to carve out time for it. This ends now!"
+date: '2017-07-12'
+tags: [R, fiery, webserver]
+categories: [R]
+large_thumb: true
+img:
+    thumb: "/assets/images/fiery_logo.png"
+---
+
+
+
+<p>Last summer, just prior to starting as an intern working for Hadley, I published <a href="https://github.com/thomasp85/fiery"><code>fiery</code></a>, a flexible webserver framework that I had worked on during the spring. The reason why I developed <code>fiery</code> amids offerings such as <code>shiny</code>, <code>opencpu</code>, and <code>plumbr</code> was that I was missing a back-to-basic server framework with low overhead and freedom to program your server logic in the way you wanted. For all of their accomplishments I felt that the other frameworks had different goals.</p>
+<div class="figure">
+<img src="/assets/images/fiery_f.jpeg" />
+
+</div>
+<p><code>fiery</code> has always been intended to be modular, with support for adding plugins in order to augment functionality, but since publishing <code>fiery</code> I’ve unfortunately been distracted by other projects (mainly <code>ggforce</code>, <code>ggraph</code>, <code>tidygraph</code>, and <code>particles</code>). During all this my bad conciusness about the <code>fiery</code> standstill has nagged my though, and for several different reasons I’ve decided that now is the time to restart development of this ecosystem. This post is as much a help and incentiviser for me as it is an overview of my plans for prospective users.</p>
+<div id="routr" class="section level3">
+<h3>routr</h3>
+<p>The first piece of the puzzle to work on is my <a href="https://github.com/thomasp85/routr"><code>routr</code></a> package which was intented to be released rather shortly after <code>fiery</code> itself but fell down the priority list as my visualisation packages gained traction. While the main functionality of the package is there, it’s rough around the edges and is in general need of a full code review and update. Once <code>routr</code> is completed the whole act of writing server logic in <code>fiery</code> will be much more streamlined and easy.</p>
+</div>
+<div id="a-deployment-scheme-for-fiery-apps" class="section level3">
+<h3>A Deployment scheme for fiery apps</h3>
+<p><code>fiery</code> is both intended for local running apps in the same vien as htmlwidgets etc., for powering webapp server logic, and for services deployed to production environment. For the two latter there has yet to come a streamlined deployment scheme and this is of course a prerequisit for usage. My current plans, which will be developed under the <code>firestorm</code> mantle, is to set up infrastructure for easily deploying <code>fiery</code> apps as docker images and leveraging as much as possible from the docker ecosystem in terms of setting up load balancing and service discovery. Optimally all of this should be doable from within R and without fiddling with dockerfiles and other configurations.</p>
+</div>
+<div id="making-some-security-easy" class="section level3">
+<h3>Making (some) security easy</h3>
+<p>The internet is a wild place and you shouldn’t expose a sevice without at least some security measures. While not all of these shld be implemented at the <code>fiery</code> layer, those that do should be as easy and obvious as possble. The <code>firesafety</code> plugin package will attempt to collect all the best practices for secury http(s) and websocket communication with the big wide world</p>
+</div>
+<div id="taking-caree-of-your-data" class="section level3">
+<h3>Taking caree of your data</h3>
+<p>Whether you’re building a stateful app where session should be managed, or a REST api, data needs to go somewhere. The <code>firesale</code> plugin package will be the home of a fiery-centric datastore implementation, with support for sessions and the likes.</p>
+</div>
+<div id="demos-for-the-demo-god" class="section level3">
+<h3>Demos for the demo god</h3>
+<p>No web framework is complete without example apps, hopefully along with easy-to-read guides on how to build them. I hope to be able to provide this as well down the line, though focus is of course on providing good R documentation.</p>
+</div>
+<div id="wrapping-up" class="section level2">
+<h2>Wrapping up</h2>
+<p>That was a lot of words and promise without anything to really show for it. I’m acutely aware of that. The above provides a very loose overview of what I intend to do, but I’m in no position to provide a timeframe - you can read the list as sort-of prioritised thus getting a sense of where my spare time will be spend first.</p>
+<p>Here’s to hoping I don’t get derailed again 😄</p>
+</div>

@@ -1,0 +1,160 @@
+---
+title: "Creating a Bees and Bombs gif in R"
+description: "If you don't know Bees and Bombs go look him up immediatly. In this post I'll recreate one of his recent masterpieces in R and hopefully talk a bit about problem decomposition in the process"
+date: '2016-10-20'
+tags: [R, design]
+categories: [R]
+img:
+    thumb: "/assets/images/beesbombs_thumb.png"
+---
+
+
+
+<p>I love the work of <a href="https://twitter.com/beesandbombs">@beesandbombs</a> and while some of his creations are a poor fit for redoing in R, one of his latest got me wondering how I would recreate it in the venerable statistics language…</p>
+<p>The gif in question can be seen <a href="https://twitter.com/beesandbombs/status/789139237627170816">here</a> (I don’t know to make those fancy tweet cards using jekyll and GitHub pages).</p>
+<blockquote>
+<p>Update: I now know how to embed tweets 😄</p>
+</blockquote>
+{{% tweet 789139237627170816 %}}
+<p>While it would be nice if this was something easily solvable using <a href="https://github.com/thomasp85/tweenr">tweenr</a> it is unfortunately not, as there’s no direct path between any of the states in the animation. Each square relies on the orientation of the bounding square and so the bounding sqaure must be calculated before we can know how the inner square will move, but since the bounding sqaure moves as well we’ll need to do this for each frame.</p>
+<p>Fortunately, if you look closely on the animation you can realise that the only calculation happening is a linear interpolation between two points. The corner of an inner square simply traces the path between two corners of the bounding square. So, for each side we could define a simple linear function and solve it for the given position…</p>
+<p>But wait, that means creating four linear functions for each square - with 16 squares and a framerate of 15 frames/sec this will result in 3840 functions that needs to be created for a 4 sec animation. Seems like overkill…</p>
+<p>Fortunately we can come to another realization: If we consider each side a vector we are simply multiplying the progression of the animation onto the vector to get the corner positions of the inner square. So, given a square:</p>
+<pre class="r"><code>sq &lt;- data.frame(
+    x = c(-1, 1, 1, -1),
+    y = c(1, 1, -1, -1)
+)</code></pre>
+<p>We can calculate the corners of the inner square at time t (between 0 and 1) like so:</p>
+<pre class="r"><code>sq_to_vec &lt;- function(square) {
+    data.frame(
+        x = square$x[c(2,3,4,1)] - square$x,
+        y = square$y[c(2,3,4,1)] - square$y
+    )
+}
+vec_mult &lt;- function(vec, t) {
+    vec$x &lt;- vec$x * t
+    vec$y &lt;- vec$y * t
+    vec
+}
+vec_repos &lt;- function(vec, square) {
+    square$x &lt;- square$x + vec$x
+    square$y &lt;- square$y + vec$y
+    square
+}
+calc_inner &lt;- function(square, t) {
+    square %&gt;% 
+        sq_to_vec() %&gt;% 
+        vec_mult(t) %&gt;% 
+        vec_repos(square)
+}</code></pre>
+<p>I’ve probably gone overboard with the code refactoring, but this is mainly to illustrate what’s going on. Let’s try it out:</p>
+<pre class="r"><code>sq1 &lt;- calc_inner(sq, 0.3)
+sq_dat &lt;- rbind(sq, sq1)
+sq_dat$group &lt;- rep(1:2, each = 4)
+ggplot(sq_dat) + 
+    geom_polygon(aes(x, y, group = group), fill = NA, colour = &#39;black&#39;) + 
+    coord_fixed()</code></pre>
+<p><img src="/post/2016-10-20-Bees-and-bombs-in-r_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>that seems right…</p>
+<p>The next task is to do this for multiple squares within each others. True R users would quickly think that some <code>*apply()</code> function can solve this for us but, alas, each computation relies on the result of the prior. Then what? Are we force into using a for-loop in this day an age where functional programming is all the rage? Fear not! <code>Reduce()</code> is here to save you…</p>
+<pre class="r"><code>calc_frame &lt;- function(start, t, n) {
+    squares &lt;- rep(t, n)
+    squares &lt;- Reduce(function(sq1, t) {
+        append(sq1, list(calc_inner(sq1[[length(sq1)]], t)))
+    }, squares, init = list(start))
+    squares &lt;- do.call(rbind, squares)
+    squares$group &lt;- rep(seq_len(n + 1), each = 4)
+    squares
+}
+squares &lt;- calc_frame(sq, 0.3, 5)
+ggplot(squares) + 
+    geom_polygon(aes(x, y, group = group), fill = NA, colour = &#39;black&#39;) + 
+    coord_fixed()</code></pre>
+<p><img src="/post/2016-10-20-Bees-and-bombs-in-r_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Reduce can be a really powerfull way of abstracting away computations relying on the prior result…</p>
+<p>Now all that is left is to call the <code>calc_frame()</code> function for a number of frames that covers t = 0 – 1</p>
+<pre class="r"><code>frame_t &lt;- seq(0, 1, length.out = 100)
+squares &lt;- lapply(seq_along(frame_t), function(frame) {
+    squares &lt;- calc_frame(sq, frame_t[frame], 16)
+    squares$frame &lt;- frame
+    squares
+})
+squares &lt;- do.call(rbind, rev(squares))
+p &lt;- ggplot(squares) + 
+    geom_polygon(aes(x, y, group = group, frame = frame), fill = NA, colour = &#39;black&#39;) + 
+    coord_fixed() + 
+    theme_void() + 
+    theme(plot.background = element_rect(fill = &#39;grey90&#39;))
+gganimate(p, title_frame = FALSE)</code></pre>
+<p><img src="/post/2016-10-20-Bees-and-bombs-in-r_files/figure-html/unnamed-chunk-7.gif" width="672" /></p>
+<p>Now we could definetly call it a day now as we have reached our objective, but I want to talk about one last thing before I wrap up: Code generalization. We set out to recreate the Bees and Bombs animation so we were completely focused on making this work for squares. While our code would work nicely for rectangles as well it doesn’t generalize to other polygons. There is no need for this constraint though. Nothing in our setup should make this specific for 4-sided objects so with a little care towards generalization we can improve our code and make it generally applicable. Fortunately it is not a big change. The only function that makes any assumptions about the shape of our polygon is the <code>sq_to_vec()</code> function. Some of the other function arguments imply a square though so we’ll rewrite these as well:</p>
+<pre class="r"><code># Don&#39;t assume a shape with four corners
+shape_to_vec &lt;- function(shape) {
+    data.frame(
+        x = c(shape$x[-1], shape$x[1]) - shape$x,
+        y = c(shape$y[-1], shape$y[1]) - shape$y
+    )
+}
+# Rename square to shape
+vec_repos &lt;- function(vec, shape) {
+    shape$x &lt;- shape$x + vec$x
+    shape$y &lt;- shape$y + vec$y
+    shape
+}
+calc_inner &lt;- function(shape, t) {
+    shape %&gt;% 
+        shape_to_vec() %&gt;% 
+        vec_mult(t) %&gt;% 
+        vec_repos(shape)
+}
+calc_frame &lt;- function(start, t, n) {
+    shapes &lt;- rep(t, n)
+    shapes &lt;- Reduce(function(sq1, t) {
+        append(sq1, list(calc_inner(sq1[[length(sq1)]], t)))
+    }, shapes, init = list(start))
+    shapes &lt;- do.call(rbind, shapes)
+    shapes$group &lt;- rep(seq_len(n + 1), each = nrow(start))
+    shapes
+}</code></pre>
+<p>That was easy - let’s try to make something crazy with this:</p>
+<pre class="r"><code>trans &lt;- radial_trans(c(0, 1), c(0, 1), pad = 0)
+triangle &lt;- trans$transform(rep(sqrt(2), 4), seq(0, 1, length.out = 4))[1:3, ]
+triangles &lt;- lapply(seq_along(frame_t), function(frame) {
+    triangles &lt;- calc_frame(triangle, frame_t[frame], 16)
+    triangles$frame &lt;- frame
+    triangles
+})
+triangles &lt;- do.call(rbind, rev(triangles))
+triangles$shape &lt;- &#39;triangle&#39;
+star &lt;- trans$transform(rep(1.3, 6), seq(0, 1, length.out = 6))[c(1, 3, 5, 2, 4), ]
+stars &lt;- lapply(seq_along(frame_t), function(frame) {
+    stars &lt;- calc_frame(star, frame_t[frame], 16)
+    stars$frame &lt;- frame
+    stars
+})
+stars &lt;- do.call(rbind, rev(stars))
+stars$shape &lt;- &#39;star&#39;
+hexagon &lt;- trans$transform(rep(1.2, 7), seq(0, 1, length.out = 7))[1:6, ]
+hexagons &lt;- lapply(seq_along(frame_t), function(frame) {
+    hexagons &lt;- calc_frame(hexagon, frame_t[frame], 16)
+    hexagons$frame &lt;- frame
+    hexagons
+})
+hexagons &lt;- do.call(rbind, rev(hexagons))
+hexagons$shape &lt;- &#39;hexagon&#39;
+squares$shape &lt;- &#39;square&#39;
+shapes &lt;- rbind(squares, stars, triangles, hexagons)
+p &lt;- ggplot(shapes) + 
+    geom_polygon(aes(x, y, group = -group, frame = frame, colour = group), 
+                 fill = NA) + 
+    scale_color_gradient(low = &#39;black&#39;, high = &#39;grey90&#39;, trans = &#39;log&#39;) + 
+    facet_wrap(~shape) +
+    coord_fixed() + 
+    theme_void() + 
+    theme(plot.background = element_rect(fill = &#39;grey90&#39;),
+          legend.position = &#39;none&#39;,
+          strip.text = element_blank())
+gganimate(p, title_frame = FALSE)</code></pre>
+<p><img src="/post/2016-10-20-Bees-and-bombs-in-r_files/figure-html/unnamed-chunk-9.gif" width="672" /></p>
+<p>As generalizations go, this is pretty good. While all of the above is quite simple I hope it serves to illustrate how you can think about the code you write and how small changes can make it broader applicable. Even if there is no way that the code should be applied in any other context than the one at hand, thinking about generalization helps you identify the hidden assumptions in your code, so it is never a wasted exercise.</p>
+<p>Another point I hope I have made is how animations are often really simple. A lot of R users are accustumed to static plots and find animations to be very daunting. In reality it is often just a matter of identifying how key points travel around as time pass and everything else will sort itself out. What I admire about Bees and Bombs is how he can take seemingly simple relationships between shapes and transformations and mix it together in a way that makes the whole greater than the sums of the parts. I invite anyone who wish to improve their understanding of animations in R to recreate one of his pieces - it might be simpler than you think…</p>
