@@ -81,7 +81,7 @@ enableEmoji = true
   linkedin-square = "https://www.linkedin.com/in/thomas-lin-pedersen-9b17572/"
 
 [outputs]
-home = [ "RSS"]
+home = [ "HTML", "RSS"]
 
 [outputFormats]
 [outputFormats.RSS]
