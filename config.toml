@@ -81,9 +81,15 @@ enableEmoji = true
   linkedin-square = "https://www.linkedin.com/in/thomas-lin-pedersen-9b17572/"
 
 [outputs]
-home = [ "HTML", "RSS"]
+home = [ "HTML", "RSS", "RFEED"]
 
 [outputFormats]
 [outputFormats.RSS]
 mediatype = "application/rss"
 baseName = "feed"
+
+[outputFormats]
+[outputFormats.RFEED]
+mediatype = "application/rss"
+baseName = "feed_r"
+noUgly = true
