@@ -1,0 +1,4 @@
+# Our security address
+
+Contact: thomasp85@gmail.com
+Encryption: https://www.data-imaginist.com/pgp-key.txt
