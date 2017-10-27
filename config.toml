@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "www.data-imaginist.com/"
+baseurl = "https://www.data-imaginist.com/"
 # HTML Language Code Reference, such as en, zh-cn
 languageCode = "en"
 title = "Data Imaginist"
