@@ -2,6 +2,7 @@
 title: "Introducing tidygraph"
 description: "Towards a tidy API for relational data"
 date: '2017-07-07'
+slug: 'Introducing-tidygraph'
 tags: [R, tidygraph, network, graph]
 categories: [R]
 large_thumb: true

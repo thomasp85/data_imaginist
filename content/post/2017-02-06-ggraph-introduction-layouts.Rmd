@@ -2,6 +2,7 @@
 title: "Introduction to ggraph: Layouts"
 description: "In the first post in a series of ggraph introductions I will talk about how ggraph specifies and uses layouts"
 date: '2017-02-06'
+slug: 'ggraph-introduction-layouts'
 tags: [R, ggraph, visualization]
 categories: [R]
 large_thumb: true

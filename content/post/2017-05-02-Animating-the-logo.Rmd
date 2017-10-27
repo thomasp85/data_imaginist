@@ -2,6 +2,7 @@
 title: "Taking control of animations in R and demystifying them in the process"
 description: "Some time ago I created the logo for www.data-imaginist.com and and promised to show you how it could be animated. The time for that has come..."
 date: '2017-05-02'
+slug: 'Animating-the-logo'
 tags: [R, ggraph, design, animation, gtable]
 categories: [R]
 img:

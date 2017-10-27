@@ -2,6 +2,7 @@
 title: "Becoming The Intern"
 description: "The story of how I landed the most prestigious internship within the world of R visualization frameworks."
 date: '2016-10-31'
+slug: 'Becoming-the-intern'
 tags: [R, ggplot2, ggforce, ggraph]
 categories: [R]
 large_thumb: true

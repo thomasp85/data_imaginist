@@ -2,6 +2,7 @@
 title: "Introducing reqres"
 description: "A modern R interface to HTTP messages"
 date: '2017-08-13'
+slug: 'Introducing-reqres'
 tags: [R, reqres, HTTP, webserver]
 categories: [R]
 large_thumb: true

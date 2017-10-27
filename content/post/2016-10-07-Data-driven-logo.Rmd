@@ -2,6 +2,7 @@
 title: "Data Driven Logo Design with ggraph and gtable"
 description: "I recently created the logo for www.data-imaginist.com and in this post I will describe how I did it and what went through my head in the process"
 date: '2016-10-07'
+slug: 'Data-driven-logo'
 tags: [R, ggraph, design]
 categories: [R]
 large_thumb: true

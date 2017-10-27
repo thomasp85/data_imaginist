@@ -2,6 +2,7 @@
 title: "Introducing reqres"
 description: "A modern R interface to HTTP messages"
 date: '2017-08-13'
+slug: 'Introducing-reqres'
 tags: [R, reqres, HTTP, webserver]
 categories: [R]
 large_thumb: true
@@ -111,7 +112,7 @@ response$get_header(&#39;Server&#39;)</code></pre>
 <pre><code>## Warning in format.POSIXlt(as.POSIXlt(x, tz), format, usetz, ...): unknown
 ## timezone &#39;default/Europe/Copenhagen&#39;</code></pre>
 <pre class="r"><code>response$get_header(&#39;Date&#39;)</code></pre>
-<pre><code>## [1] &quot;Thu, 26 Oct 2017 11:01:20 GMT&quot;</code></pre>
+<pre><code>## [1] &quot;Thu, 26 Oct 2017 23:28:22 GMT&quot;</code></pre>
 <pre class="r"><code>response$type &lt;- &#39;json&#39;
 response$get_header(&#39;Content-Type&#39;)</code></pre>
 <pre><code>## [1] &quot;application/json&quot;</code></pre>
@@ -125,7 +126,7 @@ response$get_header(&#39;Set-Cookie&#39;)</code></pre>
 <pre class="r"><code>response$has_cookie(&#39;session&#39;)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>response$as_list()$headers[[&#39;Set-Cookie&#39;]]</code></pre>
-<pre><code>## [1] &quot;session=ef064802-f1be-46b8-9ae8-a4618b6bf8f0; Max-Age=9000; Secure&quot;</code></pre>
+<pre><code>## [1] &quot;session=d7f6aafa-aee4-4f52-ab7f-aa34625ec6a6; Max-Age=9000; Secure&quot;</code></pre>
 <p>Apart from the headers, the each response also contains their own data store that can contain any data. This facilitate communication between different middleware (code that modify the HTTP messages on the server). The data store is used pretty much like the headers.</p>
 <pre class="r"><code>response$set_data(&#39;alphabet&#39;, letters)
 response$has_data(&#39;alphabet&#39;)</code></pre>

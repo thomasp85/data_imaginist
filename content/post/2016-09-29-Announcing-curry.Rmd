@@ -2,6 +2,7 @@
 title: "Announcing curry: Operator based currying and partial application"
 description: "curry is a new package just released on CRAN, that allows you to perform currying and partial application of functions using a range of operators."
 date: '2016-09-29'
+slug: 'Announcing-curry'
 tags: [R, package, announcement, curry]
 categories: [R]
 ---

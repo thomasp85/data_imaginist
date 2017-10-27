@@ -2,6 +2,7 @@
 title: "When A Fire Starts to Burn - Fiery 1.0 released"
 description: "The R webserver framework fiery has just been updated to v1.0"
 date: '2017-08-16'
+slug: 'When-a-fire-starts-to-burn'
 tags: [R, fiery, webserver, http]
 categories: [R]
 large_thumb: true

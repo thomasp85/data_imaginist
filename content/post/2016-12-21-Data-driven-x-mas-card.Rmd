@@ -2,6 +2,7 @@
 title: "Data Driven Christmas Card Animation with Voronoi Tiles"
 description: "In this post I'm going to show you how to make a Christmas card that will bring joy to even the geekiest of data scientists"
 date: '2016-12-21'
+slug: 'Data-driven-x-mas-card'
 tags: [R, design, ggforce, tweenr]
 categories: [R]
 img:

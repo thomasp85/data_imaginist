@@ -2,6 +2,7 @@
 title: "Beneath the canvas"
 description: 'On performance, mechanics, and coding in ggplot2'
 date: '2017-07-24'
+slug: 'Beneath-the-canvas'
 large_thumb: no
 tags:
 - R
