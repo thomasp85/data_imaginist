@@ -11,6 +11,7 @@ hasCJKLanguage = false
 # Added to theme
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 enableEmoji = true
+pygmentsUseClassic = true
 [permalinks]
     post = "/:year/:slug/"
 
