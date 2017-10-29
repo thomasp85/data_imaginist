@@ -1,0 +1,111 @@
+---
+title: Moving to Blogdown
+description: "A short post about my descision to move from Jekyll to Blogdown/Hugo"
+author: Thomas Lin Pedersen
+date: '2017-10-29'
+slug: moving-to-blogdown
+categories:
+  - R
+tags: []
+---
+
+As I announced last friday on Twitter I have moved *Data Imaginist* to Blogdown
+from Jekyll. This is going to be a short post about why I did it. There's not
+going to be much tutorial about this; the migration is as painless as can be 
+expected and besides, other more qualified people have already made great 
+tutorials about the matter.
+
+A little over a year ago I started blogging, using what I expect most were using
+at the time (in R-land anyway) --- The Jekyll/Github Pages combo. I'd stolen a
+script from David Robinson that converted new RMarkdown files into Markdown 
+documents for Jekyll, resulting in a workflow quite like what Blogdown offers. 
+So when Blogdown arrived, I had little inclination to look more into it. 
+Blogdown might be newer and more flashy, but it didn't seem to offer enough to
+warrant the time investment it would take to migrate my post and learn about
+Hugo. Arguably it is possible to ignore the Hugo backend when using Blogdown,
+but I like to tinker and would never be satisfied using an engine I didn't 
+understand (this might explain why I have been poking at ggplot2 to the extend I
+has).
+
+Bottomline: I let it pass...
+
+Then, little by little, I was drawn in anyway. The first seducer were the slew 
+of blogposts descibing the bliss that migrating your blog to Blogdown had 
+brought - In addition those posts also spoke highly of the hosting from Netlify
+and their free HTTPS support. Being around Bob Rudis (in the Twitterverse) had
+made me aware of the need for secure browsing habits so this appealed a lot to
+me (even though the HTTPS support came throgh Let's Encrypt - something Bob 
+vehemently opposes). The second seducer was more of a repulsor from my current
+setup: My page was falling apart... Due to changes in Jekyll my internal links
+were no longer functioning and I would need to go through my whole theme to fix
+it. What was most annoying was that this stabbed me in the back. Jekyll had been
+upgraded on Github pages at some point, silently wrecking havock on my site
+without me knowing it - clearly an unacceptable setup. Lastly, as convenient as
+the automatic Jekyll building was by Github (when it didn't break my site), as
+annoying it was to do it locally to preview a post before publishing. Mayby it
+is because I haven't spend much time in Ruby-world but I never quite managed to
+get everything installed correctly so I could ensure that my own system matched
+what Github was using... The final push came when I for a brief period was the
+designer of the Blogdown logo and decided that now was the right time to make 
+the switch.
+
+As I said in the beginning, this will not be a post about how to switch to 
+Blogdown from Jekyll as I'm horrible at writing such posts. I can, however,
+describe my approach to migrating. I started by browsing the available Hugo
+themes and to my joy the one I was currently using had been ported and improved
+upon so the choice was easy (to be honest I'm not really really pleased with the
+look of my blog but the Cactus theme is pretty stylish in its minimalism). Once
+the theme was sorted out I began moving my posts into the new system one by one
+to see how it went. To my surprise it went predominantly without a hitch. 
+Blogdown sets some other default figure sizes which resulted in some of my
+animations becoming unbearably large, so this had to be adjusted, but other than
+that it was mainly a matter of switching the Jekyll macros for Hugo shortcodes.
+My most used macro was for linking between blogposts which is akin to the *ref*
+shortcode but it took me a while to figure out that the argument to ref had to 
+be enclosed in escaped quotes to survive the RMarkdown + Pandoc conversion. This
+could be a nice thing for Blogdown to take care off as it feels pretty 
+cumbersome to write a path as `'\\"my-post.html\\"'`...
+
+Once I had gotten all my posts successfully into Blogdown I needed to get the
+rest going, which meant for the most part to port all my hacks and changes from
+the Jekyll theme into the Hugo version. One thing I'm pretty serious about is
+how links to my posts look when shared on Twitter so I had made a system where
+I could set the Twitter card type in the preamble of a post (large vs small) as
+well as a picture to use instead of my default logo. Porting this meant getting
+a bit into the Hugo templating system so that I could migrate my changes to the
+HTML header that gives these nice cards on Twitter/Facebook/LinkedIn. In the end
+HTML templates seems to be so alike nowadays that moving from one to the next is
+mostly a matter of understanding the data binding and how it differs between the
+systems. If you have some custom templates in Jekyll I can assure you that they
+probably wont take long to port over to Hugo...
+
+My last big todo was my RSS feed. Had I only had one it would not have been an
+issue at all, but as it is my page actually got two - a general one and one 
+unique to posts in the *R* category (this was only made for R-Bloggers). Hugo
+comes with automatic RSS generation for both the main site and for differentt 
+tags and categories, but they all reside at different locations. My two feeds 
+both resides at the root of my page - something not really supported by Hugo. 
+But I couldn't accept breaking subscription or link so I scavenged the net and 
+came to a solution - as my git commits tell, it was not straightforward...
+
+![](/assets/images/rss_git_commit.png)
+
+In the end I prevailed. If you are in a similar situation do look at my source
+code for the solution or contact me - I wont bore the 99.9 % rest with the
+details. The RSS episode was my first experience battling the Hugo system and
+arguably only because I had to support a setup from Jekyll that was handled in 
+another way by Hugo...
+
+I wish I had a lot to tell you about my experience with Netlify, but I haven't.
+Their service is the posterchild of *easy, one-click solutions* and I can 
+whole-heartedly recommend them. The switch from Github to Netlify hosting took a
+total of around 20 minutes, including setting up HTTPS.
+
+As easy as I have hopefully made all of this sound, I really, really, really 
+hope that something new and better doesn't come out within a year. Doing this
+sort of infrastructure stuff is not something I particularly enjoy and I could
+have given my site a new look or begun developing the next version of 
+`gganimate` instead of basically getting to the same page I had before. But
+sometimes you have to clean your room before you can play, and hopefully 
+playtime is coming soon.
+
