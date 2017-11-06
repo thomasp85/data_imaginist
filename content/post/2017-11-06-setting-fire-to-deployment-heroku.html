@@ -1,0 +1,114 @@
+---
+title: "Setting fire to deployment: Heroku"
+description: "In this blog post I'll show one way of deploying fiery web services: As a Heroku app."
+author: Thomas Lin Pedersen
+date: '2017-11-06'
+slug: setting-fire-to-deployment
+categories:
+  - R
+tags:
+  - fiery
+  - webserver
+  - heroku
+  - routr
+large_thumb: true
+img:
+    thumb: "/assets/images/fiery_heroku.png"
+---
+
+
+
+<p>There are many ways to utilize <code>fiery</code>: It can be the engine behind a local running web-app, it can serve a dynamic site running on your own server, or it can serve a more demanding service by running in the cloud. In this post I’m going to focus on one way of achieving the latter, namely by deploying a fiery app to Heroku.</p>
+<div id="whats-heroku-anyways" class="section level2">
+<h2>What’s Heroku anyways?</h2>
+<p><a href="https://heroku.com">Heroku</a> is a Platform-as-a-Service (PaaS), meaning it is a way of putting your code in production without having to worry too much about managing servers, scaling your platform, and keeping everything running. Heroku builds on the premise of containers, a topic which will be familiar to anyone who has looked at <a href="https://docker.com">Docker</a>—arguably the most well known container solution at the moment. If the concept of containers are foreign to you I’ll give a very short introduction below:</p>
+<blockquote>
+<p>A container is conceptually a minimal virtual machine that can be run anywhere the correct runtime has been installed. Compared to a regular virtual machine a container is merely a thin shell around your environment and most processes are mapped directly to processes on the host system. This means that a container requires way less ressources to get running and is much quicker to get up and running.</p>
+</blockquote>
+<p>Containers are perfect for services written with R code because it makes scaling easy. R is famously single threaded, and achieving concurrency (the ability to handle multiple requests at the same time) is difficult inside a single running R process. By packaging the R code inside a container it is a simple matter of starting multiple containers if there is need for a higher throughput.</p>
+<p>Heroku abstracts most of the container part away so you can focus on the app logic instead, but has not really been build for R (few services are…). Out of the box Heroku should work with Node, Ruby, Java, PHP, Python, Go, Scala, and Clojure, but it is possible to make anything work by providing your own build instructions…</p>
+</div>
+<div id="before-we-begin" class="section level2">
+<h2>Before we begin</h2>
+<p>In order to play along with this tutorial you’ll need a <a href="https://heroku.com/login">Heroku acount</a>. An account is free but as with all free beer on the internet it comes with restrictions: There are limited resources available to you, and you can map your app to your own domain. Still, for our little tutorial there should be no problems. If you do not wish to register at Heroku I think you can get the gist of the tutorial by just reading along, but then again - the tutorial is pretty worthless to you if you have no intention of using Heroku.</p>
+<p>Once registered there are two different ways to get going: One is <a href="https://devcenter.heroku.com/articles/heroku-cli#download-and-install">installing the command-line tools</a> which we will cover first, while the other is doing it from within the web interface, which we will do afterwards.</p>
+</div>
+<div id="the-setup" class="section level2">
+<h2>The setup</h2>
+<p>I have prepared a <a href="https://github.com/thomasp85/heroku-fiery-demo">GitHub repository</a> that you are free to fork or download. The repository contains 3 files of note:</p>
+<ul>
+<li><strong>run.R</strong> The source file defining and starting the fiery app. Is the app already defined within a package its a simple matter of loading the package and starting the app, but it can also—as with this example—be a complete specification of the app itself. In our example we are reusing the simple prediction service we created in the <a href="{{% ref \"2017-08-16-When-a-fire-starts-to-burn.html\" %}}">fiery v1 announcement</a> with a few small adjustments. The most important change is that the app is now set to run on the <em>0.0.0.0</em> host and listen on a port defined by Heroku using the <em>PORT</em> environment variable.</li>
+<li><strong>init.R</strong> The file defining the R dependencies. This file is making sure that your R environment is ready to run your app. It will usually contain <code>install.packages</code> calls, and/or <code>devtools::install_github</code> to grab development versions of packages. For our example we are just grabbing the latest versions of <code>fiery</code> and <code>routr</code> from GitHub</li>
+<li><strong>Aptfile</strong> The file defining system level dependencies. This will generally be filled with libraries needed for your R packages. In our example, since <code>fiery</code> requires <code>reqres</code> and <code>reqres</code> requires <code>xml2</code>, we need <code>libxml2-dev</code> available. In general it can be hard to predict which libraries are needed so it is often a matter of trying things out and adding the requested libraries as they pop up. As the name of the file suggests, the libraries will be installed with <code>apt-get</code> so any library available there is good to go.</li>
+</ul>
+<p>Apart from our files we need a way to tell Heroku how to deal with them. This is the potentially hardest part, but thankfully it has already been solved. Chris Stefano has been iterating over a range of approaches to get R to run on Heroku and <a href="https://github.com/virtualstaticvoid/heroku-buildpack-r/tree/heroku-16">provides buildpacks</a> to get us going.</p>
+<p>Now, with everything we need ready, we can finally try to get this thing up and running</p>
+</div>
+<div id="deploying-from-the-command-line" class="section level2">
+<h2>Deploying from the command-line</h2>
+<p>Once you have installed the command line tools <a href="https://devcenter.heroku.com/articles/heroku-cli#download-and-install">according to the instructions</a> for your system (I used Homebrew on my Mac) and forked my repository we are ready to go. From here on there are surprisingly few steps before we get our app up and running.</p>
+<p>The first step is to create the app on Heroku. This is done from the command line using the <code>heroku create</code> command. The command takes the name of the app (I’ve chosen <em>fiery-demo</em> so you’ll have to chose something different). In our case, because we don’t use a language that Heroku supports out of the box, we also adds the buildpack discussed above using <code>-b</code>.</p>
+<pre class="bash"><code>heroku create fiery-demo -b http://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16
+# Creating ⬢ fiery-demo... done
+# Setting buildpack to http://github.com/virtualstaticvoid/heroku-buildpack-r.git#heroku-16... done
+# https://fiery-demo.herokuapp.com/ | https://git.heroku.com/fiery-demo.git</code></pre>
+<p>Apart from setting up the app on Heroku the command will also link the current directory with the Heroku git server. This can be verified by listing the remotes.</p>
+<pre class="bash"><code>git remote
+# heroku
+# origin</code></pre>
+<p>From now on it is a simple matter of pushing to the <em>heroku</em> remote to trigger a redeployment. We can simulate this by creating and committing an empty file.</p>
+<pre class="bash"><code>touch triggerfile
+git add .
+git commit -am &quot;trigger a deploy&quot;
+git push heroku master</code></pre>
+<p>With the Git integration and new <em>Terminal</em> pane in RStudio, managing and deploying fiery apps from within a native R development environment is pretty easy. The only small annoyance is that the git integration does not support pushing to multiple different remotes so you’ll have to do the push to the heroku remote manually (this could change in the future of course).</p>
+</div>
+<div id="using-the-web-interface" class="section level2">
+<h2>Using the web interface</h2>
+<p>While using the command line is in no way difficult, Heroku also provides a web interface for setting up your app. In the following I’ll show what it takes to replicate what we did in the command line (more or less):</p>
+<p>When you log in to <a href="http://heroku.com">Heroku</a> for the first time you’ll be greeted with the following screen:</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/start.png" />
+
+</div>
+<p>(if you already have something up and running you’ll see a list of your apps).</p>
+<p>As R is not part of the exclusive club of languages that Heroku understands we must start from scratch by clicking <em>Create New App</em>. We will now be asked for a name for the app as well as the location of the server it should run on (US or Europe). You generally want your server to be as close to your users, but for our little demo it really doesn’t matter.</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/create.png" />
+
+</div>
+<p>As you can see it also lets you add the app to a pipeline. Pipelines are used for orchestrating multiple different apps that should work together and is outside the scope of this tutorial (there is nothing R-specific about their use). Once you hit <em>Create App</em> you are taken to the <em>Deploy</em> settings for the app. Scrolling a bit down you’ll find a section where you can specify how to get your code into the app.</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/method.png" />
+
+</div>
+<p>I’ll be showing how you can link it up to a GitHub repository, but as you can see it is also possible to link it to e.g. a Dropbox folder (in that case you’ll have to manually redeploy every time you change code in your app).</p>
+<p>Once you’ve found the repository containing the app and linked to it you’ll be able to set additional settings, such as automatically redeploying when you push to a branch etc.</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/set%20deploy.png" />
+
+</div>
+<p>If we click on <em>Deploy Branch</em> now we’ll get an error, as Heroku has yet to be told how to deal with R code.</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/fail.png" />
+
+</div>
+<p>To fix this we’ll need to point Heroku to our buildpack. This is done under the <em>Settings</em> pane, where we will add the same buildpack as we used with the console.</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/buildpack.png" />
+
+</div>
+<p>After this we can switch back to the <em>Deploy</em> pane and hit <em>Deploy Branch</em> again and see the deployment start and, hopefully, succeed.</p>
+<div class="figure">
+<img src="/assets/images/fiery-heroku/success.png" />
+
+</div>
+<p>If you have activated <em>Automatic Deploys</em> you’ll just have to push to your Github branch to update your app and you can thus, as with the command-line setup, manage your app completely from within your R development environment.</p>
+</div>
+<div id="wrapping-up" class="section level2">
+<h2>Wrapping up</h2>
+<p>While the demo app we have used is extremely minimal, the approach we have seen scales to any type of app, whether it is a minimal service API or a full webpage. As your app grows I would encourage you to move as much code into a package so you can document and unit test it, and so the <code>run.R</code> does not grow unwieldy large.</p>
+<p>Another consideration when growing your application is the limited resources available in the free tier. If you begin to build a more complex app you might run into the limitations and need to shell out some money to get decent performance. As with everything on the internet there is no free beer…</p>
+<p>While it may be possible that I will add a clear specification for defining fiery apps in the future and provide buildpacks for this specifically, the approach shown above is general and continue to work irrelevant of how <code>fiery</code> continues to evolve.</p>
+<p>In a later post I will show how to use Docker in much the same way as we have used Heroku in this post - stay tuned…</p>
+</div>
