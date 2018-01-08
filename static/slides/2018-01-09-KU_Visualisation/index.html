@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Grammar of Graphics</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Thomas Lin Pedersen" />
+    <link href="libs/remark-css-0.0.1/example.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# The Grammar of Graphics
+## Its Implications for Understanding and Programming Visualisations
+### Thomas Lin Pedersen
+### 2018/09/01
+
+---
+
+
+
+
+# Overview
+
+.pull-left[
+1. About me
+
+2. What is a plot?
+  * From data to graphic
+  * The grammar
+  * Examples
+  
+3. The ggplot2 way
+  * The ggplot2 grammar
+  * API overview
+]
+
+.pull-right[
+![](img/xkcd.png)
+]
+
+.center.well[
+*You can find this presentation at:*
+
+[www.data-imaginist.com/slides/2018-01-09-KU_Visualisation](https://www.data-imaginist.com/slides/2018-01-09-KU_Visualisation)
+]
+
+---
+
+# About me
+
+.l-column[
+- Thomas Lin Pedersen
+- PhD in Bioinformatics (DTU)
+  - Analysing and visualising large scale genomic data
+- Data Scientist at SKAT
+  - Develops tools for our Data Scientists
+  - Occationally develops visualisations
+  - Helps with anything R related
+- Compulsive R package developer
+- Maker of generative art
+
+Find me on:
+- Twitter: [@thomasp85](https://twitter.com/thomasp85)
+- GitHub: [thomasp85](https://github.com/thomasp85)
+- The web: [www.data-imaginist.com](https://data-imaginist.com)
+]
+
+.r-column[
+.center[
+![](img/me.jpg)
+]
+
+.center[
+![](img/skat.png)
+]
+]
+
+???
+- Tools to empower scientists
+- Bioinformatics is data science
+- SKAT has the largest data science office in DK
+  - Work with actual big data
+  - Solve problems at the frontier of ds
+- Twitter is a great place for visualisation/programming
+- Showcase your work!
+- Blog about it!
+---
+class: center, middle
+
+# About You?
+
+???
+- How many know/use R?
+- How many know ggplot2?
+- Who consider themselves data scientists?
+- Who have programmed visualisations prior to this course?
+
+---
+class: center, middle, break
+
+# The Grammar of Graphics
+
+---
+
+# A plot
+
+
+```
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- classic bar plot
+  - summation of bins
+
+---
+
+# A plot
+
+
+```
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- choice of bar is arbitrary
+- line or points would do as well
+
+---
+
+# A plot
+
+
+```
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- unstead of counting we can show all
+- y-axis free to do some other stuff 
+
+---
+
+# A plot
+
+
+```
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- color can be used to distinguish bins
+
+---
+
+# A plot
+
+
+```
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- this, of course, makes the x-axis free to show other stuff
+
+---
+
+# A plot
+
+
+```
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- we can add additional layers on top of each others
+
+---
+
+# The Grammar
+
+In data science a **grammar** defines a vocabulary of a specific **domain**. A
+grammar makes it easier to *think about*, *break down*, and *communicate* about
+problems within the domain.
+
+### The grammar of graphics
+Coined by Leland Wilkinson the **grammar of graphics** provides a framework for
+discussing *any* type of data visualisation. It discusses the *transformations*
+applied to the data as well as the *elements* of the final graphic.
+
+Wilkinson provided a *theoretical* framework for the grammar of graphics.
+**ggplot2** is one *practical* application of the theory.
+
+ 
+
+.center.well[
+*grammar of ggplot2* **!=** *grammar defined by Wilkinson*
+]
+
+???
+- grammar defines the
+  - meaning
+  - interplay
+  of domain specific verbs
+- not a programming term
+  - but provide a natural vocabulary for a composit API
+
+---
+layout: true
+
+# Data
+
+The data going into ggplot2 needs to be **tidy** — if this term is foreign
+it simply indicates an SQL-like formatting of data.
+
+---
+
+## Tidy data: 
+
+
+```r
+head(mtcars)
+```
+
+```
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+???
+- data structure might seem second tier to a graphical framework
+  - a wrong format will constrain you
+
+---
+
+## Untidy data
+
+
+```r
+mtcars %&gt;% reshape2::dcast(cyl~gear, sum)
+```
+
+```
+##   cyl  3  4  5
+## 1   4  1 12  4
+## 2   6  2 16  6
+## 3   8 37  0 12
+```
+
+---
+layout: false
+
+# Aesthetics
+
+A mapping of a data attribute (column) to a visual property:
+
+
+```r
+head(mtcars)
+```
+
+```
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```r
+aes(colour = cyl, size = gear)
+```
+
+```
+## * colour -&gt; cyl
+## * size   -&gt; gear
+```
+
+???
+- A plot is basically a translation of data to visual parameters
+  - aesthetic specifies what should be translated; and to what
+
+---
+
+# Statistics
+
+In case visualising the raw data is not feasable or warranted the input data can
+be transformed into a format meaningful for the plottype.
+
+
+```r
+mtcars2 &lt;- mutate(mtcars, x = gear, y = mpg, 
+                  group = match(x, unique(x)), PANEL = 1)
+
+StatBoxplot$compute_panel(mtcars2) %&gt;% as_tibble()
+```
+
+```
+## # A tibble: 3 x 14
+##    ymin lower middle  upper  ymax  outliers notchupper notchlower     x
+##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;list&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
+## 1  17.8  21.0   22.8 28.075  33.9 &lt;dbl [0]&gt;   26.02695   19.57305     4
+## 2  10.4  14.5   15.5 18.400  21.5 &lt;dbl [0]&gt;   17.09102   13.90898     3
+## 3  15.0  15.8   19.7 26.000  30.4 &lt;dbl [0]&gt;   26.90729   12.49271     5
+## # ... with 5 more variables: relvarwidth &lt;dbl&gt;, gear &lt;dbl&gt;, group &lt;int&gt;,
+## #   PANEL &lt;dbl&gt;, am &lt;dbl&gt;
+```
+
+???
+- showing the raw data is often the best, but can be unfeasable
+- statistic transformations can also show information not readily obvious from
+  raw data, e.g. voronoi tesselation
+
+---
+
+# Scale
+
+A transformation of a mapped attribute to a domain understandable by the
+aesthetic:
+
+In the case of `colour -&gt; cyl` the values in the `cyl` column doesn't match
+any specific colour — they need to be translated to a colour value first. A
+**scale** is a function that defines this transformation:
+
+```
+# A simple scale mapping for cyl
+4 -&gt; '#1b9e77'
+6 -&gt; '#d95f02'
+8 -&gt; '#7570b3'
+```
+
+```r
+cyl_scale(c(6, 8, 4, 4, 8, 6, 4))
+```
+
+```
+## [1] "#d95f02" "#7570b3" "#1b9e77" "#1b9e77" "#7570b3" "#d95f02" "#1b9e77"
+```
+
+???
+- aesthetics define what
+- scales define how!
+
+---
+
+# Positional adjustments
+
+In the event data points needs to change their relative position. The gold
+example is a stacked bar chart:
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- other well known examples
+  - grouped bar chart
+  - jitter
+
+---
+
+# Coordinate system
+
+Define how positional aesthetics (*x* and *y*) are laid out in 2D. The standard
+is to use a cartesian coordinate system but others exists, e.g. polar 
+coordinates or map projections.
+
+![](presentation_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/unnamed-chunk-13-2.png)&lt;!-- --&gt;
+
+???
+- whether a pie chart is a stacked bar on a polar coordinate system, or a 
+  transformation mapping a variable to wedge angle is left to the user...
+
+---
+
+# Geometries
+
+This is the biggie! How should data — after everything it has been through — be
+drawn? The basic building blocks are *points*, *lines*, and *polygons*, but composite geometries are available as well (e.g. box plots which combines them all)
+
+![](presentation_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/unnamed-chunk-14-2.png)&lt;!-- --&gt;
+
+???
+often a geom is intrincically linked to a statistical transformation
+
+---
+
+# Layers
+
+A layer is defined by data, a statistic, a positional adjustment, and a
+geometry. A plot can consist of multiple layers, stacked on top of each other
+and sharing scales and coordinate system.
+
+![](presentation_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/unnamed-chunk-15-2.png)&lt;!-- --&gt;
+
+???
+- a dual axis plot is a n example of a layered plot that breaks the common
+  scales requirement
+
+---
+
+# Panels/facets
+
+Small multiples allows you to segments data by variables. It is a **very** 
+powerful way of decluttering plots and create stories/insight.
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+- small multiples are just one application of facetting
+- basically facetting is simply subviews of your data
+
+---
+class: center, middle, break
+
+# Examples
+
+---
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+```
+carat -&gt; x, price -&gt; y
+statistic is hexagonal binning
+fill -&gt; count
+geometry is hexagon
+```
+
+???
+fill is mapped to a variable from stat
+
+---
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+```
+manufacturer -&gt; x, hwy -&gt; y
+statistic is mean + standard error
+geometry is rectangle + line
+coordinate system is polar
+```
+---
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+```
+Petal.Length -&gt; x, Petal.Width -&gt; y, colour -&gt; Species
+statistic is identity and smooth (linear fit)
+geometry is point and line
+facet is zoom
+```
+
+---
+class: center, middle, break
+
+.c-column[
+![](img/ggplot2.png)
+]
+
+---
+
+# ggplot2
+
+Created by *Hadley Wickham* ggplot2 is an R package for creating explorative
+data visualisations using a **declarative** API.
+
+* Describe what you want, not how to do it
+
+The API is based on an interpretation of the grammar of graphics. Understanding 
+the grammar makes the API natural.
+
+ggplot2 is:
+
+* opinionated, but still highly flexible
+* designed for exploration but capable of publish quality output
+* Highly extendible
+* The only visualisation API you need to know (in R)
+
+---
+
+# A note on interactivety
+
+ggplot2 is, at its core, a package for creating *static* visualisations. If you
+come from the brave new world of web based data visualisation it might seem 
+downright medival, but:
+
+.pull-left[
+Interactivety...
+- can be distracting
+- might be a crutch
+- requires instructions
+
+Static...
+- invites reflection
+- creates a baseline
+- works on paper
+]
+
+--
+
+.pull-right[
+.well.center[
+Not all interactive graph is bad and not all static plot is great
+
+{{content}}
+]
+]
+
+--
+
+* * *
+
+... but bad static plots are easier to spot
+
+---
+
+# A bad plot is a bad plot is a...
+
+ 
+ 
+
+.center[
+![](img/self_description.png)
+]
+
+???
+- A bad plot is a bad plot
+  - useless
+  - lying
+
+---
+
+# A bad plot is a bad plot is a...
+
+.center.c-column[
+![](img/heatmap.png)
+]
+
+???
+- A bad plot is a bad plot
+  - useless
+  - lying
+
+---
+
+# An example
+
+
+```r
+ggplot(iris) + 
+  
+  geom_point(aes(x = Petal.Width, y = Petal.Length, colour = Species), size = 4) + 
+  geom_smooth(aes(x = Petal.Width, y = Petal.Length), method = 'loess') + 
+  
+  scale_colour_brewer(type = 'qual', palette = 2) + 
+  scale_x_continuous(limits = c(0, NA)) + 
+  scale_y_continuous(limits = c(0, NA)) + 
+  
+  labs(
+    title = 'An example plot',
+    subtitle = 'A boring plot that just shows the API',
+    caption = 'Based on the iris data we all know',
+    x = 'Petal width (cm)',
+    y = 'Petal length (cm)'
+  ) + 
+  hrbrthemes::theme_ipsum()
+```
+
+---
+
+# An example
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Plot creation
+
+Everything starts with a call to the `ggplot()` function. It takes 2 arguments
+but can be called empty:
+
+```r
+ggplot(
+  data = , # Global data
+  mapping = , # Global aesthetic mapping
+)
+```
+
+If either argument is given it will be used as default for subsequent layers 
+(but can be overwritten)
+
+```r
+ggplot(mtcars, aes(x = disp, y = mpg)) + 
+  geom_point() + 
+  geom_smooth()
+  
+# is equivalent to
+
+ggplot() + 
+  geom_point(aes(x = disp, y = mpg), mtcars) + 
+  geom_smooth(aes(x = disp, y = mpg), mtcars) # Note diff arg order
+```
+
+---
+
+# Plot creation
+
+`ggplot()` does not plot anything by itself
+
+
+```r
+ggplot(mtcars, aes(x = disp, y = mpg))
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Adding layers
+
+Plot layers can be added in either *geom* or *stat* major. `geom_*()` functions
+defines a geometric representation and comes with a sensible default stat. 
+`stat_*()` functions defines a statistical transformation of data and comes with
+a default geom.
+
+```r
+ggplot(mtcars, aes(x = gear, y = mpg)) + 
+  geom_bar(stat = 'summary', fun.y = sum)
+  
+# Is eqivalent to
+
+ggplot(mtcars, aes(x = gear, y = mpg)) + 
+  stat_summary(geom = 'bar', fun.y = sum)
+```
+
+In the court of public opinion `geom_*()` has won, so you will predominantly see
+that style...
+
+---
+
+# Adding layers
+
+Layers are stacked in the order they are added to the plot, so the first added
+layer is positioned on the bottom:
+
+
+```r
+p &lt;- ggplot(mtcars, aes(x = factor(gear), y = mpg))
+p + geom_point(position = 'jitter') + 
+  geom_boxplot() + ggtitle('points then boxplot')
+p + geom_boxplot() + 
+  geom_point(position = 'jitter') + ggtitle('boxplot then points')
+```
+
+![](presentation_files/figure-html/unnamed-chunk-23-1.png)![](presentation_files/figure-html/unnamed-chunk-23-2.png)
+
+---
+
+# Adding layers
+
+There's a lot of different geoms (45) and stats (28) that can be mixed and
+matched for a lot of different results (some geoms and stats go hand in hand and
+should not be separated).
+
+Main focus has been on statistical graphs, so some of the fancier visual 
+representations are not build in. The extension system takes care of this:
+
+* [ggforce](https://github.com/thomasp85/ggforce) *General extension*
+* [ggraph](https://github.com/thomasp85/ggraph)  *Network visualisations*
+* [ggalt](https://github.com/hrbrmstr/ggalt) *General extension - lots of map projections*
+* [ggrepel](https://github.com/slowkow/ggrepel) *Non-overlapping labels*
+* [ggstance](https://github.com/lionel-/ggstance) *Vertical versions of horizontal geoms*
+* [ggTimeSeries](https://github.com/Ather-Energy/ggTimeSeries) *Geoms specific to time series data*
+
+
+* see more at &lt;https://www.ggplot2-exts.org/index.html&gt;
+
+---
+
+# Adding layers: &lt;em style="color: grey"&gt;grouping&lt;/em&gt;
+
+Some layers require data to be grouped (e.g. lines and polygons). The grouping 
+can either be specified explicetly or derived from the unique combination of
+aesthetics.
+
+
+```r
+p &lt;- ggplot(mtcars, aes(disp, mpg)) + geom_point()
+p + geom_smooth()
+p + geom_smooth(aes(group = factor(gear)))
+p + geom_smooth(aes(colour = factor(gear)))
+```
+
+![](presentation_files/figure-html/unnamed-chunk-24-1.png)![](presentation_files/figure-html/unnamed-chunk-24-2.png)![](presentation_files/figure-html/unnamed-chunk-24-3.png)
+
+---
+
+# Modifying scales
+
+All data mappings get a default scale based on their type. Numbers get a 
+continuous scale while strings and factors gets a discrete (categorical) scale.
+Furthermore, several helpers exists with useful presets.
+
+**The scales:**
+
+* `scale_x`/`scale_y`
+
+* `scale_colour`/`scale_color`
+
+* `scale_fill`
+
+* `scale_alpha`
+
+* `scale_size`
+
+* `scale_shape`
+
+* `scale_linetype`
+
+---
+layout: true
+
+# Modifying scales: &lt;em style="color: grey"&gt;Palettes&lt;/em&gt;
+
+The palette is the set of possible output values a scale can give. For colour 
+scales it is the actual colours produced, for size scales it is the actual 
+sizes etc.
+
+You have full control over specifying the palette, but many predefined exists
+
+---
+
+
+```r
+p &lt;- ggplot(mtcars, aes(disp, mpg, colour = gear)) + geom_point()
+p + scale_color_continuous("Default\nscale")
+p + scale_color_gradientn("Horrible\nscale", colours = c('red', 'blue', 'green'))
+```
+
+![](presentation_files/figure-html/unnamed-chunk-25-1.png)![](presentation_files/figure-html/unnamed-chunk-25-2.png)
+
+---
+
+
+```r
+p &lt;- ggplot(mtcars, aes(disp, mpg, colour = factor(gear))) + geom_point()
+p + scale_color_brewer('Better\nscale', palette = 'Dark2')
+p + ggthemes::scale_colour_wsj(name = 'Branded\nscale')
+```
+
+![](presentation_files/figure-html/unnamed-chunk-26-1.png)![](presentation_files/figure-html/unnamed-chunk-26-2.png)
+
+---
+layout: false
+
+# Modifying scales: &lt;em style="color: grey"&gt;Transformations&lt;/em&gt;
+
+Continuous scales can apply a transformation to their input before the scale is
+applied.
+
+
+```r
+p &lt;- ggplot(diamonds, aes(carat, price)) + geom_point(alpha = 0.1)
+p + scale_y_continuous('No transformation')
+p + scale_y_continuous('Log transformation', trans = 'log10')
+```
+
+![](presentation_files/figure-html/unnamed-chunk-27-1.png)![](presentation_files/figure-html/unnamed-chunk-27-2.png)
+
+---
+
+# Adding small multiples
+
+One of ggplot2's claim to fame is the ease it provides in creating repeated
+plots with subsets of data — in ggplot2 parlance *facetting*.
+
+Facetting is done based on the values of the input data. If a layer does not
+contain the facetting variable it will be repeated across the panels making it
+easy to add a background.
+
+* `facet_wrap()` creates a one-dimensional facetting of data.
+
+* `facet_grid()` creates a matrix of panels where rows and columns are facetted
+on the same variable
+
+**Base plot**
+
+```r
+p &lt;- ggplot(diamonds, aes(carat, price)) + geom_point(alpha = 0.1)
+```
+
+---
+
+# Adding small multiples &lt;em style="color: grey"&gt;facet_wrap&lt;/em&gt;
+
+
+```r
+p + facet_wrap(~cut)
+p + facet_wrap(~cut, scales = 'free_x')
+```
+
+![](presentation_files/figure-html/unnamed-chunk-29-1.png)![](presentation_files/figure-html/unnamed-chunk-29-2.png)
+
+---
+
+# Adding small multiples &lt;em style="color: grey"&gt;facet_grid&lt;/em&gt;
+
+
+```r
+p + facet_grid(color~cut)
+```
+
+![](presentation_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+
+# Applying polish
+
+The resulting plot does not *have* to be grey and boring. More or less 
+everything is controllable and can be combined into predefined themes (e.g. a
+`theme_skat()`). Furthermore, annotation is supported with titles, subtitles, 
+and captions — use them!
+
+
+```r
+p &lt;- ggplot(mtcars, aes(disp, cyl, colour = factor(gear))) + geom_point() +
+  labs(title = 'What is this about', subtitle = '... more about this plot',
+       caption = 'Data was obtained yada yada yada...', colour = 'Gear')
+p
+```
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Applying polish
+
+Intrepid developers have provided many themes that can be used as-is, or as a
+base for your own themes... there is no need to be boring (within reason)
+
+
+```r
+# purist
+p + hrbrthemes::scale_color_ipsum() + 
+  hrbrthemes::theme_ipsum()
+
+# masochist
+p + ggthemes::scale_color_excel() + 
+  ggthemes::theme_excel()
+
+# Economist
+p + ggthemes::scale_color_economist() + 
+  ggthemes::theme_economist()
+
+# Google
+p + scale_color_manual(values = google_col) + 
+  ggtech::theme_tech('google')
+```
+
+---
+
+# Applying polish
+
+![](presentation_files/figure-html/unnamed-chunk-33-1.png)![](presentation_files/figure-html/unnamed-chunk-33-2.png)![](presentation_files/figure-html/unnamed-chunk-33-3.png)![](presentation_files/figure-html/unnamed-chunk-33-4.png)
+
+---
+class: center
+
+![](presentation_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+ 
+
+.right[
+*Cartoons by [xkcd](http://www.xkcd.com)*
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "androidstudio",
+"highlightLines": true,
+"navigation": {
+"scroll": false
+},
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
