@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+
+code {
+  border-radius: 2.5mm;
+}
+code.remark-code {
+  display: block;
+  background: lightgrey;
+  padding: .5em;
+}
+.remark-code {
+  font-family: Inconsolata;
+  font-size: 18px;
+}
+.remark-inline-code {
+  font-family: Inconsolata;
+  font-size: 20px;
+  background: lightgrey;
+  padding: .15em;
+  border-radius: .25em;
+}
+
+div.remark-slide-content.break {
+  background: darkslategrey;
+  color: white;
+}
+
+/* Two-column layout */
+.l-column {
+  width: 65%;
+  float: left;
+}
+.r-column {
+  width: 30%;
+  float: right;
+}
+.c-column {
+  width: 50%;
+  margin-left: 25%;
+}
+
+.well {
+  background: lightgrey;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+}
+
+.remark-slide-container {
+  transition: opacity 0.5s ease-out;
+  -webkit-transition: opacity 0.5s ease-out;
+  opacity: 0;
+  display: block;
+}
+.remark-preview-area .remark-slide-container {
+  opacity: 1;
+}
+.remark-visible {
+  transition: opacity 0.5s ease-out;
+  -webkit-transition: opacity 0.5s ease-out;
+  opacity: 1;
+}
