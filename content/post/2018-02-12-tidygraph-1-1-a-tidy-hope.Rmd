@@ -91,7 +91,7 @@ that may provide different insights into your network. Many of them are based
 on the `seriation` package, and the vignette provided therein serves as a nice
 introduction to the different algorithms:
 
-```{r}
+```{r, message=FALSE}
 library(tidygraph)
 library(ggraph)
 

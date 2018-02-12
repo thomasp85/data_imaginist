@@ -36,15 +36,10 @@ img:
 <div id="node-ranking" class="section level4">
 <h4>Node ranking</h4>
 <p>Often, especially when visualising networks with certain layouts, the order in which the nodes appear will have a huge influence on the insight you can get out (e.g. matrix plots and arc diagrams). The <code>node_rank_*()</code> family of algorithms have been introduced to provide different ways of sorting nodes so that closely related nodes are positionally close. As there is often not a single correct answer to this endeavor, there’s a lot of different algorithms that may provide different insights into your network. Many of them are based on the <code>seriation</code> package, and the vignette provided therein serves as a nice introduction to the different algorithms:</p>
-<pre class="r"><code>library(tidygraph)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;tidygraph&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter</code></pre>
-<pre class="r"><code>library(ggraph)</code></pre>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre class="r"><code>graph &lt;- create_notable(&#39;zachary&#39;) %&gt;% 
+<pre class="r"><code>library(tidygraph)
+library(ggraph)
+
+graph &lt;- create_notable(&#39;zachary&#39;) %&gt;% 
   mutate(ranking = node_rank_leafsort())
 
 ggraph(graph, &#39;matrix&#39;) + 
