@@ -14,7 +14,7 @@ on [R-Bloggers](https://www.r-bloggers.com/) together with a lot of other
 amazing R related content.
 
 If you use some of the tools I develop and want to ensure that I can continue
-doing what I do, you can support my through 
+doing what I do, you can support me through 
 [Patreon](https://patreon.com/thomasp85) or by donating directly 
 [through Paypal](https://paypal.me/thomasp85) — Any amount is appreciated.
 
