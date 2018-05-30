@@ -1,0 +1,86 @@
+---
+title: Scico and the Colour Conundrum
+description: "scico is now available on CRAN, ready to spread sensible colours to the world. In this post I'll show the few functions that it brings and talk a bit more in general why colour is something to think about when plotting data"
+author: Thomas Lin Pedersen
+date: '2018-05-30'
+large_thumb: yes
+img:
+  thumb: /assets/images/scico_announce.png
+slug: scico-and-the-colour-conundrum
+categories:
+  - R
+tags:
+  - announcement
+  - visualization
+  - colour
+  - color
+---
+
+
+
+<p><img src="/assets/images/scico_logo_small.png" align="right" style="width:50%"/></p>
+<p>I’m happy to once again announce the release of a package. This time it happens to be a rather unplanned and quick new package, which is fun for a change. The package in question is <code>scico</code> which provides access to the <a href="http://www.fabiocrameri.ch/colourmaps.php">colour palettes developed by Fabio Crameri</a> as well as scale functions for <code>ggplot2</code> so they can be used there. As there is not a lot to talk about in such a simple package I’ll also spend some time discussing why choice of colour is important beyond aesthtic considerations, and discuss how the quality of a palette might be assesed.</p>
+<div id="an-overview-of-the-package" class="section level2">
+<h2>An overview of the package</h2>
+<p><code>scico</code> provides a total of 17 different continuous palettes, all of which are available with the <code>scico()</code> function. For anyone having used <code>viridis()</code> the <code>scico()</code> API is very familiar:</p>
+<pre class="r"><code>library(scico)
+scico(15, palette = &#39;oslo&#39;)</code></pre>
+<pre><code>##  [1] &quot;#000000&quot; &quot;#09131E&quot; &quot;#0C2236&quot; &quot;#133352&quot; &quot;#19456F&quot; &quot;#24588E&quot; &quot;#3569AC&quot;
+##  [8] &quot;#4D7CC6&quot; &quot;#668CCB&quot; &quot;#7C99CA&quot; &quot;#94A8C9&quot; &quot;#ABB6C7&quot; &quot;#C4C7CC&quot; &quot;#E1E1E1&quot;
+## [15] &quot;#FFFFFF&quot;</code></pre>
+<p>In order to get a quick overview of all the available palettes use the <code>scico_palette_show()</code> function:</p>
+<pre class="r"><code>scico_palette_show()</code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>As can be seen, the collection consists of both sequential and diverging palettes, both of which have their own uses depending on the data you want to show. A special mention goes to the <code>oleron</code> palette which is intended for topographical height data in order to produce the well known <em>atlas look</em>. Be sure to center this palette around 0 or else you will end up with very misleading maps.</p>
+<p><code>ggplot2</code> support is provided with the <code>scale_[colour|color|fill]_scico()</code> functions, which works as expected:</p>
+<pre class="r"><code>library(ggplot2)
+volcano &lt;- data.frame(
+  x = rep(seq_len(ncol(volcano)), each = nrow(volcano)),
+  y = rep(seq_len(nrow(volcano)), ncol(volcano)),
+  Altitude = as.vector(volcano)
+)
+
+ggplot(volcano, aes(x = x, y = y, fill = Altitude)) + 
+  geom_raster() + 
+  theme_void() +
+  scale_fill_scico(palette = &#39;turku&#39;) </code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>This is more or less all there is for this package… Now, let’s get to the meat of the discussion.</p>
+</div>
+<div id="whats-in-a-colour" class="section level2">
+<h2>What’s in a colour?</h2>
+<p>If you’ve ever wondered why we are not all just using rainbow colours in our plots (after all, rainbows <em>are</em> pretty…) it’s because our choice of colour scale have a deep impact on what changes in the underlying data our eyes can percieve. The rainbow colour scale is still very common and notoriously bad - see e.g. <a href="https://ieeexplore.ieee.org/document/4118486/">Borland &amp; Taylor (2007)</a>, <a href="https://blogs.egu.eu/divisions/gd/2017/08/23/the-rainbow-colour-map/"><em>The Rainbow Colour Map (repeatedly) considered harmful</em></a>, and <a href="https://eagereyes.org/basics/rainbow-color-map"><em>How The Rainbow Color Map Misleads</em></a> - due to two huge problems that are fundamental to designing good colour scales: <em>Perceptual Uniformity</em> and <em>Colour Blind Safe</em>. Both of these issues have been taken into account when designing the <code>scico</code> palettes, but let’s tackle them one by one:</p>
+<div id="colour-blindness" class="section level3">
+<h3>Colour blindness</h3>
+<p>Up to 10% of north european males have the most common type of colour blindness (deuteranomaly, also known as red-green colour blindness), while the number is lower for other population groups. In addition, other, rarer, types of colour blindness exists as well. In any case, the chance that a person with a color vision deficiency will look at your plots is pretty high.</p>
+<p>As we have to assume that the plots we produce will be looked at by people with color vision deficiency, we must make sure that the colours we use to encode data can be clearly read by them (ornamental colours are less important as they - hopefully - don’t impact the conclusion of the graphic). Thanksfully there are ways to simulate how colours are percieved by people with various types of colour blindness. Let’s look at the rainbow colour map:</p>
+<pre class="r"><code>library(pals)
+
+pal.safe(rainbow, main = &#39;Rainbow scale&#39;)</code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>As can be seen, there are huge areas of the scale where key tints disappears, making it impossible to correctly map colours back to their original data values. Put this in contrast to one of the <code>scico</code> palettes:</p>
+<pre class="r"><code>pal.safe(scico(100, palette = &#39;tokyo&#39;), main = &#39;Tokyo scale&#39;)</code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>While colour blindness certainly have an effect here, it is less detrimental as changes along the scale can still be percieved and the same tint is not occuring at multiple places.</p>
+</div>
+<div id="perceptual-uniformity" class="section level3">
+<h3>Perceptual uniformity</h3>
+<p>While lack of colour blind safety “only” affects a subgroup of your audience, lack of perceptual uniformity affects everyone - even you. Behind the slightly highbrow name lies the criteria that equal jumps in the underlying data should result in equal jumps in percieved colour difference. Said in another way, every step along the palette should be percieved as giving the same amount of difference in colour.</p>
+<p>One way to assess perceptual uniformity is by looking at small oscillations inside the scale. Let’s return to our favourite worst rainbow scale:</p>
+<pre class="r"><code>pal.sineramp(rainbow, main = &#39;Rainbow scale&#39;)</code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We can see that there are huge differences in how clearly the oscilations appear along the scale and around the green area they even disappears. In comparison the <code>scico</code> palettes produces much more even resuls:</p>
+<pre class="r"><code>pal.sineramp(scico(100, palette = &#39;tokyo&#39;), main = &#39;Tokyo scale&#39;)</code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="but-wait---theres-more" class="section level3">
+<h3>But wait - there’s more!</h3>
+<p>This is just a very short overview into the world of colour perception and how it affects information visualisation. The <code>pals</code> package contains more functions to assess the quality of colour palettes, some of which has been collected in an ensemble function:</p>
+<pre class="r"><code>pal.test(scico(100, palette = &#39;broc&#39;), main = &#39;Broc scale&#39;)</code></pre>
+<p><img src="/post/2018-05-30-scico-and-the-colour-conundrum_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>It also has <a href="https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html">a vignette</a> that explains in more detail how the different plots can be used to look into different aspects of the palette.</p>
+<p><code>scico</code> is also not the only package that provides well-designed, safe, colour palettes. <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html"><code>RColorBrewer</code></a> has been a beloved utility for a long time, as well as the more recent <a href="https://cran.r-project.org/web/packages/viridis/index.html"><code>viridis</code></a>. Still, choice is good and using the same palettes for prolonged time can make them seem old and boring, so the more the merrier.</p>
+<p>A last honerable mention is <a href="https://github.com/EmilHvitfeldt/r-color-palettes/blob/master/README.md">the overview of palettes in R</a> that <a href="https://twitter.com/Emil_Hvitfeldt">Emil Hvitfeldt</a> has put together. Not all of the palettes in it (the lions share actually) have been designed with the issues discussed above in mind, but sometimes thats OK - at least you now know how to assess the impact of your choice and weigh it out with the other considerations you have.</p>
+<p><em>Always be weary of colours</em></p>
+</div>
+</div>
