@@ -1,0 +1,146 @@
+---
+title: What Are We Plotting, What Are We Animating
+description: "... wherein I open Pandoras box when it comes to interpolating data for animations"
+author: Thomas Lin Pedersen
+date: '2018-09-24'
+slug: what-are-we-plotting-what-are-we-animating
+large_thumb: yes
+img:
+  thumb: /assets/images/gganimate_logo.png
+categories:
+  - R
+tags:
+  - animation
+  - gganimate
+---
+
+
+
+<p><img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%"/></p>
+<p>This is my first blog post about <code>gganimate</code> — a package I’ve been working on since mid-spring this year. I have many thoughts and lots to say about animation and <code>gganimate</code>, so much in fact that it has seemed to big a task to begin writing about. Further, I felt like I had to spend my time developing the thing in the first place.</p>
+<p>So this is an alternative entrance into writing about <code>gganimate</code> — sort of a tech-note about a specific problem. There will still come a time for some more formal writing about the theory and use of <code>gganimate</code> but until then I’ll refer to my <a href="https://youtu.be/21ZWDrTukEs">useR keynote</a> for any words on my thoughts behind it all.</p>
+<div id="the-problem" class="section level2">
+<h2>The Problem</h2>
+<p>When we animate data visualisations we often do it by calculating intermediary data points resulting in a smooth transition between the states represented by the raw data. In <code>gganimate</code> this is done by adding a <em>transition</em> which defines how data should be expanded across the animation frames. Underneath it all most transitions calculate intermediary data representations using <code>tweenr</code> and <code>transformr</code> — so far, so good.</p>
+<p>What we have glanced over, and what is at the center of the problem, is what state of the data we decide to use as basis for our expansion. If you are not familiar with <code>ggplot2</code> and the grammar of graphics this might be a strange phrasing — data is data — but if you are, you’ll know that data can undergo several statistical transformations before it is encoded into a visual property and put on paper (or screen). Some of the states the data undergo are:</p>
+<ol style="list-style-type: decimal">
+<li>Raw data as it is passed into the plotting function</li>
+<li>Raw data with only the columns mapped to aesthetics present</li>
+<li>Data transformed by a statistic</li>
+<li>Data with aesthetics mapped to a scale</li>
+<li>Data with default aesthetic values added</li>
+<li>Data transformed by the geom</li>
+</ol>
+<p>If you prepare your data for animation beforehand (e.g. using <code>tweenr</code>), you’re only able to touch the data at the first state and thus limited in what you can do. If there is a one-to-one mapping between the raw data and the final visual encoding this might not be a problem, but it breaks down spectacularly when the statistic transformation impose a grouping of the data into a shared visual encoding, e.g. a box-plot. Consider the task of calculating intermediary data for a transition from one box-plot showing statistics for 10 points, to another box-plot showing statistics for 15 points. If you could only use the raw data your atomic observations would suddenly have to change from 10 to 15 values in a smooth manner. On the other hand, if you could calculate the statistics used to draw the two box-plots and then calculate intermediary statistics instead, this discrepancy in the underlying data would not pose any problem. Indeed, the latter approach is what is done in <code>gganimate</code> — all data expansion is performed after statistics have been calculated. In fact, all expansion is done when data has reached state 5. Why wait so long? A simple example to explain this is the case of colour (or fill) aesthetics. If they are mapped to a categorical variable there will be no way to create a smooth transition based on the raw data. On the other hand, if we wait until the raw data has been mapped to its final colour value, we may smoothly transition the colour itself, ignoring the fact that the intermediary colours does not correspond to any meaningful category in the raw data.</p>
+</div>
+<div id="the-curious-case-of-tesselation" class="section level2">
+<h2>The Curious Case of Tesselation</h2>
+<p>So, “what is the problem?”, you may ask. Indeed, this approach is almost universally good, to the extend that you might just ignore the existence of other approaches… But the devils in the detail — let’s make a plot:</p>
+<pre class="r"><code>library(ggplot2)
+library(ggforce)
+
+data &lt;- data.frame(
+  x = runif(20),
+  y = runif(20),
+  state = rep(c(&#39;a&#39;, &#39;b&#39;), 10)
+)
+
+ggplot(data, aes(x = x, y = y)) + 
+  geom_voronoi_tile(fill = &#39;grey&#39;, colour = &#39;black&#39;, bound = c(0, 1, 0, 1)) + 
+  geom_point() + 
+  facet_wrap(~state)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Now, think about what you would expect a transition between the two panels to look like - my guess is that it is nothing like below:</p>
+<pre class="r"><code>library(gganimate)
+ggplot(data, aes(x = x, y = y)) + 
+  geom_voronoi_tile(fill = &#39;grey&#39;, colour = &#39;black&#39;, bound = c(0, 1, 0, 1)) + 
+  geom_point() + 
+  transition_states(state, transition_length = 3, state_length = 1) + 
+  ease_aes(&#39;cubic-in-out&#39;)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-3-1.gif" /><!-- --></p>
+<p>Okay, what is going on? To be honest I had a different expectation about how this would fail when I started writing this. The reason why the voronoi tiles are static (and calculated based on all the points) is that the voronoi tessellation is calculated on the full panel data. At the time the voronoi tile statistic receives the data it all just belongs to the same panel since <code>gganimate</code> differentiate states using the group aesthetics. To show you how I expected this example to break down we’ll have to tell the voronoi stat to tessellate based on the groups instead:</p>
+<pre class="r"><code>ggplot(data, aes(x = x, y = y)) + 
+  geom_voronoi_tile(fill = &#39;grey&#39;, colour = &#39;black&#39;, bound = c(0, 1, 0, 1),
+                    by.group = TRUE) + 
+  geom_point() + 
+  transition_states(state, transition_length = 3, state_length = 1) + 
+  ease_aes(&#39;cubic-in-out&#39;)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-4-1.gif" /><!-- --></p>
+<p>Now, at least it is wrong in the way that I expected it to be. Why is this wrong? The tessellation stat outputs polygon data that is then drawn by a polygon geom, so <code>gganimate</code> does the best it can to transition these polygons smoothly between the states. In this example this is not what we expected though. We expect a tessellation to always be true, even during the transition so the tessellation should be calculated for each frame, based on intermediary point positions. In other words, here we want the expansion to happen on the raw data.</p>
+<pre class="r"><code>library(tweenr)
+library(magrittr)
+data &lt;- split(data, data$state)
+
+data &lt;- tween_state(data[[1]], data[[2]], &#39;cubic-in-out&#39;, 40) %&gt;% 
+  keep_state(10) %&gt;% 
+  tween_state(data[[1]],&#39;cubic-in-out&#39;, 40) %&gt;% 
+  keep_state(10)
+
+ggplot(data, aes(x = x, y = y)) + 
+  geom_voronoi_tile(fill = &#39;grey&#39;, colour = &#39;black&#39;, bound = c(0, 1, 0, 1),
+                    by.group = TRUE) + 
+  geom_point() + 
+  transition_manual(.frame)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-5-1.gif" /><!-- --></p>
+<p>Ah, we have finally arrived at the expected animation, but what a mess of a journey.</p>
+</div>
+<div id="who-plots-tesselation-anyway" class="section level2">
+<h2>Who Plots Tesselation Anyway?</h2>
+<p>You may think the above example is laughably construed — this may even be the first time you’ve heard of voronoi tessellation. Hold your horses, because it is about to get even worse, even using a geom from <code>ggplot2</code> itself. We’ll start with a plot again:</p>
+<pre class="r"><code>data &lt;- data.frame(
+  x = c(rnorm(50, mean = 5, sd = 3), rnorm(40, mean = 2, sd = 1)),
+  y = c(rnorm(50, mean = -2, sd = 7), rnorm(40, mean = 6, sd = 4)),
+  state = rep(c(&#39;a&#39;, &#39;b&#39;), c(50, 40))
+)
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_contour(stat = &#39;density_2d&#39;) + 
+  facet_wrap(~state)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>And how might this look if we transition between <em>a</em> and <em>b</em>?</p>
+<pre class="r"><code>ggplot(data, aes(x = x, y = y)) +
+  geom_contour(stat = &#39;density_2d&#39;) + 
+  transition_states(state, transition_length = 3, state_length = 1) + 
+  ease_aes(&#39;cubic-in-out&#39;)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-7-1.gif" /><!-- --></p>
+<p>Oh my… The problem is more or less the same as with the tessellation - the stat creates a <em>primitive</em> data representation (here paths and not polygons) and <code>gganimate</code> does its best at transitioning those, but in doing this the intermediary frames does not resemble contour lines at all, but more a bowl of spaghetti.</p>
+<p>So, could we fix it in the same way? Just prepare the data beforehand. Well, not really as we run into the first problem discussed, way up at the beginning of the blog. There is really no meaningful way of transitioning 50 points into 40. We could remove 10 and move the remaining 40, but in terms of the derived density this would look messy (but let’s try anyway):</p>
+<pre class="r"><code>data2 &lt;- split(data, data$state)
+data2 &lt;- tween_state(data2[[1]], data2[[2]], &#39;cubic-in-out&#39;, 40) %&gt;% 
+  keep_state(10) %&gt;% 
+  tween_state(data2[[1]], &#39;cubic-in-out&#39;, 40) %&gt;% 
+  keep_state(10)
+
+ggplot(data2, aes(x = x, y = y)) +
+  geom_contour(stat = &#39;density_2d&#39;) + 
+  transition_manual(.frame)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-8-1.gif" /><!-- --></p>
+<p>It sort of does the right thing, but there is a noticeable switch in the density as the 10 points disappears and reappears.</p>
+<p>What we really want to do is to calculate intermediary states of the 2D densities that the contours are derived from. The densities remove the point discrepancy while presenting a statistic that can be truthfully transitioned. Unfortunately the density data is only present ephemerally inside the stat function and is not accessible to the outside world (where <code>gganimate</code> resides). We could rewrite the density_2d stat to wait with the contour transformation:</p>
+<pre class="r"><code>StatDensityContour &lt;- ggproto(&#39;StatDensityContour&#39;, StatDensity2d,
+  compute_group = function (data, scales, na.rm = FALSE, h = NULL, contour = TRUE, 
+                            n = 100, bins = NULL, binwidth = NULL) {
+    StatDensity2d$compute_group(data, scales, na.rm = na.rm, h = h, contour = FALSE, 
+                                n = n, bins = bins, binwidth = binwidth)
+  },
+  finish_layer = function(self, data, params) {
+    names(data)[names(data) == &#39;density&#39;] &lt;- &#39;z&#39;
+    do.call(rbind, lapply(split(data, data$PANEL), function(d) {
+      StatContour$compute_panel(d, scales = NULL, bins = params$bins, 
+                                binwidth = params$binwidth)
+    }))
+  }
+)
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_contour(stat = &#39;density_contour&#39;) + 
+  transition_states(state, transition_length = 3, state_length = 1) + 
+  ease_aes(&#39;cubic-in-out&#39;)</code></pre>
+<p><img src="/post/2018-09-22-what-are-we-plotting-what-are-we-animating_files/figure-html/unnamed-chunk-9-1.gif" /><!-- --></p>
+</div>
+<div id="what-to-make-of-this" class="section level2">
+<h2>What to make of this?</h2>
+<p>You might feel like Alice who has stepped through the looking glass at this point. Should you always second guess whatever <code>gganimate</code> is doing? Of course not. The choice of interpolating the statistically transformed data is sound and will <em>just work</em> for most of what you want to do. I certainly want to allow gganimate to expand based on the raw data as well, though this has proven harder than expected as it is often only a subset of aesthetics you want to expand at that state (remember the problem with unmapped colour/fill).</p>
+<p>Even if <em>early expansion</em> gets implemented it will only solve problems such as the voronoi example. The last contour example runs deeper and touches upon the theory of the grammar of graphics and how <code>ggplot2</code> implements it itself. Statistical transformations are often envisioned as a single operation, but can just as well be thought of as a chain of transformation (here density_2d -&gt; contour). Alternatively one could think that it was the responsibility of the geom to calculate the contour lines. All-in-all the dichotomy of stat+geom is not so clear cut as it might appear, which has not been much of a problem when generating static plots. With the advent of <code>gganimate</code> this problem becomes more pertinent and I honestly don’t know the best way to address it. In a perfect world, all stats would return the data-state best fitted for expansion but this would require the <code>finish_layer()</code> hook to be more powerful, and would obviously require rewrites of a slew of geoms/stats. Then comes the question of whether it is even the responsibility of geom/stat developers to consider <code>gganimate</code> in the first place…</p>
+<p>No matter the eventual solution to all this, I hope this post has made you a bit more aware of what happens to the data you plot as you passed it into <code>ggplot2</code>. Visualisations are after all first and foremost about data transformations…</p>
+</div>
