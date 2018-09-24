@@ -19,11 +19,11 @@ knitr::opts_chunk$set(interval = 1/10)
 set.seed(24)
 ```
 
-<img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%"/>
+<img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%;margin-left:5pt"/>
 
 This is my first blog post about `gganimate` — a package I've been working on
 since mid-spring this year. I have many thoughts and lots to say about animation
-and `gganimate`, so much in fact that it has seemed to big a task to begin 
+and `gganimate`, so much in fact that it has seemed too big a task to begin 
 writing about. Further, I felt like I had to spend my time developing the thing 
 in the first place.
 
@@ -158,7 +158,7 @@ journey.
 
 ## Who Plots Tesselation Anyway?
 You may think the above example is laughably construed — this may even be the 
-first time you've heard of voronoi tessellation. Hold your horses, because it is
+first time you've heard of voronoi tessellation. Hold my beer, because it is
 about to get even worse, even using a geom from `ggplot2` itself. We'll start 
 with a plot again:
 

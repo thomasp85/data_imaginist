@@ -16,8 +16,8 @@ tags:
 
 
 
-<p><img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%"/></p>
-<p>This is my first blog post about <code>gganimate</code> — a package I’ve been working on since mid-spring this year. I have many thoughts and lots to say about animation and <code>gganimate</code>, so much in fact that it has seemed to big a task to begin writing about. Further, I felt like I had to spend my time developing the thing in the first place.</p>
+<p><img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%;margin-left:5pt"/></p>
+<p>This is my first blog post about <code>gganimate</code> — a package I’ve been working on since mid-spring this year. I have many thoughts and lots to say about animation and <code>gganimate</code>, so much in fact that it has seemed too big a task to begin writing about. Further, I felt like I had to spend my time developing the thing in the first place.</p>
 <p>So this is an alternative entrance into writing about <code>gganimate</code> — sort of a tech-note about a specific problem. There will still come a time for some more formal writing about the theory and use of <code>gganimate</code> but until then I’ll refer to my <a href="https://youtu.be/21ZWDrTukEs">useR keynote</a> for any words on my thoughts behind it all.</p>
 <div id="the-problem" class="section level2">
 <h2>The Problem</h2>
@@ -86,7 +86,7 @@ ggplot(data, aes(x = x, y = y)) +
 </div>
 <div id="who-plots-tesselation-anyway" class="section level2">
 <h2>Who Plots Tesselation Anyway?</h2>
-<p>You may think the above example is laughably construed — this may even be the first time you’ve heard of voronoi tessellation. Hold your horses, because it is about to get even worse, even using a geom from <code>ggplot2</code> itself. We’ll start with a plot again:</p>
+<p>You may think the above example is laughably construed — this may even be the first time you’ve heard of voronoi tessellation. Hold my beer, because it is about to get even worse, even using a geom from <code>ggplot2</code> itself. We’ll start with a plot again:</p>
 <pre class="r"><code>data &lt;- data.frame(
   x = c(rnorm(50, mean = 5, sd = 3), rnorm(40, mean = 2, sd = 1)),
   y = c(rnorm(50, mean = -2, sd = 7), rnorm(40, mean = 6, sd = 4)),
