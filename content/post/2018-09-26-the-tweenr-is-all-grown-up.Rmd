@@ -1,0 +1,207 @@
+---
+title: The tweenr is all grown up
+description: "A new tweenr version is out and this post tells you all you need to know to make the transition"
+author: Thomas Lin Pedersen
+date: '2018-10-22'
+slug: the-tweenr-is-all-grown-up
+categories:
+  - R
+tags:
+  - tweenr
+  - announcement
+  - package
+  - animation
+large_thumb: false
+img:
+    thumb: "/assets/images/tweenr_logo_small.png"
+---
+
+<img src="/assets/images/tweenr_logo_small.png" align="right" style="width:50%;margin-left:5pt"/>
+
+> NOTE: tweenr was released some time ago but a theft of my computer while 
+writing the release post meant that I only just finished writing about it now.
+
+I'm very happy to once again announce a package update, as a new major version 
+of `tweenr` is now on CRAN. This release, while significant in itself, is also
+an important part of getting `gganimate` on CRAN, so if you care about 
+`gganimate` but have never heard of `tweenr` you should be happy nonetheless.
+
+`tweenr` was my first sort-of popular package and filled a gap in the gganimate 
+version of yore, where smooth transitions were something you had to bring 
+yourself. It has lived almost unchanged since its initial release, but as I 
+began to develop the next iteration of `gganimate` it became clear that new 
+functionality was needed. Some of it ended up in the 
+[`transformr`](https://github.com/thomasp85/transformr) but a huge chunk has 
+been added to tweenr itself. A description of everything new follows below.
+
+## Something new, something old {new_old}
+The main API of the previous version of `tweenr` comprised of the 
+`tween_states()`, `tween_elements()`, and `tween_appear()`. All of these needed
+serious change in both capabilities and API to the extend that all prior code
+would break, so instead I decided to keep the old functions unchanged and create
+new ones for a brighter future.
+
+### tween_states ⇒ tween_state/keep_state
+`tween_states()` was perhaps the most used of the old functions. It takes a list
+of data.frames and a specification of how long transitions between them should
+take and how long it should pause at each data.frame. This is perfect for 
+situations where you have discrete states and want to have a smooth transition
+between them. Still it had certain shortcomings, such as requiring that each 
+data.frame included the same number of rows etc. (meaning that each "element"
+should be present in each state). Further I have ended up finding it a bit 
+clumsy to use. The new function(s) that should serve the same needs as 
+`tween_states()` is `tween_state()` (and `keep_state()`) and they are much more
+powerful. The biggest difference, perhaps, is that `tween_state()` only takes a
+*from* and *to* state and not an arbitrarily long list of states. If transitions
+are needed between more states you'll need to chain calls together (potentially
+with `keep_state()` if the state should pause between transitions). It will 
+something like this:
+
+```{r}
+library(tweenr)
+irises <- split(iris, iris$Species)
+iris_tween <- irises$setosa %>% 
+  tween_state(irises$versicolor, ease = 'cubic-in-out', nframes = 10) %>% 
+  keep_state(5) %>% 
+  tween_state(irises$virginica, ease = 'linear', nframes = 15) %>% 
+  keep_state(5)
+```
+
+As can be seen, if you like piping you'll feel right at home. Apart from the
+seemingly superficial change in API, the `tween_state()` also packs some new 
+tricks. One of these is per-column easing, so you can specify different easing
+functions for different variables. Another, more fundamental one, is the 
+possibility of specifying an id to match rows by. Ultimately this means that 
+rows no longer needs to be matched by position and that you can now tween 
+between states with different numbers of elements. All of this is so important 
+that it will get its own section later on in [Enter and Exit](#enter-and-exit).
+
+### tween_elements ⇒ tween_components
+While `tween_states()` was probably the most used of the legacy functions it was
+by no means the only one. `tween_elements()` was a very powerful function that
+let you specify different individual states for each element in a single 
+data.frame and then expand this to an arbitrary number of frames. The changes 
+that its hier bring is less dramatic than what happened with `tween_states()`,
+and simply adds the same features that `tween_state()` introduced. This means
+per-column easing and the same features as described below in 
+[Enter and Exit](#enter-and-exit). Further it changes the semantics of a couple of
+variables so they are now tidy evaluated. This means that state specifications
+can be calculated on the fly, rather than having to exist inside the data.frame
+to be tweened.
+
+### tween_appear ⇒ tween_events
+`tween_appear()` never really felt right. The purpose was to let each row appear
+in a specific frame while still allowing the user to define how it should 
+appear. To this end it expanded the data.frame by giving each row an *age* in 
+each frame (negative age meant that it had yet to appear) and then let the user
+do with this as they pleased. What was missing was the whole idea of 
+[Enter and Exit](#enter-and-exit) which I have already plugged multiple times. 
+`tween_event()` is a pretty radical change in order to solve the problem that 
+`tween_appear()` originally tried (but failed) to solve.
+
+## Enter and Exit
+Before we go any further with other new tweening functions I think I owe it to
+you to describe what all this entering and exiting I've been talking about 
+really is. If you have dabbled in D3.js the two words will be familiar but they
+have slightly different meaning in `tweenr`. In D3 enter and exit describe a
+selection of data that did not match in a data join between current and next 
+state, while in tweenr it is a function that modifies data that is going to 
+appear or disappear. If enter and/or exit is not given, the data will just pop
+into existence in the first frame it relates to and disappear without a trace 
+after the last frame it relates to has ended. if you provide e.g. an enter 
+function this will be applied to all elements when they first appear. The result
+of the function will then be inserted into the tweening prior to the original 
+data so that any changes the function does will gradually change to the original
+data. This may sound quite confusing, but in essence it means that if you pass 
+in an enter function that sets the transparancy variable to zero you'll get a
+gradual fade-in effect. The exit function is just like it, but in reverse. But 
+let's see it in effect instead:
+
+```{r}
+df1 <- data.frame(x = 1:2, y = 2, alpha = 1) # 2 rows
+df2 <- data.frame(x = 2:0, y = 1, alpha = 1) # 3 rows
+
+fade <- function(data) {
+  data$alpha <- 0
+  data
+}
+
+tween <- tween_state(df1, df2, ease = 'linear', nframes = 5, enter = fade)
+
+tween$alpha[tween$.id == 3]
+```
+
+We can see that the alpha value of the third element (the one that doesn't exist
+in the first state) gradually increase from zero to one. The reason why 0 isn't
+included is that the enter and exit function return virtual states that doens't 
+remain in the data - only the transition to and from them does.
+
+## New tweens on the block
+Appart from the new versions of the old functionality discussed [above](#new_old)
+this version also includes some brand new tweens, mainly implemented to serve
+needs in `gganimate` but of course also available for everyone else.
+
+### tween_along
+This is the tweening function that powers `transition_reveal()` in `gganimate` -
+if you have played with that you are fairly well situated to understand what it 
+does. In essence it allows you to specify time points for the different rows in
+your data.frame and then tween between these. You might think that this is 
+exactly what `tween_components()` does and you'd partly be right. The big 
+difference is that `tween_along()` ensures equidistant frames, whereas 
+`tween_components()` assigns all rows in the data to the nearest frame and then
+use the frame as a time variable. The latter will always have the raw data 
+appearing in one frame or another while the former will not. Further, 
+`tween_along()` will optionally keep earlier rows in your data at each frame, 
+which is useful if you e.g. want a line to gradually appear along an axis.
+
+### tween_at
+This is a pretty low level tweening function intened to get an exact state 
+between two data frames or vectors. It takes two states and a numeric vector 
+giving the tween position for each row and then calculates the intermediary 
+rows.
+
+```{r}
+tween_at(mtcars[1:3, ], mtcars[4:6, ], runif(3), 'linear')
+```
+
+This is unlikely to be useful for directly creating animations (though I guess 
+it is low-level enough to be able to be shoehorned into anything). It is being 
+used in `gganimate` for calculating shadow falloff in `shadow_wake()`.
+
+### tween_fill
+This tween takes a page out of `tidyr::fill` and simply fill out missing 
+elements in a data frame or vector. Instead of being boring and repeating the
+prior or following data it doesn the `tweenr` thing and tweens between them:
+
+```{r}
+mtcars2 <- mtcars[1:7, ]
+mtcars2[2:6, ] <- NA
+
+tween_fill(mtcars2, 'cubic-in-out')
+```
+
+Neat-o...
+
+## Grab bag of niceties
+There are more subtle additions to `tweenr` as well, most of which has also been
+driven by `gganimate` needs. Here's an unceremonious list:
+
+- *More information:* In olden days `tweenr` simply added a `.frame` column to 
+the output to identify the frame the row belonged to. It still does, but that 
+column is now accompagnied by a `.phase` column that tells if the data is raw, 
+static, entering, exiting, or transitioning, and an `.id` column that identifies
+the same data across frames.
+- *More support:* The supported data types has been expanded considerably. Most
+notably list columns are now accepted. If the list only contains numeric vectors
+these vectors will get tweened accordingly, and if not the list will be treated
+as constant.
+- *Better colour support:* Colour has always been tweened in the LAB 
+representation to get a more natural transition. In the old version the native
+`convertColor()` function was used, but this could lead to substantial slowdown
+when tweening lots of data. To address this `farver` was developed and released
+and this version of `tweenr` naturally uses this for colour space conversions 
+now. In addition, `tweenr` now supports hex-colours with alpha.
+
+I think that is it, but frankly there has been so many additions that I may have 
+missed a few... First to find something I missed gets a sticker!
+
