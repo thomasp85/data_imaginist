@@ -8,6 +8,9 @@ categories:
   - R
 tags:
   - year-in-review
+  - gganimate
+  - tweenr
+  - transformr
 ---
 
 The year is nearly over and it is the time for reflection and navel-gazing. I 
@@ -28,7 +31,7 @@ there were things I wanted to develop prior to presenting it. All-in-all there
 was a great impediment to pick myself up and get on with developing (not arguing
 that this is a fail-safe way to deal with burnout by the way).
 
-## RStudio::conf(2017L)
+## RStudio::conf(2018L)
 My trip to San Diego was amazing. If you ever get to go to an RStudio conference
 I don't think you will be disappointed (full disclosure and spoiler-alert: I now
 work for RStudio). My suspicion that the R community is as amazing in real life
