@@ -11,6 +11,12 @@ tags:
   - gganimate
   - tweenr
   - transformr
+  - tidygraph
+  - ggraph
+  - scico
+  - ambient
+  - farver
+  - particles
 ---
 
 
@@ -81,6 +87,40 @@ achievable within the next 5-10 years (it is no small task). I had been
 surprised about the support for my ideas about animations and their relevance
 within the R community, so in general the conference left my invigorated and
 with the stamina to complete gganimate.</p>
+</div>
+<div id="intermezzo" class="section level2">
+<h2>Intermezzo</h2>
+<p>I managed to release a couple of packages that do not fit into the narrative I’m
+trying to create for this year, but they deserve a mention none the less.</p>
+<p>In the beginning of the year I was able to finish of
+<a href="https://github.com/thomasp85/particles">particles</a>, a port and extension of the
+d3-force algorithm developed by Mike Bostock. It can be used for both great fun
+and work and did among other things result in this beautiful pixel-decomposition
+of Hadley:</p>
+<p><img src="/assets/images/hadley.gif" /></p>
+<p>While making improvements to tweenr in anticipation of gganimate it became clear
+that colour conversion was a main bottleneck and I ended up developing
+<a href="https://github.com/thomasp85/farver">farver</a> to improve on this. Beyond very
+fast colour conversion it also allow a range of different colour distance
+calculations to be performed. Some of the discussion that followed the
+development of ths package led to Brodie Gaslam improving the colour conversion
+performance in base R and while it is not as fast as farver, it is pretty close
+and future versions of R will definetly benefit from his great contribution.</p>
+<p>I haven’t had much time to make generative art this year, but I did manage to
+find time for some infrastructure work that will support my endavours in this
+space in the future. The <a href="https://github.com/thomasp85/ambient">ambient</a> package
+is able to produce all sorts of multidimensional noise in a very performant way
+due to the speed of the underlying C++ library. I’m planning to expand on this
+package quite a bit when I get the time as I have lots of cool ideas for how to
+manipulate noise in a tidy manner.</p>
+<p>How you use colours in data visualisation is extremely important, which is also
+why the data visualisation community has embraced the viridis colour scale to
+the extend that they have. I’ve personally grown tired of the aesthetic though,
+so when I saw a range of perceptualy uniform palettes developed by Fabio Crameri
+was quick to bring it to R with the <a href="https://github.com/thomasp85/scico">scico</a>
+package. To my surprise the development of a colour palette packages became my
+most contentious contribution this year (that I know of), so I welcome everyone
+who is tired of colour palette packages to ignore it alltogether.</p>
 </div>
 <div id="transition_hobby_work" class="section level2">
 <h2>transition_hobby_work()</h2>
