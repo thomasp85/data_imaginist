@@ -104,7 +104,7 @@ that colour conversion was a main bottleneck and I ended up developing
 [farver](https://github.com/thomasp85/farver) to improve on this. Beyond very 
 fast colour conversion it also allow a range of different colour distance 
 calculations to be performed. Some of the discussion that followed the 
-development of ths package led to Brodie Gaslam improving the colour conversion
+development of this package led to Brodie Gaslam improving the colour conversion
 performance in base R and while it is not as fast as farver, it is pretty close
 and future versions of R will definetly benefit from his great contribution.
 
