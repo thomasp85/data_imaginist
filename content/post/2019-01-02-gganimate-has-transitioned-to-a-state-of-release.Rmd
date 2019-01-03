@@ -134,6 +134,83 @@ one, though it does show at points that the ggplot2 API was never designed with
 animation in mind. I am particularly pleased with how powerful the API has 
 turned out, and I have already seen countless uses I had never anticipated.
 
+## Making Fireworks
+While a proper introduction to its use is better kept for a separate document 
+(such as the *Getting Started* guide mentioned earlier), I think I would do
+gganimate a disservice by not showing of at least a single fully fledged 
+example. Below is the code needed to make fireworks with gganimate:
+
+```{r}
+# Firework colours
+colours <- c(
+  'lawngreen',
+  'gold',
+  'white',
+  'orchid',
+  'royalblue',
+  'yellow',
+  'orange'
+)
+# Produce data for a single blast
+blast <- function(n, radius, x0, y0, time) {
+  u <- runif(n, -1, 1)
+  rho <- runif(n, 0, 2*pi)
+  x <- radius * sqrt(1 - u^2) * cos(rho) + x0
+  y <- radius * sqrt(1 - u^2) * sin(rho) + y0
+  id <- sample(.Machine$integer.max, n + 1)
+  data.frame(
+    x = c(x0, rep(x0, n), x0, x),
+    y = c(0, rep(y0, n), y0, y),
+    id = rep(id, 2),
+    time = c((time - y0) * runif(1), rep(time, n), time, time + radius + rnorm(n)),
+    colour = c('white', rep(sample(colours, 1), n), 'white', rep(sample(colours, 1), n)),
+    stringsAsFactors = FALSE
+  )
+}
+# Make 20 blasts
+n <- round(rnorm(20, 30, 4))
+radius <- round(n + sqrt(n))
+x0 <- runif(20, -30, 30)
+y0 <- runif(20, 40, 80)
+time <- runif(20, max = 100)
+fireworks <- Map(blast, n = n, radius = radius, x0 = x0, y0 = y0, time = time)
+fireworks <- dplyr::bind_rows(fireworks)
+```
+
+All of the above is just data preparation. `blast()` simply creates segments 
+from the center of the blast and out to the periphery, sampling colours from the
+`colour` vector. The end result, if plotted statically, looks like this:
+
+```{r}
+ggplot(fireworks) + 
+  geom_path(aes(x = x, y = y, group = id, colour = colour)) + 
+  scale_colour_identity()
+```
+
+Now, to make it all move, as well as style it a bit for a better effect
+
+```{r, gganimate=list(detail = 10), dev.args=list(bg='black')}
+ggplot(fireworks) + 
+  geom_point(aes(x, y, colour = colour, group = id), size = 0.5, shape = 20) + 
+  scale_colour_identity() + 
+  coord_fixed(xlim = c(-65, 65), expand = FALSE, clip = 'off') +
+  theme_void() + 
+  theme(plot.background = element_rect(fill = 'black', colour = NA), 
+        panel.border = element_blank()) + 
+  # Here comes the gganimate code
+  transition_components(time, exit_length = 20) + 
+  ease_aes(x = 'sine-out', y = 'sine-out') + 
+  shadow_wake(0.05, size = 3, alpha = TRUE, wrap = FALSE, 
+              falloff = 'sine-in', exclude_phase = 'enter') + 
+  exit_recolour(colour = 'black')
+```
+
+While I wont go into detail, `transition_component()` allow all the points to 
+follow their own trajectory and timeline independently, `ease_aes()` ensures 
+that the velocity of the points taper off, `shadow_wake()` is responsible for
+the trail after each point, and `exit_recolour()` makes sure the points 
+gradually fades into the black background once they "burn out".
+
 ## The Future
 While this release is a milestone for gganimate, it is not a signal of it *being 
 done* as many things are still missing (even if we ignore the whole segue part 
@@ -143,8 +220,6 @@ will break in the future. You can follow the state of the package at its
 website, <www.gganimate.com>, where I'll also try to add additional guides and
 tutorials with time. If you create something with gganimate please share it on
 twitter, as I'm eager to see what people will make of it.
-
-![](/assets/images/gganimate_logo.gif)
 
 I'll do a sort-of live cookbook talk on gganimate at this years RStudio conf in
 Austin, so if you are there and interested to learn more about the package do

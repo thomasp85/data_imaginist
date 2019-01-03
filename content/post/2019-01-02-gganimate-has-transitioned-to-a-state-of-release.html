@@ -123,6 +123,74 @@ one, though it does show at points that the ggplot2 API was never designed with
 animation in mind. I am particularly pleased with how powerful the API has
 turned out, and I have already seen countless uses I had never anticipated.</p>
 </div>
+<div id="making-fireworks" class="section level2">
+<h2>Making Fireworks</h2>
+<p>While a proper introduction to its use is better kept for a separate document
+(such as the <em>Getting Started</em> guide mentioned earlier), I think I would do
+gganimate a disservice by not showing of at least a single fully fledged
+example. Below is the code needed to make fireworks with gganimate:</p>
+<pre class="r"><code># Firework colours
+colours &lt;- c(
+  &#39;lawngreen&#39;,
+  &#39;gold&#39;,
+  &#39;white&#39;,
+  &#39;orchid&#39;,
+  &#39;royalblue&#39;,
+  &#39;yellow&#39;,
+  &#39;orange&#39;
+)
+# Produce data for a single blast
+blast &lt;- function(n, radius, x0, y0, time) {
+  u &lt;- runif(n, -1, 1)
+  rho &lt;- runif(n, 0, 2*pi)
+  x &lt;- radius * sqrt(1 - u^2) * cos(rho) + x0
+  y &lt;- radius * sqrt(1 - u^2) * sin(rho) + y0
+  id &lt;- sample(.Machine$integer.max, n + 1)
+  data.frame(
+    x = c(x0, rep(x0, n), x0, x),
+    y = c(0, rep(y0, n), y0, y),
+    id = rep(id, 2),
+    time = c((time - y0) * runif(1), rep(time, n), time, time + radius + rnorm(n)),
+    colour = c(&#39;white&#39;, rep(sample(colours, 1), n), &#39;white&#39;, rep(sample(colours, 1), n)),
+    stringsAsFactors = FALSE
+  )
+}
+# Make 20 blasts
+n &lt;- round(rnorm(20, 30, 4))
+radius &lt;- round(n + sqrt(n))
+x0 &lt;- runif(20, -30, 30)
+y0 &lt;- runif(20, 40, 80)
+time &lt;- runif(20, max = 100)
+fireworks &lt;- Map(blast, n = n, radius = radius, x0 = x0, y0 = y0, time = time)
+fireworks &lt;- dplyr::bind_rows(fireworks)</code></pre>
+<p>All of the above is just data preparation. <code>blast()</code> simply creates segments
+from the center of the blast and out to the periphery, sampling colours from the
+<code>colour</code> vector. The end result, if plotted statically, looks like this:</p>
+<pre class="r"><code>ggplot(fireworks) + 
+  geom_path(aes(x = x, y = y, group = id, colour = colour)) + 
+  scale_colour_identity()</code></pre>
+<p><img src="/post/2019-01-02-gganimate-has-transitioned-to-a-state-of-release_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Now, to make it all move, as well as style it a bit for a better effect</p>
+<pre class="r"><code>ggplot(fireworks) + 
+  geom_point(aes(x, y, colour = colour, group = id), size = 0.5, shape = 20) + 
+  scale_colour_identity() + 
+  coord_fixed(xlim = c(-65, 65), expand = FALSE, clip = &#39;off&#39;) +
+  theme_void() + 
+  theme(plot.background = element_rect(fill = &#39;black&#39;, colour = NA), 
+        panel.border = element_blank()) + 
+  # Here comes the gganimate code
+  transition_components(time, exit_length = 20) + 
+  ease_aes(x = &#39;sine-out&#39;, y = &#39;sine-out&#39;) + 
+  shadow_wake(0.05, size = 3, alpha = TRUE, wrap = FALSE, 
+              falloff = &#39;sine-in&#39;, exclude_phase = &#39;enter&#39;) + 
+  exit_recolour(colour = &#39;black&#39;)</code></pre>
+<p><img src="/post/2019-01-02-gganimate-has-transitioned-to-a-state-of-release_files/figure-html/unnamed-chunk-6-1.gif" /><!-- --></p>
+<p>While I wont go into detail, <code>transition_component()</code> allow all the points to
+follow their own trajectory and timeline independently, <code>ease_aes()</code> ensures
+that the velocity of the points taper off, <code>shadow_wake()</code> is responsible for
+the trail after each point, and <code>exit_recolour()</code> makes sure the points
+gradually fades into the black background once they “burn out”.</p>
+</div>
 <div id="the-future" class="section level2">
 <h2>The Future</h2>
 <p>While this release is a milestone for gganimate, it is not a signal of it <em>being
@@ -133,7 +201,6 @@ will break in the future. You can follow the state of the package at its
 website, &lt;www.gganimate.com&gt;, where I’ll also try to add additional guides and
 tutorials with time. If you create something with gganimate please share it on
 twitter, as I’m eager to see what people will make of it.</p>
-<p><img src="/assets/images/gganimate_logo.gif" /></p>
 <p>I’ll do a sort-of live cookbook talk on gganimate at this years RStudio conf in
 Austin, so if you are there and interested to learn more about the package do
 swing by.</p>
