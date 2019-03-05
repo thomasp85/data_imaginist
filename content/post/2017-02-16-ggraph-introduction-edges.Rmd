@@ -25,9 +25,9 @@ set.seed(24)
 ```
 
 This is the third post in my series of `ggraph` introductions. The 
-[first](`r blogdown::shortcode('ref', '\\"2017-02-06-ggraph-introduction-layouts.html\\"')`) post introduced
+[first](`r blogdown::shortcode('ref', '2017-02-06-ggraph-introduction-layouts.html')`) post introduced
 the concept of layouts, which is simply a specification on how nodes should be
-placed on a plane. The [second](`r blogdown::shortcode('ref', '\\"2017-02-10-ggraph-introduction-nodes.html\\"')`)
+placed on a plane. The [second](`r blogdown::shortcode('ref', '2017-02-10-ggraph-introduction-nodes.html')`)
 explained how to draw nodes using the `geom_node_*()` family. This post will 
 connect the dots, so to speak, by introducing the concept of edges.
 
@@ -47,7 +47,7 @@ While nodes are the sensible, mature, and predictably geoms, edges are the edgy
 While the introduction might feel a bit over-the-top it is entirely true. An 
 edge is an abstract concept denoting a relationship between two enteties. A 
 straight line is simply just one of many ways this relationship can be 
-visualised. As we saw when [discussing nodes](`r blogdown::shortcode('ref', '\\"2017-02-10-ggraph-introduction-nodes.html\\"')`)
+visualised. As we saw when [discussing nodes](`r blogdown::shortcode('ref', '2017-02-10-ggraph-introduction-nodes.html')`)
 sometimes it is not drawn at all but impied using containment or position 
 (treemap, circle packing, and partition layouts), but more often it is shown
 using a line of some sort. This use-case is handled by the large family of edge
