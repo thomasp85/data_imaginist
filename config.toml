@@ -16,8 +16,8 @@ enableEmoji = true
 
 [params]
 	name = "Data Imaginist"
-	description = "Visualization, Data Science, and Biology"
-	bio = "Visualization, Data Science, and Biology"
+	description = "Visualization and beyond..."
+	bio = "Visualization and beyond..."
 	# Enter optionally your twitter account
 	twitter = "thomasp85"
 	enableRSS = true
@@ -78,6 +78,7 @@ enableEmoji = true
 [social]
   twitter-square = "https://twitter.com/thomasp85"
   github-square = "https://github.com/thomasp85"
+  instagram = "https://www.instagram.com/thomasp85_/"
   linkedin-square = "https://www.linkedin.com/in/thomas-lin-pedersen-9b17572/"
 
 [outputs]
