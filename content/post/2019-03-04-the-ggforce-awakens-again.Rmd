@@ -389,8 +389,8 @@ the full list.
 
 Further, ggforce now has a website at https://ggforce.data-imaginist.com, with
 full documentation overview etc. This is something I plan to roll out to all my
-major packages during the next release cycle. I've found that it gives a great 
-impediment to improving the examples in the documentation!
+major packages during the next release cycle. I've found that it is a great 
+incentive to improve the examples in the documentation!
 
 I do hope that it won't take another two years before ggforce sees the next big 
 update. It is certainly a burden of my shoulder to get this out of the door and
