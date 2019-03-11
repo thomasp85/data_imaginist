@@ -80,6 +80,7 @@ enableEmoji = true
   github-square = "https://github.com/thomasp85"
   instagram = "https://www.instagram.com/thomasp85_/"
   linkedin-square = "https://www.linkedin.com/in/thomas-lin-pedersen-9b17572/"
+  500px = "https://500px.com/thomasp85"
 
 [outputs]
 home = [ "HTML", "RSS", "RFEED"]
