@@ -1,0 +1,208 @@
+---
+title: A Flurry of Facets
+description: >
+  ggforce 0.3.0 has landed on CRAN, a mere 5 months since the last release, 
+  showing my commitment to a more incremental release cycle. It doesn't skip on
+  cool features though...
+author: Thomas Lin Pedersen
+date: '2019-08-08'
+slug: a-flurry-of-facets
+large_thumb: yes
+img:
+  thumb: /assets/images/ggforce_logo.png
+categories:
+  - R
+tags:
+  - ggforce
+  - package
+  - announcement
+  - visualization
+---
+
+
+
+<p><img src="/assets/images/ggforce_logo_small.png" align="right" style="width:50%;margin-left:5pt"/></p>
+<p>When I <a href="{{% ref "2019-03-04-the-ggforce-awakens-again.html" %}}">announced the last release of ggforce</a>
+I hinted that I would like to transition to a more piecemeal release habit and
+avoid those monster releases that the last one was. True to my word, I am now
+thrilled to announce that a new version of ggforce is available on CRAN for your
+general consumption. It goes without saying that this release contains fewer
+features and fixes than the last one, but those it packs are considerable so
+let’s get to it.</p>
+<div id="build-for-gganimate" class="section level2">
+<h2>Build for gganimate</h2>
+<p>The <a href="https://gganimate.com">gganimate</a> package facilitates the creation of
+animations from ggplot2 plots. It is build to be as general purpose as possible,
+but it still makes a few assumptions about how the layers in the plot behaves.
+Some of these assumptions where not met in a few of the ggforce geoms (the
+technical explanation was that some stats and geoms stripped group information
+from the data which trips up gganimate). This has been rectified in the new
+version of ggforce and all geoms should now be ready for use with gganimate
+(please report back if you run into any problems).</p>
+</div>
+<div id="facets-for-the-people" class="section level2">
+<h2>Facets for the people</h2>
+<p>The remainder of the release centers around facets and a few geoms that has been
+made specifically for them.</p>
+<div id="enter-the-matrix" class="section level3">
+<h3>Enter the matrix</h3>
+<p>The biggest news is undoubtedly the introduction of <code>facet_matrix()</code>, a facet
+that allows you to create a grid of panels with different data columns in the
+different rows and columns of the grid. Examples of such arrangements are known
+as scatterplot matrices and pairs plots, but these are just a subset of the
+general approach.</p>
+<p>Before we go on I will, in the interest of full disclosure, mention that certain
+types of scatterplot matrices have been possible for a long time. Most powerful
+has perhaps been the <a href="https://ggobi.github.io/ggally/#ggallyggpairs"><code>ggpairs()</code> function in GGally</a>
+that provides an API for pairs plots build on top of ggplot2. More low-level and
+limited has been the possibility of converting the data to a long format by
+stacking the columns of interest and using <code>facet_grid()</code>. The latter approach
+requires that all columns of interest are of the same type and further moves a
+crucial operation of the visualization out of the visualization API. The former
+approach, while powerful, is a wrapper around ggplot2 rather than an extension
+of the API. This means that you are limited to what the wrapper function
+provides thus loosing the flexibility of the ggplot2 API. A plurality of choices
+is good though, and I’m certain that there are rooms for all approaches to
+thrive.</p>
+<p>To show off <code>facet_matrix()</code> I’ll start with a standard use of scatterplot
+matrices, namely plotting multiple components from a PCA analysis against each
+other.</p>
+<pre class="r"><code>library(recipes)
+# Data described here: https://bookdown.org/max/FES/chicago-intro.html 
+load(url(&quot;https://github.com/topepo/FES/blob/master/Data_Sets/Chicago_trains/chicago.RData?raw=true&quot;))
+
+pca_on_stations &lt;- 
+  recipe(~ ., data = training %&gt;% select(starts_with(&quot;l14_&quot;))) %&gt;% 
+  step_center(all_predictors()) %&gt;% 
+  step_scale(all_predictors()) %&gt;%
+  step_pca(all_predictors(), num_comp = 5) %&gt;% 
+  prep() %&gt;% 
+  juice()
+
+pca_on_stations</code></pre>
+<pre><code>## # A tibble: 5,698 x 5
+##       PC1   PC2     PC3     PC4   PC5
+##     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1   1.37 4.41   0.347   0.150  0.631
+##  2   1.86 4.50   0.618   0.161  0.523
+##  3   2.03 4.50   0.569   0.0468 0.543
+##  4   2.37 4.43   0.498  -0.209  0.559
+##  5   2.37 4.13   0.422  -0.745  0.482
+##  6 -15.7  1.23   0.0164 -0.180  1.04 
+##  7 -21.2  0.771 -0.653   1.35   1.23 
+##  8  -8.45 2.36   1.07   -0.143  0.404
+##  9   3.04 4.30   0.555  -0.0476 0.548
+## 10   2.98 4.45   0.409  -0.125  0.677
+## # … with 5,688 more rows</code></pre>
+<pre class="r"><code>library(ggforce)
+
+ggplot(pca_on_stations, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(alpha = 0.2, shape = 16, size = 0.5) + 
+  facet_matrix(vars(everything()))</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Let’s walk through that last piece of code. We construct a standard ggplot using
+<code>geom_point()</code> but we map x and y to <code>.panel_x</code> and <code>.panel_y</code>. These are
+placeholders created by <code>facet_matrix()</code>. Lastly we add the <code>facet_matrix()</code>
+specification. At a minimum we’ll need to specify which columns to use. For that
+we can use standard tidyselect syntax as known from e.g. <code>dplyr::select()</code> (here
+we use <code>everything()</code> to select all columns).</p>
+<p>Now, the above plot has some obvious shortcomings. The diagonal is pretty
+useless for starters, and it is often that these panels are used to plot the
+distributions of the individual variables. Using e.g. <code>geom_density()</code> won’t
+work as it always start at 0, thus messing with the y-scale of each row. ggforce
+provides two new geoms tailored for the diagonal: <code>geom_autodensity()</code> and
+<code>geom_autohistogram()</code> which automatically positions itself inside the panel
+without affecting the y-scale. We’d still need to have this geom only in the
+diagonal, but <code>facet_matrix()</code> provides exactly this sort of control:</p>
+<pre class="r"><code>ggplot(pca_on_stations, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(alpha = 0.2, shape = 16, size = 0.5) + 
+  geom_autodensity() +
+  facet_matrix(vars(everything()), layer.diag = 2)</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>As the y-scale no longer affects the diagonal we’ll emphasize this by removing
+the horizontal grid lines there:</p>
+<pre class="r"><code>ggplot(pca_on_stations, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(alpha = 0.2, shape = 16, size = 0.5) + 
+  geom_autodensity() +
+  facet_matrix(vars(everything()), layer.diag = 2, grid.y.diag = FALSE)</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>There is still some redundancy left. As the grid is symmetrical the upper and
+lower triangle shows basically the same (with flipped axes). We could add some
+insight by using another geom in one of the areas that showed some summary
+statistic instead:</p>
+<pre class="r"><code>ggplot(pca_on_stations, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(alpha = 0.2, shape = 16, size = 0.5) + 
+  geom_autodensity() +
+  geom_density2d() +
+  facet_matrix(vars(everything()), layer.diag = 2, layer.upper = 3, 
+               grid.y.diag = FALSE)</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>While we could call this a day and be pretty pleased with ourselves, I’ll need
+to show the final party trick of <code>facet_matrix()</code>. The above example was kind of
+easy because all the variables were continuous. What if we had a mix?</p>
+<pre class="r"><code>ggplot(mpg, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(shape = 16, size = 0.5) + 
+  facet_matrix(vars(fl, displ, hwy))</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>As we can see <code>facet_matrix()</code> itself handles the mix of scale types quite well,
+but <code>geom_point()</code> is not that telling when used on a mix of continuous and
+discrete position scales. ggforce handles this by providing a new position
+adjustment (<code>position_auto()</code>) that jitters the data based on the scale types.
+For continuous vs discrete it does a sina-like jitter, whereas for discrete vs
+discrete it jitters inside a disc (continuous vs continuous makes no jitter):</p>
+<pre class="r"><code>ggplot(mpg, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(shape = 16, size = 0.5, position = &#39;auto&#39;) + 
+  facet_matrix(vars(fl, displ, hwy))</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><code>geom_autodensity()</code> and <code>geom_autohistogram()</code> also knows how to handle both
+discrete and continuous data, so these can be used safely in all circumstances
+(here also showing that you can of course also map other aesthetics):</p>
+<pre class="r"><code>ggplot(mpg, aes(x = .panel_x, y = .panel_y, fill = drv, colour = drv)) + 
+  geom_point(shape = 16, size = 0.5, position = &#39;auto&#39;) + 
+  geom_autodensity(alpha = 0.3, colour = NA, position = &#39;identity&#39;) + 
+  facet_matrix(vars(fl, displ, hwy), layer.diag = 2)</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Lastly, if you need to use a geom that only makes sense with a specific
+combination of scales, you can pick these layers directly, though you may end up
+fiddling a bit to get all the right layers where you want them:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = .panel_x, y = .panel_y, fill = drv, colour = drv)) + 
+  geom_point(shape = 16, size = 0.5, position = &#39;auto&#39;) + 
+  geom_autodensity(alpha = 0.3, colour = NA, position = &#39;identity&#39;) + 
+  geom_smooth(aes(colour = NULL, fill = NULL)) + 
+  facet_matrix(vars(fl, displ, hwy), layer.diag = 2, layer.continuous = TRUE,
+               layer.mixed = -3, layer.discrete = -3)</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The last example I’m going to show, is simply that you don’t have to create
+symmetric grids. By default <code>facet_matrix()</code> sets the column selection to be the
+same as the row selection, but you can overwrite that:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = .panel_x, y = .panel_y)) + 
+  geom_point(shape = 16, size = 0.5, position = &#39;auto&#39;) + 
+  facet_matrix(vars(manufacturer, hwy), vars(drv, cty))</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>As you can hopefully appreciate, <code>facet_matrix()</code> is maximally flexible, while
+keeping the API of the standard use cases relatively clean. The lack of a
+ggplot2-like API for plotting different variables against each others in a grid
+has been a major annoyance for me, and I’m very pleased with how I finally
+solved it—I hope you’ll put it to good use as well.</p>
+</div>
+<div id="who-needs-two-dimensions-anyway" class="section level3">
+<h3>Who needs two dimensions anyway?</h3>
+<p>The last new pack of facets are more benign, but something repeatedly requested.
+<code>facet_row()</code> and it’s cousin <code>facet_col()</code> are one-dimensional mixes of
+<code>facet_grid()</code> and <code>facet_wrap()</code>. They arrange the panels in a single row or
+single column respectively (like setting <code>nrow</code> or <code>ncol</code> to <code>1</code> in
+<code>facet_wrap()</code>), but by doing so allows the addition of a <code>space</code> argument as
+known from <code>facet_grid()</code>. In contrast to using <code>facet_grid()</code> with a single
+column or row, these new facets retain the <code>facet_wrap()</code> ability of having
+completely separate scale ranges as well as positioning the facet strip
+wherever you please:</p>
+<pre class="r"><code>ggplot(mpg) + 
+  geom_bar(aes(x = manufacturer)) + 
+  facet_col(~drv, scales = &#39;free_y&#39;, space = &#39;free&#39;, labeller = label_both) + 
+  coord_flip()</code></pre>
+<p><img src="/post/2019-08-08-a-flurry-of-facets_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>So, these were the flurry of facets I was going to bring you today—I hope you’ll
+put them to good use and create some awesome visualizations with them.</p>
+<p>Next up: the next ggraph release!</p>
+</div>
+</div>
