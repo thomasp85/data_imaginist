@@ -1,0 +1,354 @@
+---
+title: 1 giraffe, 2 giraffe, GO!
+description: >
+  After what seems like a lifetime, ggraph v2 has been released on CRAN. It 
+  packs many improvements, new features, bug fixes, and a tighter integration
+  with tidygraph. Read all about it here...
+author: Thomas Lin Pedersen
+date: '2019-09-02'
+slug: 1-giraffe-2-giraffe-go
+large_thumb: yes
+img:
+  thumb: /assets/images/ggraph_announce_2.jpg
+categories:
+  - R
+tags:
+  - ggraph
+  - package
+  - announcement
+  - visualization
+  - network
+---
+
+
+
+<p><img src="/assets/images/ggraph_logo_small.png" align="right" style="width:50%;margin-left:5pt"/></p>
+<p>I am beyond excited to finally be able to announce a new version of ggraph. This
+release, like the <a href="{{% ref "2019-03-04-the-ggforce-awakens-again.html" %}}">ggforce 0.3.0 release</a>, has been many years in the making,
+laying dormant for long periods first waiting for ggplot2 to get updated and
+then waiting for me to have time to finally finish it off. All that is in the
+past now as ggraph 2.0.0 has finally landed on CRAN, filled with numerous new
+features, a massive amount of bug fixes, and a slew of breaking changes.</p>
+<p>If you are new to ggraph, a short description follows: It is an extension of
+ggplot2 that implement an extended grammar for relational data (e.g. trees and
+networks). It provides a huge variety of geoms for drawing nodes and edges,
+along with an assortment of layouts making it possible to produce a very wide
+range of network visualization types. It is to my knowledge the most feature
+packed network visualization framework available in R (and potentially in other
+languages as well), all building on top of the familiar ggplot2 API. If you want
+to learn more I invite you to browse the new
+<a href="https://ggraph.data-imaginist.com/">pkgdown website</a> that has been made
+available.</p>
+<div id="new-looks" class="section level2">
+<h2>New looks</h2>
+<p>Before we begin with the exiting new stuff, there’s a small change that may or
+may not greet you as you make your first new plot with ggraph v2.0.0. The
+default look of a ggplot is often not a good fit for network visualisations as
+the positional scales are irrelevant. Because of this ggraph has since its
+release offered a <code>theme_graph()</code> that removed a lot of the useless clutter such
+as axes and grid lines. You had to use it deliberately though as I didn’t want
+to overwrite any defaults you may have had. In the new release I’ve relaxed on
+this a bit. When you construct a ggraph plot it will still use the default theme
+as a base, but it will remove axes and gridlines from it. This makes it easier
+to use it together with coorporate templates and the likes right out the box.
+You can still use <code>theme_graph()</code>, or potentially set it as a default using
+<code>set_graph_style()</code> if you so wish.</p>
+<pre class="r"><code>library(ggraph)
+
+# THe new default look:
+ggraph(highschool) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># Using theme_graph for the remainder of this post
+set_graph_style(size = 11, plot_margin = margin(0, 0, 0, 0))</code></pre>
+</div>
+<div id="the-broken-giraffe" class="section level2">
+<h2>The broken giraffe</h2>
+<p>Let us start proper with what this release breaks, because it does it for some very
+good reasons and you’ll all be happy about it shortly as you read on. The 1.x.x
+versions of ggraph worked with two different types of network representations:
+igraph objects and dendrogram object. Some further types such as hclust and
+network objects were supported by automatic conversion, but that was it.
+Further, the internal architecture meant that certain layouts and geoms could
+only be used with certain objects. This was obviously an imperfect situation and
+one that reflected that tidygraph was developed after ggraph. In ggraph 2.0.0
+the internals have been rewritten to only be based on tidygraph. This means that
+all layouts and geoms will always be available (as long as the topology supports
+it). This doesn’t mean that igraph, dendrogram, network, and hclust objects are
+no longer supported, though. Every input will be attempted to be coerced to a
+tbl_graph object, and as tidygraph supports a wealth of network representations,
+ggraph can now be used with an even wider selection of objects, all completely
+without any need for change from the user.</p>
+<p>While this change was completely internal and thus didn’t break anything, it did
+put in to question the API of the <code>ggraph()</code> function, which had been designed
+before tidy evaluation and tidygraph came into existence. Prior to 2.0.0 all
+layout arguments passed into <code>ggraph()</code> (and <code>create_layout()</code>) would be passed
+as strings if they referenced any node or edge property, e.g.</p>
+<pre class="r"><code>library(tidygraph)
+
+graph &lt;- as_tbl_graph(
+  data.frame(
+    from = sample(5, 20, TRUE),
+    to = sample(5, 20, TRUE),
+    weight = runif(20)
+  )
+)</code></pre>
+<pre class="r"><code>ggraph(graph, layout = &#39;fr&#39;, weights = &quot;weight&quot;) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<p>With the new API, edge and node parameters are passed along as unquoted
+expressions that will be evaluated in the context of the edge or node data
+respectively. The example above will this be:</p>
+<pre class="r"><code>ggraph(graph, layout = &#39;fr&#39;, weights = weight) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>This change might seem superficial and unnecessary until you realize that this
+means the network object doesn’t have to be updated every time you want to try
+new edge and node parameters for the layout:</p>
+<pre class="r"><code>ggraph(graph, layout = &#39;fr&#39;, weights = sqrt(weight)) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>So, that’s the extent of the breakage… Now what does this change allow..?</p>
+</div>
+<div id="tidygraph-inside" class="section level2">
+<h2>Tidygraph inside</h2>
+<p>The use of tidygraph runs much deeper than simply being used as the internal
+network representation. ggraph will also register the network object during
+creation and rendering of the plot, meaning that all tidygraph algorithms are
+available as input to layout specs and aesthetic mappings:</p>
+<pre class="r"><code>graph &lt;- as_tbl_graph(highschool)
+
+ggraph(graph, layout = &#39;fr&#39;, weights = centrality_edge_betweenness()) + 
+  geom_edge_link() + 
+  geom_node_point(aes(size = centrality_pagerank(), colour = node_is_center()))</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>It is obvious (at least to me) that this new-found capability will make it much
+easier to experiment and iterate on the visualization, hopefully inspiring
+users to try out different settings before settling on a plot.</p>
+<p>As discussed above, the tidygraph integration also makes it easy to plot a wide
+variety of data types directly. Above we first create a tbl_graph from the
+<code>highschool</code> edge-list, but that is strictly not necessary:</p>
+<pre class="r"><code>head(highschool)</code></pre>
+<pre><code>##   from to year
+## 1    1 14 1957
+## 2    1 15 1957
+## 3    1 21 1957
+## 4    1 54 1957
+## 5    1 55 1957
+## 6    2 21 1957</code></pre>
+<pre class="r"><code>ggraph(highschool, layout = &#39;kk&#39;) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Note that even though the input is not a tbl_graph it will be converted to one
+so all the tidygraph algorithms are still available during plotting.</p>
+<p>To further make it easy to quickly gain an overview over your network data,
+ggraph gains a <code>qgraph()</code> function that inspects you input and automatically
+picks a layout and combination of edge and node geoms. While the return type is
+a standard ggraph/ggplot object it should not really be used as the basis for
+a more complicated plot as you have no influence over how the layout and first
+couple of layers are chosen.</p>
+<pre class="r"><code>iris_clust &lt;- hclust(dist(iris[, 1:4]))
+
+qgraph(iris_clust)</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="layout-galore" class="section level2">
+<h2>Layout galore</h2>
+<p>ggraph 2.0.0 comes with a huge selection of new layouts, from new algorithms for
+the classic node-edge diagram to completely new types such as matrix and
+(bio)fabric layouts. The biggest addition comes from the integration of the
+<a href="https://github.com/schochastics/graphlayouts">graphlayouts</a> package by
+<a href="https://twitter.com/schochastics">David Schoch</a> who has done a tremendous job
+in bringing new, high quality, layout algorithms to R. The <code>'stress'</code> layout
+is the new default as it does a much better job than fruchterman-reingold
+(<code>'fr'</code>). It also includes a sparse version <code>'sparse_stress'</code> for large graphs
+that are much faster than any of the ones provided by igraph.</p>
+<pre class="r"><code># Defaults to stress, with a message
+ggraph(graph) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<pre><code>## Using `stress` as default layout</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>There are other layouts from graphlayouts of interest, e.g. the <code>'backbone'</code>
+layout that emphasize community structure, the <code>'focus'</code> layout that places all
+nodes in concentric circle based on their distance to a selected node etc. I
+wont show them all here but instead direct you to its
+<a href="https://github.com/schochastics/graphlayouts">github page</a> that describes all
+its different layouts.</p>
+<p>Another type of layout that has become available is the unrooted equal-angle and
+equal-daylight algorithms for drawing unrooted trees. This type of trees are
+different than those resulting from e.g. hierarchical clustering in that they
+do not contain direction or a specific root node. The tree structure is only
+given by the branch length. To support this the <code>'dendrogram'</code> layout has gained
+a length argument that allows the layout to be calculated from branch length:</p>
+<pre class="r"><code>library(ape)
+data(bird.families)
+# Using the bird.orders dataset from ape
+ggraph(bird.families, &#39;dendrogram&#39;, length = length) + 
+  geom_edge_elbow()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Often the dendrogram layout is a bad choice for unrooted trees, as it
+implicitly shows a node as the root and draw everything else according to that.
+Instead one can choose the <code>'unrooted'</code> layout where leafs are attempted
+evenly spread across the plane.</p>
+<pre class="r"><code>ggraph(bird.families, &#39;unrooted&#39;, length = length) + 
+  geom_edge_link()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>By default the equal-daylight algorithm is used but it is possible to also get
+the simpler, but less well-dispersed equal-angle version as well by setting
+<code>daylight = FALSE</code>.</p>
+<p>The new version also brings two new special layouts (special meaning
+non-standard): <code>'matrix'</code> and <code>'fabric'</code>, which, like the <code>'hive'</code> layout,
+brings their own edge and node geoms. The matrix layout places nodes on a
+diagonal and shows edges by placing points at the horizontal and vertical
+intersection of the terminal nodes. The selling point of this layout is that it
+scales better as there is no possibility of edge crossings. On the other hand
+is matrix layouts very dependent on the order in which nodes are placed, and as
+the network growth so does the possible ordering of nodes. There exist however
+a large range of node ranking algorithm that can be used to provide an effective
+ordering and many of these are available in tidygraph. It can take some time
+getting used to matrix plots but once you begin to recognize patterns in the
+plot and how it links to certain topological features of the network, they can
+become quite effective tools:</p>
+<pre class="r"><code># Create a graph where internal edges in communities are grouped
+graph &lt;- create_notable(&#39;zachary&#39;) %&gt;%
+  mutate(group = factor(group_infomap())) %&gt;%
+  morph(to_split, group) %&gt;%
+  activate(edges) %&gt;%
+  mutate(edge_group = as.character(.N()$group[1])) %&gt;%
+  unmorph()</code></pre>
+<pre><code>## Warning: `as_quosure()` requires an explicit environment as of rlang 0.3.0.
+## Please supply `env`.
+## This warning is displayed once per session.</code></pre>
+<pre class="r"><code>ggraph(graph, &#39;matrix&#39;, sort.by = node_rank_hclust()) + 
+  geom_edge_point(aes(colour = edge_group), mirror = TRUE) + 
+  coord_fixed()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>As can be seen in the example above it is often useful to mirror edges to both
+sides of the diagonal to make the patterns stronger. Highly connected nodes are
+easily recognizable, without suffering from over-plotting, and by choosing an
+appropriate ranking algorithm communities are easily visible. In addition to
+<code>gemo_edge_point()</code> ggraph also provides <code>geom_edge_tile()</code> for a different
+look.</p>
+<p>The fabric layout (originally called biofabric, but I have decided to drop the
+prefix to indicate it can be used generally), is another layout approach that
+tries to deal with the problems of over-plotting. It does so by drawing all edges
+as evenly spaced vertical lines, and all nodes as evenly spaced horizontal
+lines. As with the matrix layout it is highly dependent on the sorting of nodes,
+and requires some getting used to. I urge you to give it a chance though,
+potentially with some help from the <a href="http://www.biofabric.org">website</a> its
+inventor has set up:</p>
+<pre class="r"><code>ggraph(graph, &#39;fabric&#39;, sort.by = node_rank_fabric()) + 
+  geom_node_range(aes(colour = group), alpha = 0.3) + 
+  geom_edge_span(aes(colour = edge_group), end_shape = &#39;circle&#39;) + 
+  coord_fixed() + 
+  theme(legend.position = &#39;top&#39;)</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>The <code>node_rank_fabric()</code> is the ranking proposed in the original paper, but
+other ranking algorithms are of course also possible.</p>
+<p>The last new feature in the layout department is that it is now easier to plug
+in new layouts. First, by providing a matrix or data.frame to the <code>layout</code>
+argument in <code>ggraph()</code> you can quickly provide a fixed position of the nodes.
+The same can be obtained by providing an <code>x</code> and <code>y</code> argument to the <code>'auto'</code> layout.
+Second, you can provide a function directly to the <code>layout</code> argument. The
+function must take a tbl_graph as input and return a data.frame or an object
+coercible to one. This means that e.g. layouts defined as physics simulations
+with the particles package can be used directly:</p>
+<pre class="r"><code>library(particles)
+# Set up simulation
+sim &lt;- . %&gt;% simulate() %&gt;% 
+  wield(manybody_force) %&gt;% 
+  wield(link_force) %&gt;% 
+  evolve()
+
+ggraph(graph, sim) + 
+  geom_edge_link(colour = &#39;grey&#39;) + 
+  geom_node_point(aes(colour = group), size = 3)</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="geoms-for-the-people" class="section level2">
+<h2>Geoms for the people</h2>
+<p>While ggraph has always included quite a large range of different geoms for
+showing nodes and edges, this release has managed to add some more. Most
+importantly, <code>geom_edge_fan()</code> has gained a brother in crime for showing
+multi-edges. <code>geom_edge_parallel()</code> will draw edges as straight lines but, in
+the case of multi-edges, will offset them slightly orthogonal to its direction
+so that there is no overlap. This is a geom best suited for smaller graphs
+(IMO), but here it can add a very classic look to the plot:</p>
+<pre class="r"><code>small_graph &lt;- create_notable(&#39;bull&#39;) %&gt;%
+  convert(to_directed) %&gt;%
+  bind_edges(data.frame(from = c(1, 2, 5, 3), to = c(2, 1, 3, 2)))
+
+ggraph(small_graph, &#39;stress&#39;) + 
+  geom_edge_parallel(end_cap = circle(.5), start_cap = circle(.5),
+                     arrow = arrow(length = unit(1, &#39;mm&#39;), type = &#39;closed&#39;)) + 
+  geom_node_point(size = 4)</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>For this edge geom in particular it is often a good idea to use capping to let
+them end before they reaches the terminal nodes.</p>
+<p>Another edge geom that has become available is <code>geom_edge_bend()</code> which is sort
+of an organic elbow geom:</p>
+<pre class="r"><code>ggraph(iris_clust, &#39;dendrogram&#39;, height = height) + 
+  geom_edge_bend()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Lastly, in addition to the node and edge geoms shown in the Layout section,
+<code>geom_node_voronoi()</code> has been added. It is a ggraph specific version of
+<code>ggforce::geom_voronoi_tile()</code> that allows you to create a Voronoi tessellation
+of the nodes and use the resulting tiles to show the nodes. As with the ggforce
+version it is possible to constrain the tiles to a specific radius around the
+edge making it a great way of showing which nodes dominates certain areas
+without any problems with over-plotting.</p>
+<pre class="r"><code>ggraph(graph, &#39;stress&#39;) + 
+  geom_node_voronoi(aes(fill = group), max.radius = 0.5, colour = &#39;white&#39;) + 
+  geom_edge_link() + 
+  geom_node_point()</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>A last little thing pertaining to edge geoms is that many have gained a
+<code>strength</code> argument, which controls their level of non-linearity (this is
+obviously only available for non-linear edges). Setting <code>strength = 0</code> will
+result in a linear edge, while setting <code>strength = 1</code> will give the standard
+look. Everything in between is fair game, while everything outside that range
+will look exceptionally weird, probably.</p>
+<pre class="r"><code>ggraph(iris_clust, &#39;dendrogram&#39;, height = height) + 
+  geom_edge_bend(alpha = 0.3) + 
+  geom_edge_bend(strength = 0.5, alpha = 0.3) + 
+  geom_edge_bend(strength = 0.2, alpha = 0.3)</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>ggraph(iris_clust, &#39;dendrogram&#39;, height = height) + 
+  geom_edge_elbow(alpha = 0.3) + 
+  geom_edge_elbow(strength = 0.5, alpha = 0.3) + 
+  geom_edge_elbow(strength = 0.2, alpha = 0.3)</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>A few geoms have had arguments such as <code>curvature</code> or <code>spread</code> that have had
+similar purpose, but those arguments have been deprecated in favor of the same
+argument across all (applicable) geoms.</p>
+<p>And then one more last thing, but it is really not something new in ggraph. As
+you can use standard geoms for drawing nodes some of the new features in ggforce
+is of particular interest to ggraph users. The <code>geom_mark_*()</code> family in
+particular is great for annotating single, or groups of nodes, and going forward
+it will be the advised approach:</p>
+<pre class="r"><code>library(ggforce)
+ggraph(graph, &#39;stress&#39;) + 
+  geom_edge_link() + 
+  geom_node_point() + 
+  geom_mark_ellipse(aes(x, y, label = &#39;Group 3&#39;, 
+                        description = &#39;A very special collection of nodes&#39;,
+                        filter = group == 3))</code></pre>
+<p><img src="/post/2019-08-22-1-giraffe-2-giraffe-go_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="all-the-rest" class="section level2">
+<h2>All the rest</h2>
+<p>These are the exiting new stuff, but the release also includes numerous bug
+fixes and small tweaks… Far to many to be interesting to list, so you must
+take my work for it 😄.</p>
+<p>As with ggforce I hope that ggraph never goes this long without a release again.
+Feel free to flood me with feature request after you have played with the new
+version and I’ll do my best to take them on.</p>
+<p>I’ll spend some time on ggplot2 and grid for now, but still plan on taking a
+development sprint with patchwork with the intend of getting it on CRAN before
+the end of this year.</p>
+</div>
