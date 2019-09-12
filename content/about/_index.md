@@ -21,8 +21,8 @@ doing what I do, you can support me through
 ## Art Commision
 I create generative art using some of the tools that I develop. If you are 
 interested in purchasing one of my pieces please contact me by mail 
-(<thomasp85@gmail.com>) or Twitter. The current prices are $50+shipment for a 
-unique A4 print and $100+shipment for a unique A3 print.
+(<thomasp85@gmail.com>) or Twitter. The current prices are $100 + shipment for a 
+A4 print and $150 + shipment for a A3 print.
 
 ![unfold02](/assets/images/unfold02.png)
 
