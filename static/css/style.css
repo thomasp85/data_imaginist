@@ -921,3 +921,16 @@ a.symbol:hover {
 .page-tags .tags:hover a {
     color: #EB5D40;
 }
+
+body {
+  background-image: url('/assets/images/middle.png'), url('/assets/images/left.png'), url('/assets/images/right.png');
+  background-repeat: repeat-y;
+  background-position: center top, left top, right top;
+  background-size: 860px, 500px, 500px;
+}
+@media (max-width: 700px) {
+  body {
+    background-image: none;
+    background-size: 0;
+  }
+}
