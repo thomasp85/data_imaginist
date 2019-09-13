@@ -1,9 +1,15 @@
 <div class="profile">
     <section id="wrapper">
         <header id="header">
+            {{ if eq .URL "/about/" }}
             <a href='{{ .Site.BaseURL }}about'>
                 <img id="avatar" class="2x" src="{{ .Site.BaseURL }}images/avatar.png"/>
             </a>
+            {{ else }}
+            <a href='{{ .Site.BaseURL }}about'>
+                <img id="logo" class="2x" src="{{ .Site.BaseURL }}assets/images/di_logo.png"/>
+            </a>
+            {{ end }}
             <h1>{{ .Site.Params.name }}</h1>
             {{ with .Site.Params.bio }}<h2>{{ . | markdownify }}</h2>{{ end }}
         </header>
