@@ -10,7 +10,7 @@ img:
     thumb: "/assets/images/reqres_logo.png"
 ---
 
-<img src="/assets/images/reqres_logo_small.png" align="right" style="width:50%"/>
+<img src="/assets/images/reqres_logo_small.png" align="right" style="width:50%;max-width:200px"/>
 
 I'm very happy to announce that `reqres` has been released on CRAN. `reqres` is
 a new (in R context) approach to working with HTTP messages, that is, the 

@@ -10,7 +10,7 @@ img:
     thumb: "/assets/images/fiery_logo.png"
 ---
 
-<img src="/assets/images/fiery_f.jpeg" align="right" style="width:50%"/>
+<img src="/assets/images/fiery_f.jpeg" align="right" style="width:50%;max-width:200px"/>
 
 I'm pleased to announce that `fiery` has been updated to version 1.0 and is now
 available on CRAN. As the version bump suggests, this is a rather major update 

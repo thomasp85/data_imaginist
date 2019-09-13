@@ -22,7 +22,7 @@ tags:
 set.seed(24)
 ```
 
-<img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%;margin-left:5pt"/>
+<img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%;max-width:200px;margin-left:5pt"/>
 
 Just to start of the year in a positive way, I'm happy to announce that 
 *gganimate* is now available on CRAN. This release is the result of a pretty 

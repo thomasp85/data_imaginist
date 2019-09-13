@@ -19,7 +19,7 @@ knitr::opts_chunk$set(interval = 1/10)
 set.seed(24)
 ```
 
-<img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%;margin-left:5pt"/>
+<img src="/assets/images/gganimate_logo_small.png" align="right" style="width:50%;max-width:200px;margin-left:5pt"/>
 
 This is my first blog post about `gganimate` — a package I've been working on
 since mid-spring this year. I have many thoughts and lots to say about animation

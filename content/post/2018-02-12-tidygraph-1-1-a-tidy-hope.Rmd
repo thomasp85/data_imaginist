@@ -16,7 +16,7 @@ img:
     thumb: "/assets/images/tidygraph_logo.png"
 ---
 
-<img src="/assets/images/tidygraph_logo_small.png" align="right" style="width:139pt;max-width:50%"/>
+<img src="/assets/images/tidygraph_logo_small.png" align="right" style="width:50%;max-width:200px"/>
 
 I am very pleased to tell you that the next version of `tidygraph` (1.1) is now 
 available on CRAN. This is not a bug-fix release, nor a change-it-all release,

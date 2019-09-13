@@ -22,7 +22,7 @@ set.seed(2)
 ```
 
 
-<img src="/assets/images/transformr_logo_small.png" align="right" style="width:50%"/>
+<img src="/assets/images/transformr_logo_small.png" align="right" style="width:50%;max-width:200px;"/>
 
 Once again, I gives me great pleasure to announce a new package has joined CRAN.
 `transformr` is the spatial brother of `tweenr` and as with the `tweenr` update 

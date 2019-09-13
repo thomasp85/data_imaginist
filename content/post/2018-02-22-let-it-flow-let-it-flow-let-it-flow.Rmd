@@ -32,7 +32,7 @@ Sys.setenv(LANG = "en")
 set.seed(1)
 ```
 
-<img src="/assets/images/particles_logo_small.png" style="width:139pt;max-width:50%;display:block;margin-left:auto;margin-right:auto"/>
+<img src="/assets/images/particles_logo_small.png" style="width:50%;max-width:200px;display:block;margin-left:auto;margin-right:auto"/>
 
 I got a new package on CRAN! It's called `particles` and it sits right in the 
 perfect intersection of fun, cool, and useful. If you don't believe me, have a

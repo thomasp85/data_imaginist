@@ -16,7 +16,7 @@ tags:
   - color
 ---
 
-<img src="/assets/images/scico_logo_small.png" align="right" style="width:50%"/>
+<img src="/assets/images/scico_logo_small.png" align="right" style="width:50%;max-width:200px;"/>
 
 I'm happy to once again announce the release of a package. This time it happens
 to be a rather unplanned and quick new package, which is fun for a change. The

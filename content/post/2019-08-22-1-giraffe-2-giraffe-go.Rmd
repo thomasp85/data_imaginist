@@ -26,7 +26,7 @@ Sys.setenv(LANG = "en")
 set.seed(25)
 ```
 
-<img src="/assets/images/ggraph_logo_small.png" align="right" style="width:50%;margin-left:5pt"/>
+<img src="/assets/images/ggraph_logo_small.png" align="right" style="width:50%;max-width:200px;margin-left:5pt"/>
 
 I am beyond excited to finally be able to announce a new version of ggraph. This
 release, like the [ggforce 0.3.0 release](`r blogdown::shortcode('ref', '2019-03-04-the-ggforce-awakens-again.html')`), has been many years in the making, 

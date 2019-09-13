@@ -10,7 +10,7 @@ img:
     thumb: "/assets/images/routr_logo.png"
 ---
 
-<img src="/assets/images/routr_logo_small.png" align="right" style="width:50%"/>
+<img src="/assets/images/routr_logo_small.png" align="right" style="width:50%;max-width:200px"/>
 
 `routr` is now available on CRAN, and I couldn't be happier. It's release marks
 the completion of an idea that stretches back longer than my attempts to bring

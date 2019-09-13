@@ -18,7 +18,7 @@ categories:
 - R
 ---
 
-<img src="/assets/images/lime_logo_small.jpg" align="right" style="width:50%"/>
+<img src="/assets/images/lime_logo_small.jpg" align="right" style="width:50%;max-width:200px"/>
 
 I'm happy to report a new major release of `lime` has landed on CRAN. `lime` is 
 an R port of the Python library of the same name by Marco Ribeiro that allows

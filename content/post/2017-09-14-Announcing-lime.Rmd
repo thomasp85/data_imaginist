@@ -10,7 +10,7 @@ img:
     thumb: "/assets/images/lime_logo.jpg"
 ---
 
-<img src="/assets/images/lime_logo_small.jpg" align="right" style="width:50%"/>
+<img src="/assets/images/lime_logo_small.jpg" align="right" style="width:50%;max-width:200px"/>
 
 I'm very pleased to announce that `lime` has been released on CRAN. `lime` is an
 implementation of the model prediction explanation framework described in 
