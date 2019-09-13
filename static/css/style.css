@@ -179,9 +179,8 @@ h3 {
 
 nav.main-nav {
     font-family: 'Comfortaa', cursive;
-    padding: 20px 20px 0;
-    background: #fff;
-    background: rgba(255, 255, 255, .90);
+    padding: 20px;
+    background: #4A4645;
     margin: 0 auto;
     text-align: right;
     z-index: 100;
@@ -191,22 +190,21 @@ nav.main-nav a {
     top: 8px;
     right: 6px;
     padding: 8px 12px;
-    color: #5badf0;
+    color: #FAF5E6;
     font-size: 14px;
     line-height: 1.35;
     border-radius: 3px;
 }
 
 nav.main-nav a.cta {
-    background: #5badf0;
-    color: #fff;
+    background: #FAF5E6;
+    color: #4A4645;
     margin-left: 12px;
 }
 @media (max-width: 700px) {
   nav.main-nav {
-      padding: 20px 10px 0 0;
-      background: #fff;
-      background: rgba(255, 255, 255, .90);
+      padding: 20px 10px;
+      background: #4A4645;
       margin: 0 auto;
       text-align: right;
       z-index: 100;
@@ -215,7 +213,7 @@ nav.main-nav a.cta {
       top: 8px;
       right: 6px;
       padding: 8px 8px;
-      color: #5badf0;
+      color: #FAF5E6;
       font-size: 13px;
       line-height: 1.35;
       border-radius: 3px;
@@ -254,12 +252,11 @@ nav.main-nav a.cta {
 
 a, #title, #post-list a:hover, #title:hover {
     text-decoration: none;
-    color: #5badf0;
-    color: #5694f1;
+    color: #EB5D40;
 }
 
 p a {
-    color: #5694f1;
+    color: #EB5D40;
 }
 
 
@@ -528,9 +525,9 @@ Post List
 }
 
 #archive-link:hover {
-    background: #5694f1;
+    background: #EB5D40;
     color: #fff;
-    box-shadow: 0 0 0 1px #5694f1;
+    box-shadow: 0 0 0 1px #EB5D40;
 }
 
 #archive-link span {
@@ -682,7 +679,7 @@ h2.month {
 }
 
 #archive-list li a:hover, #archive-list li:hover .dates {
-    color: #5694f1;
+    color: #EB5D40;
 }
 
 #post-meta img.avatar {
@@ -704,7 +701,7 @@ h2.month {
 }
 
 #post-list.archive.readmore a {
-    color: #5694f1;
+    color: #EB5D40;
 }
 
 #post-list.archive.readmore a:hover {
@@ -815,11 +812,11 @@ h2.month {
 }
 
 .archive .post-item:hover {
-    color: #5694f1;
+    color: #EB5D40;
     transition: 0.3s ease-out;
 }
 .archive .post-item:hover .post-link {
-    color: #5694f1;
+    color: #EB5D40;
 }
 
 .fa.fa-heart:hover {
@@ -922,5 +919,5 @@ a.symbol:hover {
 }
 
 .page-tags .tags:hover a {
-    color: #5694f1;
+    color: #EB5D40;
 }
