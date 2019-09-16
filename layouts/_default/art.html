@@ -20,9 +20,11 @@
       {{ $imageName := replace (path.Base .Name) (path.Ext .Name) ""}}
       <li>
         <figure>
-        <img src="{{$image.RelPermalink}}" alt="{{$imageName}}" width="{{$image.Width}}px" height="{{$image.Height}}px"/>
-        <figcaption>{{$imageName}}</figcaption>
-      </figure>
+          <a href="#" data-featherlight="{{.RelPermalink}}" class="autoBind">
+            <img src="{{$image.RelPermalink}}" alt="{{$imageName}}" width="{{$image.Width}}px" height="{{$image.Height}}px"/>
+          </a>
+          <figcaption>{{$imageName}}</figcaption>
+        </figure>
       </li>
     {{ end }}
   </ul>
@@ -33,4 +35,13 @@
 </section>
 
 {{ partial "js.html" . }}
+<link href="{{ .Site.BaseURL }}js/featherlight.min.css" type="text/css" rel="stylesheet" />
+<script src="{{ .Site.BaseURL }}js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+$.featherlight.prototype.afterContent = function() {
+  var caption = this.$currentTarget.find('img').attr('alt');
+  this.$instance.find('.caption').remove();
+  $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+};
+</script>
 </body>

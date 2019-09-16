@@ -262,7 +262,7 @@ nav.main-nav a.cta {
 }
 
 #wrapper.art {
-    max-width: none;
+    max-width: 1400px;
     padding: 60px 40px 20px 40px;
 }
 
@@ -1025,8 +1025,14 @@ a.symbol:hover {
   height: 100%;
 }
 
-.image-gallery > li > figure > img {
+.image-gallery > li > figure > a > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.featherlight-caption {
+  font-family: 'Comfortaa', sans-serif;
+  padding-top: 4px;
+  text-align: right;
 }
