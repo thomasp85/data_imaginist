@@ -1,5 +1,5 @@
 ---
-title: "Art"
+title: "Generative Art by Thomas Lin Pedersen"
 layout: art
 description: >
   If you are interested in buying one of my pieces, then please contact me by 
@@ -7,6 +7,9 @@ description: >
   or [Instagram](https://instagram.com/thomasp85_). I print myself on high quality
   paper using pigment ink. The price is $100 for A4 and $150 for A3, plus 
   shipping.
+large_thumb: yes
+img:
+  thumb: /art/genesis/genesis4563.png
 ---
 
 ## On generative art
