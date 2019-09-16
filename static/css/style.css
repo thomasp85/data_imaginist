@@ -6,6 +6,12 @@ body {
   background-position: center top, left top, right top;
   background-size: 860px, 500px, 500px;
 }
+
+body#portfolio {
+  background-image: none;
+  background-size: 0;
+}
+
 @media (max-width: 700px) {
   body {
     background-image: none;
@@ -255,6 +261,12 @@ nav.main-nav a.cta {
     padding: 0px 40px 20px 40px;
 }
 
+#wrapper.art {
+    max-width: none;
+    margin: 0 50px;
+    padding: 60px 40px 20px 40px;
+}
+
 .home #avatar {
     float: right;
     width: 40px;
@@ -480,6 +492,10 @@ img {
     width: 100%;
     max-width: 100%;
     border-radius: 3px;
+}
+.art img {
+  width: initial;
+  margin: 0 auto;
 }
 
 
@@ -938,4 +954,80 @@ a.symbol:hover {
 
 .page-tags .tags:hover a {
     color: #EB5D40;
+}
+#art-purchase {
+  float: left;
+  padding-right: 20px;
+  width: 300px;
+  display: block;
+}
+#art-about {
+  float: left;
+  padding-right: 20px;
+  width: 300px;
+  display: block;
+  clear: both;
+}
+#art-about2 {
+  display: none;
+}
+@media (max-width: 840px) {
+  #art-purchase {
+    float: none;
+    padding-right: inherit;
+    width: inherit;
+    display: block;
+  }
+  #art-about {
+    display: none;
+  }
+  #art-about2 {
+    display: block;
+  }
+}
+.image-gallery {
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: 200px;
+  grid-auto-rows: 200px;
+  grid-gap: 1rem;
+  grid-auto-flow: dense;
+  padding-left: 0;
+  margin-bottom: 40px;
+}
+.image-gallery figcaption {
+  font-family: 'Comfortaa', sans-serif;
+  background: rgba(0, 0, 0, 0.5);
+  background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5032387955182073) 40%, rgba(0,0,0,0) 100%);
+  color: white;
+  position:relative;
+  height: 23px;
+  width: 180px;
+  top: -24px;
+  padding: 4px;
+}
+.image-gallery > li:nth-child(4n) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+@media (max-width: 480px) {
+  .image-gallery > li {
+    grid-column: span 1 !important;
+    grid-row: span 1  !important;
+  }
+}
+
+.image-gallery > li {
+  list-style: none;
+}
+
+.image-gallery > li > figure {
+  height: 100%;
+}
+
+.image-gallery > li > figure > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

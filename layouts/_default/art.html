@@ -1,0 +1,36 @@
+{{ partial "head.html" . }}
+<body id="portfolio">
+{{ partial "nav.html" . }}
+
+<section id="wrapper" class="art">
+  <div id="art-purchase">
+    <h2>Purchase</h2>
+    <p>
+      {{ .Description | markdownify }}
+    </p>
+  </div>
+  <div id="art-about">
+    {{ .Content }}
+  </div>
+  
+  <h2>Gallery</h2>
+  <ul class="image-gallery">
+    {{ range sort (.Resources.ByType "image") "Name"}}
+      {{ $image := .Fill "500x500 center" }}
+      {{ $imageName := replace (path.Base .Name) (path.Ext .Name) ""}}
+      <li>
+        <figure>
+        <img src="{{$image.RelPermalink}}" alt="{{$imageName}}" width="{{$image.Width}}px" height="{{$image.Height}}px"/>
+        <figcaption>{{$imageName}}</figcaption>
+      </figure>
+      </li>
+    {{ end }}
+  </ul>
+  <div id="art-about2">
+    {{ .Content }}
+  </div>
+  {{ partial "footer.html" . }}
+</section>
+
+{{ partial "js.html" . }}
+</body>
