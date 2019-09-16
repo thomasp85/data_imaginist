@@ -1,7 +1,8 @@
 ---
 title: "Generative Art by Thomas Lin Pedersen"
 layout: art
-description: >
+description: "A gallery of my work. Contact me if you are interested in a purchase."
+purchase: >
   If you are interested in buying one of my pieces, then please contact me by 
   email (<thomasp85@gmail.com>), through [Twitter](https://twitter.com/thomasp85),
   or [Instagram](https://instagram.com/thomasp85_). I print myself on high quality
