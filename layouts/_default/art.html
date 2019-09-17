@@ -15,7 +15,7 @@
   
   <h2>Gallery</h2>
   <ul class="image-gallery">
-    {{ range sort (.Resources.ByType "image") "Name"}}
+    {{ range sort (.Resources.ByType "image") ".RelPermalink" "desc"}}
       {{ $image := .Fill "500x500 center" }}
       {{ $imageName := replace (path.Base .Name) (path.Ext .Name) ""}}
       <li>
