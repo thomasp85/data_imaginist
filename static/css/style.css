@@ -1031,8 +1031,13 @@ a.symbol:hover {
   object-fit: cover;
 }
 
-.featherlight-caption {
+.featherlight-caption .caption-title {
   font-family: 'Comfortaa', sans-serif;
   padding-top: 4px;
   text-align: right;
+}
+
+.featherlight-caption .caption-text {
+  font-family: 'Faustina', serif;
+  font-style: italic;
 }

@@ -18,9 +18,10 @@
     {{ range sort (.Resources.ByType "image") ".RelPermalink" "desc"}}
       {{ $image := .Fill "500x500 center" }}
       {{ $imageName := replace (path.Base .Name) (path.Ext .Name) ""}}
+      {{ $description := readFile (print "content/art/" (path.Dir .Name) "/info")}}
       <li>
         <figure>
-          <a href="#" data-featherlight="{{.RelPermalink}}" class="autoBind">
+          <a href="#" data-featherlight="{{.RelPermalink}}" class="autoBind" data-description="{{$description | markdownify}}">
             <img src="{{$image.RelPermalink}}" alt="{{$imageName}}" width="{{$image.Width}}px" height="{{$image.Height}}px"/>
           </a>
           <figcaption>{{$imageName}}</figcaption>
@@ -38,10 +39,18 @@
 <link href="{{ .Site.BaseURL }}js/featherlight.min.css" type="text/css" rel="stylesheet" />
 <script src="{{ .Site.BaseURL }}js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
-$.featherlight.prototype.afterContent = function() {
+$.featherlight.defaults.afterContent = function() {
   var caption = this.$currentTarget.find('img').attr('alt');
+  var description = this.$currentTarget.attr('data-description');
   this.$instance.find('.caption').remove();
-  $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+  var descContainer = $('<div class="featherlight-caption">');
+  descContainer.append($("<p class='caption-title'>").text(caption));
+  descContainer.append($("<p class='caption-text'>").text(description));
+  descContainer.css("max-width", this.$instance.find('.featherlight-content img').css("width"));
+  descContainer.appendTo(this.$instance.find('.featherlight-content'));
 };
+$.featherlight.defaults.onResize = function() {
+  this.$instance.find('.featherlight-caption').css("max-width", this.$instance.find('.featherlight-content img').css("width"));
+}
 </script>
 </body>
