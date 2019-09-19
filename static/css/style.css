@@ -956,21 +956,21 @@ a.symbol:hover {
 }
 #art-purchase {
   float: left;
-  padding-right: 20px;
-  width: 300px;
+  padding-right: 30px;
+  width: 400px;
   display: block;
 }
 #art-about {
   float: left;
-  padding-right: 20px;
-  width: 300px;
+  padding-right: 30px;
+  width: 400px;
   display: block;
   clear: both;
 }
 #art-about2 {
   display: none;
 }
-@media (max-width: 840px) {
+@media (max-width: 860px) {
   #art-purchase {
     float: none;
     padding-right: inherit;
@@ -994,6 +994,7 @@ a.symbol:hover {
   grid-auto-flow: dense;
   padding-left: 0;
   margin-bottom: 40px;
+  max-width: 900px;
 }
 .image-gallery figcaption {
   font-family: 'Comfortaa', sans-serif;
