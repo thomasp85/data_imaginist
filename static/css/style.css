@@ -355,10 +355,14 @@ em, i {
     text-align: center;
 }
 
-.post h1 {
+.post h1, .art h1 {
     margin-bottom: 20px;
     color: #222;
     font: 300 32px/1.4em 'Comfortaa', sans-serif;
+}
+.art h1 .byline {
+  font-size: 18px;
+  color: #888;
 }
 
 .post h2 {
@@ -981,6 +985,9 @@ a.symbol:hover {
     display: none;
   }
   #art-about2 {
+    display: block;
+  }
+  .art header .byline {
     display: block;
   }
 }
