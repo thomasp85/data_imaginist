@@ -30,7 +30,7 @@ performance bottleneck in gganimate related to converting colours into Lab
 colour space and back when tweening them. This was a result of
 <code>grDevices::convertColor()</code> not being meant for use with millions of colour
 values. I build farver in order to address this very specific need, which in
-turn mad Brodie Gaslam look into speeding up the grDevices function. The
+turn made Brodie Gaslam look into speeding up the grDevices function. The
 bottom line is that, while farver is still the fastest at converting between
 colour spaces, grDevices is now so fast that I probably wouldn’t have bothered
 to build farver in the first place had it been like this all along. I find this
