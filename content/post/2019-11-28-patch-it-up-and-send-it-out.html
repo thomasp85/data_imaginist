@@ -1,0 +1,198 @@
+---
+title: Patch it up and send it out
+description: >
+  Finally! Patchwork has finally been released on CRAN. Finally! No Joke... It's
+  all there! Go check it out.
+author: Thomas Lin Pedersen
+date: '2019-11-28'
+slug: patch-it-up-and-send-it-out
+large_thumb: yes
+img:
+  thumb: /assets/images/patchwork_announce_1.png
+categories:
+  - R
+tags:
+  - package
+  - announcement
+  - patchwork
+  - ggplot2
+  - visualization
+---
+
+
+
+<p><img src="/assets/images/patchwork_logo_small.png" align="right" style="width:50%;max-width:200px;margin-left:5pt"/></p>
+<p>I am super, super thrilled to finally be able to announce that patchwork has
+been released on CRAN. Patchwork has, without a doubt, been my most popular
+unreleased package and it is great to finally make it available to everyone.</p>
+<p>Patchwork is a package for composing plots, i.e. placing multiple plots together
+in the same figure. It is not the only package that tries to solve this. <code>grid.arrange()</code> from gridExtra, and <code>plot_grid()</code> from <code>cowplot</code> are two
+popular choices while some will claim that all you need is base graphics and
+<code>layout()</code> (they would be wrong, though). Do we really need another package for
+this? I personally feel that patchwork brings enough innovation to the table to
+justify its existence, but if you are a happy user of <code>cowplot::plot_grid()</code> I’m
+not here to force you away from that joy.</p>
+<p>The claim to fame of patchwork is mainly two things: A very intuitive API, and
+a layout engine that promises to keep your plots aligned no matter how complex
+a layout you concoct.</p>
+<pre class="r"><code>library(ggplot2)
+library(patchwork)
+
+p1 &lt;- ggplot(mpg) + 
+  geom_point(aes(hwy, displ))
+p2 &lt;- ggplot(mpg) + 
+  geom_bar(aes(manufacturer, fill = stat(count))) + 
+  coord_flip()
+
+# patchwork allows you to add plots together
+p1 + p2</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>If you find this intriguing, you should at least give patchwork a passing
+glance. I’ve already written at length about all of its features at its
+<a href="https://patchwork.data-imaginist.com">webpage</a>, so if you don’t want to
+entertain my ramblings more than necessary, make haste to the
+<a href="https://patchwork.data-imaginist.com/articles/patchwork.html">Getting Started</a>
+guide, or one of the in-depth guides covering:</p>
+<ul>
+<li><a href="https://patchwork.data-imaginist.com/articles/guides/assembly.html">Assembling Plots</a></li>
+<li><a href="https://patchwork.data-imaginist.com/articles/guides/layout.html">Defining Layouts</a></li>
+<li><a href="https://patchwork.data-imaginist.com/articles/guides/annotation.html">Adding Annotation</a></li>
+<li><a href="https://patchwork.data-imaginist.com/articles/guides/multipage.html">Aligning Across Pages</a></li>
+</ul>
+<div id="the-patch-that-worked" class="section level2">
+<h2>The Patch that Worked</h2>
+<p>If you are still here, I’ll tell you a bit more about the package, and round up
+with some examples of my favorite features in patchwork. As I described in
+<a href="https://www.data-imaginist.com/2017/looking-back-on-2017/">my look back at 2017</a>
+patchwork helped me out of burn-out fueled by increasing maintenance burdens of
+old packages. At that time I don’t think I expected two years to pass before it
+got its proper release, but here we are… What I don’t really go into is why I
+started on the package. The truth is that I was beginning to think about the new
+gganimate API, but was unsure whether it was possible to add completely foreign
+objects to ggplots, alter how it behaves, while still allowing normal ggplot2
+objects to be added afterwards. I was not prepared to create a POC of gganimate
+to test it out at this point, so I came up with the idea of trying to allow
+plots to be added together. The new behavior was that the two plots would be
+placed beside each other, and the last plot would still be able to receive new
+ggplot objects. It worked, obviously, and I began to explore this idea a bit
+more, adding more capabilities. I consciously didn’t advertise this package at
+all. I was still burned out and didn’t want to do anything for anyone but
+myself, but someone picked it up from my github and made a moderately viral
+tweet about it, so it quickly became popular despite my intentions. I often
+joke that patchwork is my most elaborate tech-demo to date.</p>
+<p>All that being said, I was in search for a better way to compose plots (I think
+most R users have cursed about misaligned axes and butchered <code>facet_wrap()</code> into
+a layout engine) and I now had a blurry vision of a solution, so I had to take
+it out of tech-demo land, and begin to treat it as a real package. But, along
+came gganimate and swallowed up all my development time. Further, I had hit a
+snag in how nested layouts worked that meant backgrounds and other elements were
+lost. This snag was due to a fundamental part of why patchwork otherwise worked
+so well, so I was honestly in no rush to get back to fixing it.</p>
+<p>So patchwork lingered, unreleased…</p>
+<p>At the start of 2019 I decided that the year should be dedicated to finishing of
+updates and unreleased packages, and by November only patchwork remained. I was
+still not feeling super exited about getting back to the aforementioned snag,
+but I saw no way out so I dived in. After having explored uncharted areas of
+grid in search of something that could align the layout engine implementation
+with not removing background etc. I was ready to throw it all out, but I decided
+to see how hard it would be to simply rewrite a subset of the layout engine. 1
+day later I had a solution… There is a morale in there somewhere, I’m sure —
+feel free to use it.</p>
+</div>
+<div id="the-golden-patches" class="section level2">
+<h2>The Golden Patches</h2>
+<p>I don’t want to repeat what I’ve written about at length in the guides I linked
+to in the beginning of the post, so instead I’ll end with simply a few of my
+favorite parts of patchwork. There will be little explanation about the code
+(again, check out the guides), so consider this a blindfolded tasting menu.</p>
+<pre class="r"><code># A few more plots to play with
+p3 &lt;- ggplot(mpg) + 
+  geom_smooth(aes(hwy, cty)) + 
+  facet_wrap(~year)
+p4 &lt;- ggplot(mpg) + 
+  geom_tile(aes(factor(cyl), drv, fill = stat(count)), stat = &#39;bin2d&#39;)</code></pre>
+<div id="human-centered-api" class="section level3">
+<h3>Human-Centered API</h3>
+<p>Patchwork implements a few API innovations to make plot composition both quick,
+but also readable: Consider this code</p>
+<pre class="r"><code>(p1 | p2) /
+   p3</code></pre>
+<p>It is not too difficult to envision what kind of composition comes out of this
+and, lo and behold, it does exactly what is expected:</p>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>As layout complexity increases, the use of operators get less and less readable.
+Patchwork allows you to provide a textual representation of the layout instead,
+which scales much better:</p>
+<pre class="r"><code>layout &lt;- &#39;
+ABB
+CCD
+&#39;
+p1 + p2 + p3 + p4 + plot_layout(design = layout)</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="capable-auto-tagging" class="section level3">
+<h3>Capable auto-tagging</h3>
+<p>When plot compositions are used in scientific literature, the subplots are
+often enumerated so they can be referred to in the figure caption and text.
+While you could do that manually, it is much easier to let patchwork do it for
+you.</p>
+<pre class="r"><code>patchwork &lt;- (p4 | p2) /
+                p1
+patchwork + plot_annotation(tag_levels = &#39;A&#39;)</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>If you have a nested layout, as in the above, you can even tell patchwork to
+create a new tagging level for it:</p>
+<pre class="r"><code>patchwork &lt;- ((p4 | p2) + plot_layout(tag_level = &#39;new&#39;)) /
+                 p1
+patchwork + plot_annotation(tag_levels = c(&#39;A&#39;, &#39;1&#39;))</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="it-allows-you-to-modify-subplots-all-at-once" class="section level3">
+<h3>It allows you to modify subplots all at once</h3>
+<p>What if want to play around with the theme? Do you begin to change the theme of
+all of your subplots? No, you use the <code>&amp;</code> operator that allows you to add ggplot
+elements to all your subplots:</p>
+<pre class="r"><code>patchwork &amp; theme_minimal()</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+<div id="it-shepherds-the-guides" class="section level2">
+<h2>It shepherds the guides</h2>
+<p>Look at the plot above. The guides are annoying, right. Let’s put them together:</p>
+<pre class="r"><code>patchwork + plot_layout(guides = &#39;collect&#39;)</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>That is, visually, better but really we only want a single guide for the fill.
+patchwork will remove duplicates, but only if they are alike. If we give them
+the same range, we get what we want:</p>
+<pre class="r"><code>patchwork &lt;- patchwork &amp; scale_fill_continuous(limits = c(0, 60))
+patchwork + plot_layout(guides = &#39;collect&#39;)</code></pre>
+<p><img src="/post/2019-11-28-patch-it-up-and-send-it-out_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Pretty nice, right?</p>
+</div>
+<div id="this-is-not-a-grammar" class="section level2">
+<h2>This is not a grammar</h2>
+<p>I’ll finish this post off with something that has been rummaging inside my head
+for a while, and this is as good a place as any to put it. It seems obvious to
+call patchwork a grammar of plot composition, after all it expands on ggplot2
+which has a grammar of graphics. I think that would be wrong. A grammar is not
+an API, but a theoretical construct that describes the structure of something in
+a consistent way. An API can be based on a grammar (as is the case for ggplot2
+and dplyr) which will guide its design, or a grammar can be developed in close
+concert with an API as I tried to do with gganimate. Not everything lends itself
+well to being described by a grammar, and an API is not necessarily bad if it is
+not based on one (conversely, it may be bad even if it is). Using operators to
+combine plots is hardly a reflection of an underlying coherent theory of plot
+composition, much less a reflection of a grammar. It is still a nice API though.</p>
+<p>Why do I need to say this? It seems like the programming world has been taken
+over by grammars and you may feel bad about just solving a problem with a nice
+API. Don’t feel bad — “grammar” has just been conflated with “cohesive API”
+lately.</p>
+</div>
+<div id="towards-some-new-packages" class="section level2">
+<h2>Towards some new packages</h2>
+<p>As mentioned in the beginning, I set out to mainly finish off stuff in 2019.
+tidygraph, ggforce, and ggraph has seen some huge updates, and with patchwork
+finally released I’ve reached my year goal with time to spare. I’ll be looking
+forward to creating something new again, but hopefully find a good rhythm where
+I don’t need to take a year off to update forgotten projects.</p>
+</div>
