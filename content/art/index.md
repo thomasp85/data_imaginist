@@ -10,7 +10,7 @@ purchase: >
   shipping.
 large_thumb: yes
 img:
-  thumb: /art/genesis/genesis4563.png
+  thumb: /art/005_genesis/genesis4563.png
 ---
 
 ## On generative art
