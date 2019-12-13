@@ -4,6 +4,7 @@ description: It's not that difficult...
 author: Thomas Lin Pedersen
 date: '2019-12-13'
 slug: don-t-be-a-dick
+large_thumb: yes
 categories: []
 tags: []
 ---
@@ -19,10 +20,10 @@ The world is shit though...
 
 ## A Plea
 I've spend most of my adult life developing software and giving it away for 
-free, no strings attached. I try to be a welcominging and helpful part of the 
+free, no strings attached. I try to be a welcoming and helpful part of the 
 community. Lines has to be drawn though...
 
-If you support fascism, racism, misogyni, or any of the other ugly heads that
+If you support fascism, racism, misogyny, or any of the other ugly heads that
 bigotry has, either openly or indirectly by voting for the likes of Trump or
 Johnson, I have a plea for you: 
 
@@ -42,7 +43,7 @@ It goes without saying that this plea can only extend to the code I create in my
 spare time and release as a private person.
 
 It also goes without saying that, should this plea apply to you, you'll probably 
-ignore it because you have already cast aside descency. If you do ignore it just 
+ignore it because you have already cast aside decency. If you do ignore it just 
 know: I actively despise you as a user...
 
 ## To Everyone Else
