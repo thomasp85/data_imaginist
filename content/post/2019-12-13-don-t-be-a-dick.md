@@ -53,3 +53,24 @@ able to chip in on (mostly R and generative art), and are you a minority in any
 way, I invite you to reach out, and I'll do what I can.
 
 Merry Christmas
+
+## Addendum 16/12/19
+Thankfully people have mostly reacted in positive to this post. This was kind of
+expected as I think the R community is by and large on the right side of 
+history. A few people have taken issue with me naming political leaders and 
+their supporters directly, thinking this is about political disagreement. This 
+is not the case.
+
+Bigotry is not politics!
+
+You can be a republican and not support Trump. You can be a tory and not support
+Johnson and if you do I both applaud you for your conviction and welcome you to
+my small sphere of R packages. If you are a republican/tory and feel uneasy 
+about the current leadership, but still choose to vote for them, you have put
+your morale values up for sale. This is entirely your choice. I will call you 
+out on it.
+
+Others have indicated that any type of disagreement should simply not have a 
+bearing in the open source world. First, OS is activistic in its very nature, 
+and second, good job on living a priviliged life if you think this is the first
+time people take a stand in the R world...
