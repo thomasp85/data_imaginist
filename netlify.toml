@@ -1,9 +1,6 @@
 [build]
   publish = "public"
   command = "hugo"
-  
-[build.processing]
-  skip_processing = false
 
 [context.production.environment]
   HUGO_VERSION = "0.58.2"
@@ -18,12 +15,6 @@
 
 [context.deploy-preview]
   command = "hugo -b $DEPLOY_PRIME_URL --buildFuture"
-  
-[context.deploy-preview.processing.images]
-  compress = false
 
 [context.branch-deploy]
   command = "hugo -b $DEPLOY_PRIME_URL --buildFuture"
-  
-[context.branch-deploy.processing.images]
-  compress = false
