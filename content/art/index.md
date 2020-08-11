@@ -6,8 +6,8 @@ purchase: >
   If you are interested in buying one of my pieces, then please contact me by 
   email (<thomasp85@gmail.com>), through [Twitter](https://twitter.com/thomasp85),
   or [Instagram](https://instagram.com/thomasp85_). I print myself on high quality
-  paper using pigment ink. The price is US$100 for A4, US$150 for A3, and US$450 for 
-  A1, plus shipping.
+  paper using pigment ink. The price is US$100 for A4, US$150 for A3, US$450 for 
+  A1, and US$650 for A0, plus shipping.
 large_thumb: yes
 img:
   thumb: /art/005_genesis/genesis4563.png
