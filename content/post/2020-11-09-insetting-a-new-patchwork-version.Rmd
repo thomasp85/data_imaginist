@@ -6,6 +6,9 @@ description: >
 author: Thomas Lin Pedersen
 date: '2020-11-09'
 slug: insetting-a-new-patchwork-version
+large_thumb: yes
+img:
+  thumb: /assets/images/patchwork_logo.png
 categories:
   - R
 tags:
