@@ -20,7 +20,7 @@ tags:
 
 I'm delighted to announce that a new version of patchwork has been released on CRAN. This new version contains both a bunch of small bug fixes as well as some prominent features which will be showcased below.
 
-If you are unaware of patchwork, it is a package that allows easy composition of graphics, primarily aimed at ggplot2, but with support for base graphics as well. You can read more about the package on its [website](https::/patchwork.data-imaginist.com).
+If you are unaware of patchwork, it is a package that allows easy composition of graphics, primarily aimed at ggplot2, but with support for base graphics as well. You can read more about the package on its [website](https://patchwork.data-imaginist.com).
 
 For the remainder of this post we'll use the following plots as examples:
 
