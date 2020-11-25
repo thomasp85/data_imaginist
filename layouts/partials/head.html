@@ -37,13 +37,13 @@
   
     {{ if .Params.img.thumb }}
       <meta property="og:image" content="{{ .Site.BaseURL }}{{ .Params.img.thumb }}" />
-      <meta name="twitter:image:src" content="{{ .Site.BaseURL }}{{ .Params.img.thumb }}">
+      <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.img.thumb }}">
     {{ else }}
       <meta property="og:image" content="{{ .Site.BaseURL }}assets/images/logo_large.png" />
       {{ if .Params.large_thumb }}
-        <meta name="twitter:image:src" content="{{ .Site.BaseURL }}assets/images/logo_large.png">
+        <meta name="twitter:image" content="{{ .Site.BaseURL }}assets/images/logo_large.png">
       {{ else }}
-        <meta name="twitter:image:src" content="{{ .Site.BaseURL }}assets/images/logo_opaque.png">
+        <meta name="twitter:image" content="{{ .Site.BaseURL }}assets/images/logo_opaque.png">
       {{ end }}
     {{ end }}
     <meta content="{{ .Site.Title }}" property="og:site_name">
