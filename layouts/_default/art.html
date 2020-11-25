@@ -21,13 +21,14 @@
   <h2>Gallery</h2>
   <ul class="image-gallery">
     {{ range sort (.Resources.ByType "image") ".RelPermalink" "desc"}}
-      {{ $image := .Fill "500x500 center" }}
+      {{ $image := .Resize "x1000 jpg" }}
+      {{ $imageThumb := .Fill "500x500 center" }}
       {{ $imageName := replace (path.Base .Name) (path.Ext .Name) ""}}
       {{ $description := readFile (print "content/art/" (path.Dir .Name) "/info")}}
       <li>
         <figure>
-          <a href="#" data-featherlight="{{.RelPermalink}}" class="autoBind" data-description="{{$description | markdownify}}">
-            <img src="{{$image.RelPermalink}}" alt="{{$imageName}}" width="{{$image.Width}}px" height="{{$image.Height}}px"/>
+          <a href="#" data-featherlight="{{$image.RelPermalink}}" class="autoBind" data-description="{{$description | markdownify}}">
+            <img src="{{$imageThumb.RelPermalink}}" alt="{{$imageName}}" width="{{$imageThumb.Width}}px" height="{{$imageThumb.Height}}px"/>
           </a>
           <figcaption>{{$imageName}}</figcaption>
         </figure>
