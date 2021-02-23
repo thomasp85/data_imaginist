@@ -10,7 +10,7 @@ purchase: >
   A4, US$150 for A3, US$450 for A1, and US$650 for A0, plus shipping.
 large_thumb: yes
 img:
-  thumb: art/card.jpg
+  thumb: /assets/images/card.jpg
 ---
 
 ## On generative art
