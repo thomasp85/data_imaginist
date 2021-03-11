@@ -13,6 +13,9 @@ img:
   thumb: assets/images/card.jpg
 ---
 
+## Crypto art
+I am tentatively dipping my toes into crypto art. It is a contentious subject due to the high energy consumption, and thus it's ecological impact, of some crypto technologies. Still, technologies around crypto art and non-fungible tokens (NFT) have the potential to disrupt the current art market and improve the situation for artist so it is wrong to dismiss it outright. I'm experimenting with crypto art on [hic et nunc](https://www.hicetnunc.xyz/tz/tz2Pkj2xWJovKKCsABjnr3NbyMVJTMBkpTvb), a market place build on top of the Tezos crypto currency, which has a very low energy consumption. Only pieces minted by tz2Pkj2xWJovKKCsABjnr3NbyMVJTMBkpTvb are by me.
+
 ## On generative art
 I'm a generative artist focusing mainly on exploring the beauty of dynamic 
 systems. For me, the sweet spot of generative art lies in creating a system that
