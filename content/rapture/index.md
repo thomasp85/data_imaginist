@@ -62,7 +62,7 @@ When it comes to rendering the deformed polygons the way it was done in the gene
 
 If you are the owner of a Rapture piece you are eligible to order a signed print of it. Only one print per piece will be made, so if you bought the piece on secondary make sure to check the list below to see if the print for your piece has already been claimed. Prints will be offered in A2 size. For square Rapture pieces this translates to 420mm/16.5" on both sides. For portrait and landscape Rapture pieces this translates to 420x594mm/16.5x23.4". If you are the type of person that care about paper (I salute you), then I can tell that the pieces will be printed on Hahnemüehle Fine Art Baryta Satin.
 
-Prints will be \$250 plus shipping and can be ordered by sending a mail to [thomasp85\@gmail.com](mailto:thomasp85@gmail.com). Upon ordering I will need to verify that you are in fact the owner of the piece.
+Prints will be US$ 250 plus shipping and can be ordered by sending a mail to [thomasp85@gmail.com](mailto:thomasp85@gmail.com). Upon ordering I will need to verify that you are in fact the owner of the piece.
 
 ### Completed prints
 
