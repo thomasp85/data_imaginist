@@ -100,4 +100,5 @@ Prints will be US$ 250 plus shipping and can be ordered by sending a mail to [th
 - [#763](https://artblocks.io/token/141000763)
 - [#794](https://artblocks.io/token/141000794)
 - [#795](https://artblocks.io/token/141000795)
+- [#842](https://artblocks.io/token/141000842)
 - [#915](https://artblocks.io/token/141000915)
