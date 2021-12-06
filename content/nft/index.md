@@ -10,10 +10,10 @@ I've explored various aspects of crypto-art, starting in the spring of 2021.
 Only art minted by the following addresses is by me, unless otherwise specified
 below:
 
-**Tezos**
+#### Tezos
 * [tz2Pkj2xWJovKKCsABjnr3NbyMVJTMBkpTvb](https://tzkt.io/tz2Pkj2xWJovKKCsABjnr3NbyMVJTMBkpTvb/) (thomasp85.tez)
 
-**Ethereum**
+#### Ethereum
 * [0xa0c34acdeda216ee5424544fc885d7dafca3c54c](https://etherscan.io/address/0xa0c34acdeda216ee5424544fc885d7dafca3c54c) (thomasp85.eth)
 * [0x5a77b2d05afb67eacd8f9c7e98692dd1e2883cb3](https://etherscan.io/address/0x5a77b2d05afb67eacd8f9c7e98692dd1e2883cb3) (vault.thomasp85.eth)
 
