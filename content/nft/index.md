@@ -27,6 +27,12 @@ support the OBJKT token, such as [OBJKT.com](https://objkt.com/profile/thomasp85
 If you want to explore my mints in it's original old school brutalist interface
 you can look at [hicetnunc.art](https://hicetnunc.art/Thomas_Lin_Pedersen).
 
+### Versum
+My default place for minting 1/1s on Tezos is now 
+[Versum](https://versum.xyz/user/thomasp85), a relatively new platform build by some
+of the same developers that helped HEN in the early days and who have a great vision
+for an inclusive and healthy NFT community.
+
 ### Foundation
 I am minting single edition pieces on [Foundation](https://foundation.app/@thomasp85)
 from time to time. The collection is smaller and I'll usually split my work 
