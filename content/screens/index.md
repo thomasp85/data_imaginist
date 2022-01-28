@@ -23,6 +23,10 @@ artists. Thus, while working on Constructive, the focal points where strong
 geometric compositions, strong simple colour palettes, gradients using a 
 rendering technique mimicking screen printing.
 
+![constructive 11](assets/images/constructive11.jpg)
+
+*Constructive 11*
+
 Constructive was very much a handheld series. While it is generative in nature,
 the macro composition was decided beforehand. I did enjoy the result immensely
 and I knew almost immediately that I wanted to explore this aesthetic in a long
