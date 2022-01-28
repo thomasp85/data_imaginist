@@ -23,7 +23,7 @@ artists. Thus, while working on Constructive, the focal points where strong
 geometric compositions, strong simple colour palettes, gradients using a 
 rendering technique mimicking screen printing.
 
-<img src="assets/images/constructive11.jpg" width="50%" style="width:80%; margin-left:25%;" alt="constructive 11">
+<img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">
 
 *Constructive 11*
 
@@ -32,5 +32,5 @@ the macro composition was decided beforehand. I did enjoy the result immensely
 and I knew almost immediately that I wanted to explore this aesthetic in a long
 form format. Thus began the thought process that led to Screens.
 
-
-
+With Screens I wanted to continue my main focus: Strong geometric shapes, 
+Gradients, 
