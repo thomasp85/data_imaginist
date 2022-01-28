@@ -23,7 +23,7 @@ artists. Thus, while working on Constructive, the focal points where strong
 geometric compositions, strong simple colour palettes, gradients using a 
 rendering technique mimicking screen printing.
 
-![constructive 11](assets/images/constructive11.jpg)
+![constructive 11](assets/images/constructive11.jpg){width:80%; margin-left:10%}
 
 *Constructive 11*
 
