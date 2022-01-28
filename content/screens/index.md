@@ -23,8 +23,7 @@ artists. Thus, while working on Constructive, the focal points where strong
 geometric compositions, strong simple colour palettes, gradients using a 
 rendering technique mimicking screen printing.
 
-<img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">
-
+<img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">  
 *Constructive 11*
 
 Constructive was very much a handheld series. While it is generative in nature,
@@ -32,5 +31,17 @@ the macro composition was decided beforehand. I did enjoy the result immensely
 and I knew almost immediately that I wanted to explore this aesthetic in a long
 form format. Thus began the thought process that led to Screens.
 
-With Screens I wanted to continue my main focus: Strong geometric shapes, 
-Gradients, 
+With Screens I wanted to continue my main focus: Strong geometric shapes and 
+gradients together with the signature grainy rendering style. However, the 
+approach taken with Constructive wasn't scalable and besides, I didn't want to
+rehash a finished project.
+
+The idea of extruding lines into screen-like shapes and drawing them in an 
+isometric view first came together with the idea of using flow fields to 
+generate the lines. I very quickly cast aside the idea of flow fields for 
+several reasons, one being overexposure to the concept, and one being a strong 
+affection for pure geometric shapes in this project. The basic idea was born 
+though, and could easily be used with other things than flow fields.
+
+All of this happened without any coding or sketching at all. This is pretty much
+on par with my process, as I often design and develop ideas purely in my head.
