@@ -44,4 +44,14 @@ affection for pure geometric shapes in this project. The basic idea was born
 though, and could easily be used with other things than flow fields.
 
 All of this happened without any coding or sketching at all. This is pretty much
-on par with my process, as I often design and develop ideas purely in my head.
+on par with my process, as I often design and develop ideas purely in my head. 
+Then, when I finally decided to sit down and code, the central part of the 
+system was completed in 2 days, mainly because the result matched my vision so
+well (this is not always the case). However, following this came several months
+of trying out ideas and fine tuning the algorithm. In order for Screens to 
+work as long form generative art I had to embrace a level of chaotic behaviour
+that I would usually refrain from putting out there beyond my control. Thus, an
+enormous amount of work was put into keeping the chaos in check so that I could
+rest assured that every piece would work. Most of this work, and the months that
+went into it, is obviously not visible since it was concerned with what 
+shouldn't come up. If the work done is not apparent I have succeeded.
