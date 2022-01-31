@@ -55,3 +55,8 @@ enormous amount of work was put into keeping the chaos in check so that I could
 rest assured that every piece would work. Most of this work, and the months that
 went into it, is obviously not visible since it was concerned with what 
 shouldn't come up. If the work done is not apparent I have succeeded.
+
+## Want more?
+This page will be updated with an overview of the feature space as well as a 
+technical deep-dive into the system. Please check back at a later date, or keep
+an eye on my Twitter feed for updates.
