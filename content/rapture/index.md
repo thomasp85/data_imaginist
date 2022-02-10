@@ -1,6 +1,7 @@
 ---
 title: "Rapture"
 description: "Herein I describe the provenance of the Rapture series, my though process, and some technical details about how it is made."
+date: '2021-08-23'
 large_thumb: yes
 img:
   thumb: assets/images/rapture_0.png

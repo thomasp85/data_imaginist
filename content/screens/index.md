@@ -1,6 +1,7 @@
 ---
 title: "Screens"
 description: "Screens is a generative art series released on ArtBlocks curated. This page will contain information, background, and updates on the series."
+date: '2022-01-31'
 large_thumb: yes
 img:
   thumb: assets/images/screens/header.jpg
