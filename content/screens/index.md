@@ -10,7 +10,7 @@ editor_options:
     wrap: 80
 ---
 
-Screens is a generative series launcing on ArtBlocks Curated on January 31st,
+Screens is a generative series launching on ArtBlocks Curated on January 31st,
 12:00p CT. This page will contain additional information and background about
 the project, after it has launched.
 
