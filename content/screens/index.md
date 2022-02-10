@@ -85,7 +85,8 @@ screen and the template is then merged into a master image.
 
 <img src="assets/images/screens/process.png" width="100%" style="width:100%;" alt="The making of #923">  
 *The making of #923*
-
+  
+  
 <img src="assets/images/screens/255000923.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #923">  
 [*Screens #923 — final*](https://www.artblocks.io/token/255000923)
 
@@ -134,12 +135,12 @@ longer than those closer to it.
 
 <div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 20px;">
 <div>
-<img src="assets/images/screens/255000266.jpeg" alt="Screens #266">  
-[*Screens #266*](https://www.artblocks.io/token/255000266)
+<img src="assets/images/screens/255000266.jpeg" alt="Screens #266">
+<a href="https://www.artblocks.io/token/255000266"><i>Screens #266</i></a>
 </div>
 <div>
 <img src="assets/images/screens/255000207.jpeg" alt="Screens #207">  
-[*Screens #207*](https://www.artblocks.io/token/255000207)
+<a href="https://www.artblocks.io/token/255000207"><i>Screens #207</i></a>
 </div>
 </div>
 
