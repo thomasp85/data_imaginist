@@ -133,7 +133,7 @@ between the minimal and maximal radius allowed. Since the span of the screens
 are based on radians it follows that screens farther from the center tend to be
 longer than those closer to it.
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 20px;">
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 20px; margin: 20px">
 <div>
 <img src="assets/images/screens/255000266.jpeg" alt="Screens #266">
 <a href="https://www.artblocks.io/token/255000266"><i>Screens #266</i></a>
