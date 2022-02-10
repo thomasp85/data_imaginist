@@ -155,7 +155,16 @@ span is given as a percentage of the circumference of the square at the given
 distance from the center. The square actor is the only one capable of creating
 sharp turns in its screens, giving it some unique compositional abilities.
 
-716 + 521
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000716.jpeg" alt="Screens #716">
+<a href="https://www.artblocks.io/token/255000716"><i>Screens #716</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000521.jpeg" alt="Screens #521">  
+<a href="https://www.artblocks.io/token/255000521"><i>Screens #521</i></a>
+</div>
+</div>
 
 ##### Radial actor
 
@@ -169,7 +178,16 @@ cross each other, they have the potential to get very near to each other.
 Because of this each screen is terminated if it gets within a threshold distance 
 to other screens from the same actor.
 
-230 + 423
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000230.jpeg" alt="Screens #230">
+<a href="https://www.artblocks.io/token/255000230"><i>Screens #230</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000423.jpeg" alt="Screens #423">  
+<a href="https://www.artblocks.io/token/255000423"><i>Screens #423</i></a>
+</div>
+</div>
 
 ##### Straight actors
 
@@ -181,7 +199,16 @@ same angle and is distributed along a shared line. Like circle and square
 actors, the screens from a straight actor can be condensed around the shared
 line or uniformly distributed out to a max distance from the line.
 
-380 + 78
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000380.jpeg" alt="Screens #380">
+<a href="https://www.artblocks.io/token/255000380"><i>Screens #380</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000078.jpeg" alt="Screens #78">  
+<a href="https://www.artblocks.io/token/255000078"><i>Screens #78</i></a>
+</div>
+</div>
 
 ##### Spline actors
 
@@ -196,7 +223,16 @@ capable of creating screens with a more wavy feel and the possibility of
 changing directions multiple times. This offers some unique possibilities in
 composition.
 
-613 + 983
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000613.jpeg" alt="Screens #613">
+<a href="https://www.artblocks.io/token/255000613"><i>Screens #613</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000983.jpeg" alt="Screens #983">  
+<a href="https://www.artblocks.io/token/255000983"><i>Screens #983</i></a>
+</div>
+</div>
 
 #### Scenes
 
@@ -210,7 +246,16 @@ placed inside the frame creating 100 screens. Because a single actor cannot
 create intersecting screens the hero scene has a very clean and striking look.
 However, there is also not much room for emergent compositional traits to arise.
 
-921 + 395
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000921.jpeg" alt="Screens #921">
+<a href="https://www.artblocks.io/token/255000921"><i>Screens #921</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000395.jpeg" alt="Screens #395">  
+<a href="https://www.artblocks.io/token/255000395"><i>Screens #395</i></a>
+</div>
+</div>
 
 ##### Collapse
 
@@ -222,7 +267,16 @@ of my own personal favourites are of this style. The reason why this approach
 refrain from resulting in pure chaos is that each screen shares a common
 dynamic, thus unifying them in the same compositional harmony.
 
-86 + 473
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000086.jpeg" alt="Screens #86">
+<a href="https://www.artblocks.io/token/255000086"><i>Screens #86</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000473.jpeg" alt="Screens #473">  
+<a href="https://www.artblocks.io/token/2550000473"><i>Screens #473</i></a>
+</div>
+</div>
 
 ##### Company
 
@@ -231,7 +285,16 @@ two of the same actors, placed inside or outside the frame and each creating 50
 screens. This style is often one of both harmony and strong geometries, though
 certain setups can of course create dissonance.
 
-999 + 315
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000999.jpeg" alt="Screens #999">
+<a href="https://www.artblocks.io/token/255000999"><i>Screens #999</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000315.jpeg" alt="Screens #315">  
+<a href="https://www.artblocks.io/token/2550000315"><i>Screens #315</i></a>
+</div>
+</div>
 
 ##### Antagonists
 
@@ -240,7 +303,16 @@ ones. While the name implies tension, that is not always the case. The
 combination of e.g. a circular and straight actor might just give rise to a some
 of the interest that the cleanness of a hero lack.
 
-843 + 701
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000843.jpeg" alt="Screens #843">
+<a href="https://www.artblocks.io/token/255000843"><i>Screens #843</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000701.jpeg" alt="Screens #701">  
+<a href="https://www.artblocks.io/token/2550000701"><i>Screens #701</i></a>
+</div>
+</div>
 
 ##### Crowd
 
@@ -251,7 +323,16 @@ of the two actors of the same type somewhat works to counteract the chaos, but
 the last actor is bound to throw a wrench into the effort. Thus this style will
 often balance between harmony and tension.
 
-680 + 445
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000680.jpeg" alt="Screens #680">
+<a href="https://www.artblocks.io/token/255000680"><i>Screens #680</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000445.jpeg" alt="Screens #445">  
+<a href="https://www.artblocks.io/token/2550000445"><i>Screens #445</i></a>
+</div>
+</div>
 
 ##### Order and Chaos
 
@@ -263,7 +344,16 @@ simply to describe the feeling the composition elicit in the viewer. Screens has
 been designed to encompass this diversity in emotional responses to the
 compositions --- an overabundance of harmony quickly becomes boring.
 
-408 + 14
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000408.jpeg" alt="Screens #408">
+<a href="https://www.artblocks.io/token/255000408"><i>Screens #408</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000014.jpeg" alt="Screens #14">  
+<a href="https://www.artblocks.io/token/2550000014"><i>Screens #14</i></a>
+</div>
+</div>
 
 #### Interactions
 
@@ -285,7 +375,16 @@ of screens considerably thus giving rise to more variation and visual
 interaction. However, due to the buffer zone around each intersection, it
 retains a level of order --- no two screens are too close to each other.
 
-889 + 865
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000889.jpeg" alt="Screens #889">
+<a href="https://www.artblocks.io/token/255000889"><i>Screens #889</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000865.jpeg" alt="Screens #865">  
+<a href="https://www.artblocks.io/token/2550000865"><i>Screens #865</i></a>
+</div>
+</div>
 
 ##### Tight
 
@@ -299,7 +398,16 @@ The longer gradients possible here means that screens can end up only showing a
 single colour in the visible area, thus creating much more potential for
 interesting negative space to form.
 
-498 + 374
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000498.jpeg" alt="Screens #498">
+<a href="https://www.artblocks.io/token/255000498"><i>Screens #498</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000374.jpeg" alt="Screens #374">  
+<a href="https://www.artblocks.io/token/2550000374"><i>Screens #374</i></a>
+</div>
+</div>
 
 ##### Dominating
 
@@ -310,7 +418,16 @@ the battle of who gets clipped. This means that screens from a single actor is
 left intact while the remaining screens fight it out. It is natural that the
 dominating actor ends up, ahem, dominating the piece.
 
-876 + 348
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000876.jpeg" alt="Screens #876">
+<a href="https://www.artblocks.io/token/255000876"><i>Screens #876</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000348.jpeg" alt="Screens #348">  
+<a href="https://www.artblocks.io/token/2550000348"><i>Screens #348</i></a>
+</div>
+</div>
 
 #### Screen types
 
@@ -324,7 +441,16 @@ Tall screens are basically extruded to infinity making sure that nothing behind
 them will ever be visible. This is the prevalent look and the setting that most
 often leads to harmonious and dense compositions.
 
-901 + 795
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000901.jpeg" alt="Screens #901">
+<a href="https://www.artblocks.io/token/255000901"><i>Screens #901</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000795.jpeg" alt="Screens #795">  
+<a href="https://www.artblocks.io/token/2550000795"><i>Screens #795</i></a>
+</div>
+</div>
 
 ##### Medium
 
@@ -334,14 +460,32 @@ the screen and what is behind it. This leaves room for the solid background
 colour to shiny through giving rise to interesting negative spaces and shapes
 that would otherwise not be possible.
 
-989 + 654
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000989.jpeg" alt="Screens #989">
+<a href="https://www.artblocks.io/token/255000989"><i>Screens #989</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000654.jpeg" alt="Screens #654">  
+<a href="https://www.artblocks.io/token/2550000654"><i>Screens #654</i></a>
+</div>
+</div>
 
 ##### Thin
 
 Thin screens are, well, thin. So thin in fact that often the resulting
 composition is dominated be the background and the negative space.
 
-16 + 642
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000016.jpeg" alt="Screens #16">
+<a href="https://www.artblocks.io/token/255000016"><i>Screens #16</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000642.jpeg" alt="Screens #642">  
+<a href="https://www.artblocks.io/token/2550000642"><i>Screens #642</i></a>
+</div>
+</div>
 
 ##### Varied
 
@@ -351,7 +495,16 @@ background being visible underneath the screens you'll see the structure of the
 tall screens. Visually you often get the feeling of seeing the thinner screens
 floating in between the infinitely tall screens.
 
-961 + 859
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000961.jpeg" alt="Screens #961">
+<a href="https://www.artblocks.io/token/255000961"><i>Screens #961</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000859.jpeg" alt="Screens #859">  
+<a href="https://www.artblocks.io/token/2550000859"><i>Screens #859</i></a>
+</div>
+</div>
 
 ### Colour
 
@@ -372,59 +525,185 @@ pieces for each palette, showing their range:
 
 ##### Berlin
 
-545 + 976
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000545.jpeg" alt="Screens #545">
+<a href="https://www.artblocks.io/token/255000545"><i>Screens #545</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000976.jpeg" alt="Screens #976">  
+<a href="https://www.artblocks.io/token/2550000976"><i>Screens #976</i></a>
+</div>
+</div>
 
 ##### Autumn
 
-571 + 333
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000571.jpeg" alt="Screens #571">
+<a href="https://www.artblocks.io/token/255000571"><i>Screens #571</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000333.jpeg" alt="Screens #333">  
+<a href="https://www.artblocks.io/token/2550000333"><i>Screens #333</i></a>
+</div>
+</div>
 
 ##### Rythm
 
-765 + 603
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000765.jpeg" alt="Screens #765">
+<a href="https://www.artblocks.io/token/255000765"><i>Screens #765</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000603.jpeg" alt="Screens #603">  
+<a href="https://www.artblocks.io/token/2550000603"><i>Screens #603</i></a>
+</div>
+</div>
 
 ##### Bauhaus
 
-822 + 771
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000822.jpeg" alt="Screens #822">
+<a href="https://www.artblocks.io/token/255000822"><i>Screens #822</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000771.jpeg" alt="Screens #771">  
+<a href="https://www.artblocks.io/token/2550000771"><i>Screens #771</i></a>
+</div>
+</div>
 
 ##### The Avenue
 
-454 + 87
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000454.jpeg" alt="Screens #454">
+<a href="https://www.artblocks.io/token/255000454"><i>Screens #454</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000087.jpeg" alt="Screens #87">  
+<a href="https://www.artblocks.io/token/2550000087"><i>Screens #87</i></a>
+</div>
+</div>
 
 ##### Iceland
 
-192 + 290
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000192.jpeg" alt="Screens #192">
+<a href="https://www.artblocks.io/token/255000192"><i>Screens #192</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000290.jpeg" alt="Screens #290">  
+<a href="https://www.artblocks.io/token/2550000290"><i>Screens #290</i></a>
+</div>
+</div>
 
 ##### The Refuge
 
-957 + 544
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000957.jpeg" alt="Screens #957">
+<a href="https://www.artblocks.io/token/255000957"><i>Screens #957</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000544.jpeg" alt="Screens #544">  
+<a href="https://www.artblocks.io/token/2550000544"><i>Screens #544</i></a>
+</div>
+</div>
 
 ##### Somebody that I used to love
 
-947 + 700
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000947.jpeg" alt="Screens #947">
+<a href="https://www.artblocks.io/token/255000947"><i>Screens #947</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000700.jpeg" alt="Screens #700">  
+<a href="https://www.artblocks.io/token/2550000700"><i>Screens #700</i></a>
+</div>
+</div>
 
 ##### Rhino
 
-249 + 941
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000249.jpeg" alt="Screens #249">
+<a href="https://www.artblocks.io/token/255000249"><i>Screens #249</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000941.jpeg" alt="Screens #941">  
+<a href="https://www.artblocks.io/token/2550000941"><i>Screens #941</i></a>
+</div>
+</div>
 
 ##### Penguin
 
-199 + 141
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000199.jpeg" alt="Screens #199">
+<a href="https://www.artblocks.io/token/255000199"><i>Screens #199</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000141.jpeg" alt="Screens #141">  
+<a href="https://www.artblocks.io/token/2550000141"><i>Screens #141</i></a>
+</div>
+</div>
 
 ##### The Jungle
 
-609 + 251
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000609.jpeg" alt="Screens #609">
+<a href="https://www.artblocks.io/token/255000609"><i>Screens #609</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000251.jpeg" alt="Screens #251">  
+<a href="https://www.artblocks.io/token/2550000251"><i>Screens #251</i></a>
+</div>
+</div>
 
 ##### Stencil
 
-261 + 756
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000261.jpeg" alt="Screens #261">
+<a href="https://www.artblocks.io/token/255000261"><i>Screens #261</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000756.jpeg" alt="Screens #756">  
+<a href="https://www.artblocks.io/token/2550000756"><i>Screens #756</i></a>
+</div>
+</div>
 
 ##### இڿڰۣ-ڰۣ--- (Rose)
 
-543 + 298
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000543.jpeg" alt="Screens #543">
+<a href="https://www.artblocks.io/token/255000543"><i>Screens #543</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000298.jpeg" alt="Screens #298">  
+<a href="https://www.artblocks.io/token/2550000298"><i>Screens #298</i></a>
+</div>
+</div>
 
 ##### Dreams of a Distant Memory
 
-538 + 299
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000538.jpeg" alt="Screens #538">
+<a href="https://www.artblocks.io/token/255000538"><i>Screens #538</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000299.jpeg" alt="Screens #299">  
+<a href="https://www.artblocks.io/token/2550000299"><i>Screens #299</i></a>
+</div>
+</div>
 
 #### Colouring scheme
 
@@ -439,7 +718,16 @@ from the palette are chosen at random which defines the gradient. The result is
 definitely the busiest of all the colour schemes, especially when combined with
 primary colour palettes such as Bauhaus.
 
-937 + 58
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000937.jpeg" alt="Screens #937">
+<a href="https://www.artblocks.io/token/255000937"><i>Screens #937</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000058.jpeg" alt="Screens #58">  
+<a href="https://www.artblocks.io/token/2550000058"><i>Screens #58</i></a>
+</div>
+</div>
 
 ##### Condensed
 
@@ -449,7 +737,16 @@ screen then randomly selects to colours from the assigned colour + light and
 dark. This creates very well defined actors, bringing more structure to the
 piece.
 
-827 + 695
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000827.jpeg" alt="Screens #827">
+<a href="https://www.artblocks.io/token/255000827"><i>Screens #827</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000695.jpeg" alt="Screens #695">  
+<a href="https://www.artblocks.io/token/2550000695"><i>Screens #695</i></a>
+</div>
+</div>
 
 ##### Gradient
 
@@ -459,7 +756,16 @@ on its position along the y-axis. As with condensed, it create structure, but
 the structure comes from proximity, not from the actor, thus creating groupings
 between otherwise unrelated screens.
 
-825 + 720
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000825.jpeg" alt="Screens #825">
+<a href="https://www.artblocks.io/token/255000825"><i>Screens #825</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000720.jpeg" alt="Screens #720">  
+<a href="https://www.artblocks.io/token/2550000720"><i>Screens #720</i></a>
+</div>
+</div>
 
 ##### Calm
 
@@ -470,7 +776,16 @@ adjacent in the palette. Since all palettes are sorted roughly by darkness it
 means that all gradients in the piece ends up being very calm and low-contrast,
 resulting in an overall less aggressive vibe.
 
-806 + 181
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
+<div>
+<img src="assets/images/screens/255000806.jpeg" alt="Screens #806">
+<a href="https://www.artblocks.io/token/255000806"><i>Screens #806</i></a>
+</div>
+<div>
+<img src="assets/images/screens/255000181.jpeg" alt="Screens #181">  
+<a href="https://www.artblocks.io/token/2550000181"><i>Screens #181</i></a>
+</div>
+</div>
 
 ### Wait, somethings not right...
 
@@ -484,12 +799,14 @@ happens.
 
 Take the case of #957 - the space station.
 
-957
+<img src="assets/images/screens/255000957.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957">  
+[*Screens #957*](https://www.artblocks.io/token/255000957)
 
 Classic hero, right? Wrong! In reality it is an antagonists... We can see this
 if we zoom out:
 
-975_zoom
+<img src="assets/images/screens/255000957_zoom.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957 - Zoomed">  
+[*Screens #957 — Zoomed out*](https://www.artblocks.io/token/255000957)
 
 This is what happens if an artist gives into and embraces chaos. So is 957 a
 hero or antagonists? Who cares... The traits in Screens are more about the
