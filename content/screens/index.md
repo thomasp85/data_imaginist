@@ -16,8 +16,7 @@ the project, after it has launched.
 <iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="100%" sandbox="allow-scripts" src="https://generator.artblocks.io/255000000" width="80%" style="min-height: 500px; margin-left: 10%">
 
 </iframe>
-
-[*Screens #0*](https://www.artblocks.io/token/255000000)
+<a href="https://www.artblocks.io/token/255000000" style="margin-left: 25%;"><i>Screens #0</i></a>
 
 ## Background
 
@@ -29,8 +28,8 @@ artists. Thus, while working on Constructive, the focal points where strong
 geometric compositions, strong simple colour palettes, gradients using a
 rendering technique mimicking screen printing.
 
-<img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">  
-[*Constructive 11*](https://foundation.app/@thomasp85/foundation/72856)
+<img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">
+<a href="https://foundation.app/@thomasp85/foundation/72856" style="margin-left: 25%;"><i>Constructive 11</i></a>
 
 Constructive was very much a handheld series. While it is generative in nature,
 the macro composition was decided beforehand. I did enjoy the result immensely
@@ -84,11 +83,10 @@ been done, the black parts of the template is coloured with the colour of the
 screen and the template is then merged into a master image.
 
 <img src="assets/images/screens/process.png" width="100%" style="width:100%;" alt="The making of #923">  
-*The making of #923*
   
   
-<img src="assets/images/screens/255000923.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #923">  
-[*Screens #923 — final*](https://www.artblocks.io/token/255000923)
+<img src="assets/images/screens/255000923.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #923">
+<a href="https://www.artblocks.io/token/255000923" style="margin-left: 25%;"><i>Screens #923 — finale</i></a>
 
 I had to make some concessions as to how close I could follow the print making
 technique, mostly when it comes to the alignment shifts. The first iteration was
@@ -799,14 +797,14 @@ happens.
 
 Take the case of #957 - the space station.
 
-<img src="assets/images/screens/255000957.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957">  
-[*Screens #957*](https://www.artblocks.io/token/255000957)
+<img src="assets/images/screens/255000957.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957">
+<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens #957</i></a>
 
 Classic hero, right? Wrong! In reality it is an antagonists... We can see this
 if we zoom out:
 
-<img src="assets/images/screens/255000957_zoom.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957 - Zoomed">  
-[*Screens #957 — Zoomed out*](https://www.artblocks.io/token/255000957)
+<img src="assets/images/screens/255000957_zoom.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957 - Zoomed">
+<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens #957 — Zoomed out</i></a>
 
 This is what happens if an artist gives into and embraces chaos. So is 957 a
 hero or antagonists? Who cares... The traits in Screens are more about the
