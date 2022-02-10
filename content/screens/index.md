@@ -133,7 +133,7 @@ between the minimal and maximal radius allowed. Since the span of the screens
 are based on radians it follows that screens farther from the center tend to be
 longer than those closer to it.
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 20px; margin: 20px">
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
 <div>
 <img src="assets/images/screens/255000266.jpeg" alt="Screens #266">
 <a href="https://www.artblocks.io/token/255000266"><i>Screens #266</i></a>
@@ -157,19 +157,17 @@ sharp turns in its screens, giving it some unique compositional abilities.
 
 716 + 521
 
-##### Spiral actor
+##### Radial actor
 
-The spiral actor is one of the more versatile of the five. It creates screens
-that spirals towards a randomly selected center. The start distance and angle
-relative to the center is chosen at random. All screens from the same spiral
+The radial actor is one of the more versatile of the five. It creates screens
+that radiates from a randomly selected center. The start distance and angle
+relative to the center is chosen at random. All screens from the same radial
 actor follows the same rotational momentum, but this momentum can vary between
-different spiral actors, giving rise to both strongly winding spirals and almost
-straight lines towards the center. This means that while the actor is *spiral*
-by name, the look of the resulting screens can range from spirals to burst.
-While screens from the same spiral actor cannot cross each other, they have the
-potential to get very near to each other. Because of this each screen is
-terminated if it gets within a threshold distance to other screens from the
-spiral.
+different radial actors, giving rise to both strongly winding spirals and almost
+straight lines from the center. While screens from the same radial actor cannot 
+cross each other, they have the potential to get very near to each other. 
+Because of this each screen is terminated if it gets within a threshold distance 
+to other screens from the same actor.
 
 230 + 423
 
@@ -191,7 +189,7 @@ This actor sets up 4 or 5 parallel lines that acts as control points for a
 clamped open B-spline. Each screen is based on a location along the control
 point lines, e.g. a screen placed at 0.25 would derive its control points a
 quarter along the lines. Further, it has a start and end from 0 to 1 (B-splines
-are parameterised between 0 and 1). As with spirals, Spline screens has the
+are parameterised between 0 and 1). As with radials, Spline screens has the
 potential to get very close to each other so they also check for and terminate
 at too close proximity to other screens. Spline actors are the only actors
 capable of creating screens with a more wavy feel and the possibility of
