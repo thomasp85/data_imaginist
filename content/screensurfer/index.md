@@ -47,8 +47,16 @@ a.button:hover{
 }
 </style>
 
+This page gives you direct access to the Screens algorithms vast output space. 
+Every press of the button will conjure up a new random seed and show the screens
+piece associated with it. The output is ephemeral by nature — once you leave a 
+piece it will never come back. Use it to feel the surprise and tension of the 
+screen layering build up that is most powerful when you don't know how it will
+end up. Or browse it to get a sense of what could have been and build an 
+intuition of for the behaviour of the system. Just don't get lost...
+
 <div style="display: flex; justify-content: center;">
-<a id="generate" class="button" onclick="generate()" style="margin-left: 40px">Next Screen</a>
+<a id="generate" class="button" onclick="generate()" style="margin-bottom: 20px">Next Screen</a>
 </div>
 
 <div id="drawing_board"><canvas></canvas></div>
