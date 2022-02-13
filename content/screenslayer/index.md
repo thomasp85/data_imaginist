@@ -22,6 +22,7 @@ function generate() {
   req.send(null);
   let token_info = JSON.parse(req.responseText);
   let tokenData = {hash: token_info.token_hash, tokenId: token_info.tokenID};
+  document.getElementById("drawing_board").scrollIntoView({ behavior: 'smooth', block: 'center' });
   render_screen(tokenData);
   document.getElementById("screenlink").text = "Screens #" + id;
   document.getElementById("screenlink").href = token_info.external_url;
