@@ -34,7 +34,7 @@ a.button{
   border-radius:2em;
   box-sizing: border-box;
   text-decoration:none;
-  font-family:'Roboto',sans-serif;
+  font-family:'Comfortaa', sans-serif;
   font-weight:300;
   color:#FFFFFF;
   background-color:#4A4645;
