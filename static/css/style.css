@@ -372,8 +372,13 @@ em, i {
     color: #111;
 }
 
-.post h3 {
+.post h3, .post h4, .post h5, .post h6 {
     margin-bottom: 0;
+}
+
+.post h5 {
+    font-weight: normal;
+    font-style: italic;
 }
 
 .post h2.headline {
