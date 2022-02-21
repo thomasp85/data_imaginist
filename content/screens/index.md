@@ -10,24 +10,33 @@ editor_options:
     wrap: 80
 ---
 
-Screens is a generative series launching on ArtBlocks Curated on January 31st,
-12:00p CT. This page will contain additional information and background about
-the project, after it has launched.
+Screens is a generative series that launched on ArtBlocks Curated on January 
+31st 2022. This page contain additional information and background about
+the project. To buy a Screens piece, use a secondary market site such as
+[OpenSea](https://opensea.io/collection/screens-by-thomas-lin-pedersen)
 
-<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="100%" sandbox="allow-scripts" src="https://generator.artblocks.io/255000000" width="80%" style="min-height: 500px; margin-left: 10%">
-
-</iframe>
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="100%" sandbox="allow-scripts" src="https://generator.artblocks.io/255000000" width="80%" style="min-height: 500px; margin-left: 10%"></iframe>
 <a href="https://www.artblocks.io/token/255000000" style="margin-left: 25%;"><i>Screens #0</i></a>
+
+### Additional ressources
+
+* [Screens Layers](https://www.data-imaginist.com/screenslayer) — Experience the 
+  build-up of a random Screens piece from the collection.
+* [Screens Surfer](https://www.data-imaginist.com/screensurfer) — Browse 
+  ephemeral, out-of-band, Screens piece.
+* [Screens Scaler](https://www.data-imaginist.com/screenscaler) — Experience 
+  your favourite Screens piece at different scales, uncovering what lies outside
+  of the frame.
 
 ## Background
 
 Screens is the continuation of an idea and vision that started with my
 Constructive series (released in August 2021). The primal aim was to explore the
-aesthetics offered by screen printing techniques, and this naturally led me to
-explore the poster prints from both Bauhaus artists and Russian constructivism
-artists. Thus, while working on Constructive, the focal points where strong
-geometric compositions, strong simple colour palettes, gradients using a
-rendering technique mimicking screen printing.
+aesthetics offered by silk screen printing techniques, and this naturally led me 
+to explore the poster prints from both Bauhaus artists and Russian 
+constructivism artists. Thus, while working on Constructive, the focal points 
+where strong geometric compositions, strong simple colour palettes, gradients 
+using a rendering technique mimicking screen printing.
 
 <img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">
 <a href="https://foundation.app/@thomasp85/foundation/72856" style="margin-left: 25%;"><i>Constructive 11</i></a>
