@@ -282,7 +282,7 @@ dynamic, thus unifying them in the same compositional harmony.
 </div>
 <div>
 <img src="assets/images/screens/255000473.jpeg" alt="Screens #473">  
-<a href="https://www.artblocks.io/token/2550000473"><i>Screens #473</i></a>
+<a href="https://www.artblocks.io/token/255000473"><i>Screens #473</i></a>
 </div>
 </div>
 
@@ -300,7 +300,7 @@ certain setups can of course create dissonance.
 </div>
 <div>
 <img src="assets/images/screens/255000315.jpeg" alt="Screens #315">  
-<a href="https://www.artblocks.io/token/2550000315"><i>Screens #315</i></a>
+<a href="https://www.artblocks.io/token/255000315"><i>Screens #315</i></a>
 </div>
 </div>
 
@@ -318,7 +318,7 @@ of the interest that the cleanness of a hero lack.
 </div>
 <div>
 <img src="assets/images/screens/255000701.jpeg" alt="Screens #701">  
-<a href="https://www.artblocks.io/token/2550000701"><i>Screens #701</i></a>
+<a href="https://www.artblocks.io/token/255000701"><i>Screens #701</i></a>
 </div>
 </div>
 
@@ -338,7 +338,7 @@ often balance between harmony and tension.
 </div>
 <div>
 <img src="assets/images/screens/255000445.jpeg" alt="Screens #445">  
-<a href="https://www.artblocks.io/token/2550000445"><i>Screens #445</i></a>
+<a href="https://www.artblocks.io/token/255000445"><i>Screens #445</i></a>
 </div>
 </div>
 
@@ -359,7 +359,7 @@ compositions --- an overabundance of harmony quickly becomes boring.
 </div>
 <div>
 <img src="assets/images/screens/255000014.jpeg" alt="Screens #14">  
-<a href="https://www.artblocks.io/token/2550000014"><i>Screens #14</i></a>
+<a href="https://www.artblocks.io/token/255000014"><i>Screens #14</i></a>
 </div>
 </div>
 
@@ -390,7 +390,7 @@ retains a level of order --- no two screens are too close to each other.
 </div>
 <div>
 <img src="assets/images/screens/255000865.jpeg" alt="Screens #865">  
-<a href="https://www.artblocks.io/token/2550000865"><i>Screens #865</i></a>
+<a href="https://www.artblocks.io/token/255000865"><i>Screens #865</i></a>
 </div>
 </div>
 
@@ -413,7 +413,7 @@ interesting negative space to form.
 </div>
 <div>
 <img src="assets/images/screens/255000374.jpeg" alt="Screens #374">  
-<a href="https://www.artblocks.io/token/2550000374"><i>Screens #374</i></a>
+<a href="https://www.artblocks.io/token/255000374"><i>Screens #374</i></a>
 </div>
 </div>
 
@@ -433,7 +433,7 @@ dominating actor ends up, ahem, dominating the piece.
 </div>
 <div>
 <img src="assets/images/screens/255000348.jpeg" alt="Screens #348">  
-<a href="https://www.artblocks.io/token/2550000348"><i>Screens #348</i></a>
+<a href="https://www.artblocks.io/token/255000348"><i>Screens #348</i></a>
 </div>
 </div>
 
@@ -456,7 +456,7 @@ often leads to harmonious and dense compositions.
 </div>
 <div>
 <img src="assets/images/screens/255000795.jpeg" alt="Screens #795">  
-<a href="https://www.artblocks.io/token/2550000795"><i>Screens #795</i></a>
+<a href="https://www.artblocks.io/token/255000795"><i>Screens #795</i></a>
 </div>
 </div>
 
@@ -475,7 +475,7 @@ that would otherwise not be possible.
 </div>
 <div>
 <img src="assets/images/screens/255000654.jpeg" alt="Screens #654">  
-<a href="https://www.artblocks.io/token/2550000654"><i>Screens #654</i></a>
+<a href="https://www.artblocks.io/token/255000654"><i>Screens #654</i></a>
 </div>
 </div>
 
@@ -491,7 +491,7 @@ composition is dominated be the background and the negative space.
 </div>
 <div>
 <img src="assets/images/screens/255000642.jpeg" alt="Screens #642">  
-<a href="https://www.artblocks.io/token/2550000642"><i>Screens #642</i></a>
+<a href="https://www.artblocks.io/token/255000642"><i>Screens #642</i></a>
 </div>
 </div>
 
@@ -510,7 +510,7 @@ floating in between the infinitely tall screens.
 </div>
 <div>
 <img src="assets/images/screens/255000859.jpeg" alt="Screens #859">  
-<a href="https://www.artblocks.io/token/2550000859"><i>Screens #859</i></a>
+<a href="https://www.artblocks.io/token/255000859"><i>Screens #859</i></a>
 </div>
 </div>
 
@@ -540,7 +540,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000976.jpeg" alt="Screens #976">  
-<a href="https://www.artblocks.io/token/2550000976"><i>Screens #976</i></a>
+<a href="https://www.artblocks.io/token/255000976"><i>Screens #976</i></a>
 </div>
 </div>
 
@@ -553,7 +553,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000333.jpeg" alt="Screens #333">  
-<a href="https://www.artblocks.io/token/2550000333"><i>Screens #333</i></a>
+<a href="https://www.artblocks.io/token/255000333"><i>Screens #333</i></a>
 </div>
 </div>
 
@@ -566,7 +566,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000603.jpeg" alt="Screens #603">  
-<a href="https://www.artblocks.io/token/2550000603"><i>Screens #603</i></a>
+<a href="https://www.artblocks.io/token/255000603"><i>Screens #603</i></a>
 </div>
 </div>
 
@@ -579,7 +579,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000771.jpeg" alt="Screens #771">  
-<a href="https://www.artblocks.io/token/2550000771"><i>Screens #771</i></a>
+<a href="https://www.artblocks.io/token/255000771"><i>Screens #771</i></a>
 </div>
 </div>
 
@@ -592,7 +592,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000087.jpeg" alt="Screens #87">  
-<a href="https://www.artblocks.io/token/2550000087"><i>Screens #87</i></a>
+<a href="https://www.artblocks.io/token/255000087"><i>Screens #87</i></a>
 </div>
 </div>
 
@@ -605,7 +605,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000290.jpeg" alt="Screens #290">  
-<a href="https://www.artblocks.io/token/2550000290"><i>Screens #290</i></a>
+<a href="https://www.artblocks.io/token/255000290"><i>Screens #290</i></a>
 </div>
 </div>
 
@@ -618,7 +618,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000544.jpeg" alt="Screens #544">  
-<a href="https://www.artblocks.io/token/2550000544"><i>Screens #544</i></a>
+<a href="https://www.artblocks.io/token/255000544"><i>Screens #544</i></a>
 </div>
 </div>
 
@@ -631,7 +631,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000700.jpeg" alt="Screens #700">  
-<a href="https://www.artblocks.io/token/2550000700"><i>Screens #700</i></a>
+<a href="https://www.artblocks.io/token/255000700"><i>Screens #700</i></a>
 </div>
 </div>
 
@@ -644,7 +644,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000941.jpeg" alt="Screens #941">  
-<a href="https://www.artblocks.io/token/2550000941"><i>Screens #941</i></a>
+<a href="https://www.artblocks.io/token/255000941"><i>Screens #941</i></a>
 </div>
 </div>
 
@@ -657,7 +657,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000141.jpeg" alt="Screens #141">  
-<a href="https://www.artblocks.io/token/2550000141"><i>Screens #141</i></a>
+<a href="https://www.artblocks.io/token/255000141"><i>Screens #141</i></a>
 </div>
 </div>
 
@@ -670,7 +670,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000251.jpeg" alt="Screens #251">  
-<a href="https://www.artblocks.io/token/2550000251"><i>Screens #251</i></a>
+<a href="https://www.artblocks.io/token/255000251"><i>Screens #251</i></a>
 </div>
 </div>
 
@@ -683,7 +683,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000756.jpeg" alt="Screens #756">  
-<a href="https://www.artblocks.io/token/2550000756"><i>Screens #756</i></a>
+<a href="https://www.artblocks.io/token/255000756"><i>Screens #756</i></a>
 </div>
 </div>
 
@@ -696,7 +696,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000298.jpeg" alt="Screens #298">  
-<a href="https://www.artblocks.io/token/2550000298"><i>Screens #298</i></a>
+<a href="https://www.artblocks.io/token/255000298"><i>Screens #298</i></a>
 </div>
 </div>
 
@@ -709,7 +709,7 @@ pieces for each palette, showing their range:
 </div>
 <div>
 <img src="assets/images/screens/255000299.jpeg" alt="Screens #299">  
-<a href="https://www.artblocks.io/token/2550000299"><i>Screens #299</i></a>
+<a href="https://www.artblocks.io/token/255000299"><i>Screens #299</i></a>
 </div>
 </div>
 
@@ -733,7 +733,7 @@ primary colour palettes such as Bauhaus.
 </div>
 <div>
 <img src="assets/images/screens/255000058.jpeg" alt="Screens #58">  
-<a href="https://www.artblocks.io/token/2550000058"><i>Screens #58</i></a>
+<a href="https://www.artblocks.io/token/255000058"><i>Screens #58</i></a>
 </div>
 </div>
 
@@ -752,7 +752,7 @@ piece.
 </div>
 <div>
 <img src="assets/images/screens/255000695.jpeg" alt="Screens #695">  
-<a href="https://www.artblocks.io/token/2550000695"><i>Screens #695</i></a>
+<a href="https://www.artblocks.io/token/255000695"><i>Screens #695</i></a>
 </div>
 </div>
 
@@ -771,7 +771,7 @@ between otherwise unrelated screens.
 </div>
 <div>
 <img src="assets/images/screens/255000720.jpeg" alt="Screens #720">  
-<a href="https://www.artblocks.io/token/2550000720"><i>Screens #720</i></a>
+<a href="https://www.artblocks.io/token/255000720"><i>Screens #720</i></a>
 </div>
 </div>
 
@@ -791,7 +791,7 @@ resulting in an overall less aggressive vibe.
 </div>
 <div>
 <img src="assets/images/screens/255000181.jpeg" alt="Screens #181">  
-<a href="https://www.artblocks.io/token/2550000181"><i>Screens #181</i></a>
+<a href="https://www.artblocks.io/token/255000181"><i>Screens #181</i></a>
 </div>
 </div>
 
