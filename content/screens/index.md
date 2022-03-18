@@ -10,36 +10,42 @@ editor_options:
     wrap: 80
 ---
 
-Screens is a generative series that launched on ArtBlocks Curated on January 
-31st 2022. This page contain additional information and background about
-the project. To buy a Screens piece, use a secondary market site such as
+Screens is a generative series that launched on ArtBlocks Curated on January
+31st 2022. This page contain additional information and background about the
+project. To buy a Screens piece, use a secondary market site such as
 [OpenSea](https://opensea.io/collection/screens-by-thomas-lin-pedersen)
 
-<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="100%" sandbox="allow-scripts" src="https://generator.artblocks.io/255000000" width="80%" style="min-height: 500px; margin-left: 10%"></iframe>
-<a href="https://www.artblocks.io/token/255000000" style="margin-left: 25%;"><i>Screens #0</i></a>
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="100%" sandbox="allow-scripts" src="https://generator.artblocks.io/255000000" width="80%" style="min-height: 500px; margin-left: 10%">
+
+</iframe>
+
+<a href="https://www.artblocks.io/token/255000000" style="margin-left: 25%;"><i>Screens
+
+#0</i></a>
 
 ### Additional ressources
 
-* [Screens Layers](https://www.data-imaginist.com/screenslayer) — Experience the 
-  build-up of a random Screens piece from the collection.
-* [Screens Surfer](https://www.data-imaginist.com/screensurfer) — Browse 
-  ephemeral, out-of-band, Screens piece.
-* [Screens Scaler](https://www.data-imaginist.com/screenscaler) — Experience 
-  your favourite Screens piece at different scales, uncovering what lies outside
-  of the frame.
+-   [Screens Layers](https://www.data-imaginist.com/screenslayer) --- Experience
+    the build-up of a random Screens piece from the collection.
+-   [Screens Surfer](https://www.data-imaginist.com/screensurfer) --- Browse
+    ephemeral, out-of-band, Screens piece.
+-   [Screens Scaler](https://www.data-imaginist.com/screenscaler) --- Experience
+    your favourite Screens piece at different scales, uncovering what lies
+    outside of the frame.
 
 ## Background
 
 Screens is the continuation of an idea and vision that started with my
 Constructive series (released in August 2021). The primal aim was to explore the
-aesthetics offered by silk screen printing techniques, and this naturally led me 
-to explore the poster prints from both Bauhaus artists and Russian 
-constructivism artists. Thus, while working on Constructive, the focal points 
-where strong geometric compositions, strong simple colour palettes, gradients 
+aesthetics offered by silk screen printing techniques, and this naturally led me
+to explore the poster prints from both Bauhaus artists and Russian
+constructivism artists. Thus, while working on Constructive, the focal points
+where strong geometric compositions, strong simple colour palettes, gradients
 using a rendering technique mimicking screen printing.
 
 <img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">
-<a href="https://foundation.app/@thomasp85/foundation/72856" style="margin-left: 25%;"><i>Constructive 11</i></a>
+<a href="https://foundation.app/@thomasp85/foundation/72856" style="margin-left: 25%;"><i>Constructive
+11</i></a>
 
 Constructive was very much a handheld series. While it is generative in nature,
 the macro composition was decided beforehand. I did enjoy the result immensely
@@ -92,11 +98,12 @@ smooth gradients to the grainy noise that Screens is known for. After this has
 been done, the black parts of the template is coloured with the colour of the
 screen and the template is then merged into a master image.
 
-<img src="assets/images/screens/process.png" width="100%" style="width:100%;" alt="The making of #923">  
-  
-  
+<img src="assets/images/screens/process.png" width="100%" style="width:100%;" alt="The making of #923">
+
 <img src="assets/images/screens/255000923.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #923">
-<a href="https://www.artblocks.io/token/255000923" style="margin-left: 25%;"><i>Screens #923 — finale</i></a>
+<a href="https://www.artblocks.io/token/255000923" style="margin-left: 25%;"><i>Screens
+
+#923 --- finale</i></a>
 
 I had to make some concessions as to how close I could follow the print making
 technique, mostly when it comes to the alignment shifts. The first iteration was
@@ -181,9 +188,9 @@ that radiates from a randomly selected center. The start distance and angle
 relative to the center is chosen at random. All screens from the same radial
 actor follows the same rotational momentum, but this momentum can vary between
 different radial actors, giving rise to both strongly winding spirals and almost
-straight lines from the center. While screens from the same radial actor cannot 
-cross each other, they have the potential to get very near to each other. 
-Because of this each screen is terminated if it gets within a threshold distance 
+straight lines from the center. While screens from the same radial actor cannot
+cross each other, they have the potential to get very near to each other.
+Because of this each screen is terminated if it gets within a threshold distance
 to other screens from the same actor.
 
 <div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 40px; margin: 20px">
@@ -443,7 +450,7 @@ The last trait having a strong direct impact on the composition is the height of
 the screens. The concept is pretty simple and encodes how far downwards the line
 is extruded to make a screen.
 
-##### Tall 
+##### Tall
 
 Tall screens are basically extruded to infinity making sure that nothing behind
 them will ever be visible. This is the prevalent look and the setting that most
@@ -808,13 +815,17 @@ happens.
 Take the case of #957 - the space station.
 
 <img src="assets/images/screens/255000957.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957">
-<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens #957</i></a>
+<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens
+
+#957</i></a>
 
 Classic hero, right? Wrong! In reality it is an antagonists... We can see this
 if we zoom out:
 
 <img src="assets/images/screens/255000957_zoom.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957 - Zoomed">
-<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens #957 — Zoomed out</i></a>
+<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens
+
+#957 --- Zoomed out</i></a>
 
 This is what happens if an artist gives into and embraces chaos. So is 957 a
 hero or antagonists? Who cares... The traits in Screens are more about the
@@ -823,7 +834,220 @@ a healthy dose complacency as to their importance. Knowing *about* the traits in
 Screens can certainly help you understand and contextualise a piece, but they
 will never capture the essence.
 
-## Want more?
+## The Details
 
-This page will be updated with a technical deep-dive into the system. Please
-check back at a later date, or keep an eye on my Twitter feed for updates.
+Having gotten a good grip on the system itself you may be wondering how it has
+all been put together. This section is for you. I will try to describe, without
+showing any code, how a Screens piece is constructed, from the placement of the
+screens, to the layering etc.
+
+This section is not in any way necessary for appreciating the series, but if you
+are the curious type then you'll get the most detailed description of the inner
+workings of the system (until someone reverse-engineers it and writes something
+better).
+
+### Screen generation
+
+As discussed above, all screens are the result of 5 different actors that can be
+present or absent in a piece. The screens are generated one segment at a time
+with a segment length of 1. The length is of course arbitrary, but keeping it at
+unit length means that a lot of code can be trimmed down. For reference the
+viewport that the screens are drawn into is 100x141. Each actor is only
+responsible for making sure that its own screens aren't placed too close to each
+other. For circular, square, and straight actors this is done by only allowing
+the start position (radius for circles, half-width for squares, distance to
+central line for straight) to lie at integer values (1, 2, 3, 4, ...). Once a
+screen is placed that distance is no longer allowed. For b-spline and radial
+actors it is a bit different because the minimum distance between two screens
+can vary based on position and we can't just rely and well-defined start
+positions. Thus, for these actors the screens are checked continuously against
+the current pool of screens as it grows and is terminated if it comes too close.
+
+This rule has several benefits. It means that I don't have to worry about
+intersections between screens from the same actor, it ensures a nice dispersed
+feel to the screens without feeling too ordered, and it removes some annoying
+artefacts in my rendering engine that couldn't deal well with segments from
+different screens being too close to each other (reminiscent of
+[z-fighting](https://en.wikipedia.org/wiki/Z-fighting)).
+
+Drawing segments of circles, lines, squares, even b-splines, are not that hard
+and I won't bore you with the details. The end result is that we end up with a
+bunch of segments of length 1. Some of these are connected in the ends and some
+are not. These segments are stored as a linked list meaning that I can traverse
+each screen while also being allowed to sort the pool of screens as I see fit.
+
+But, back to where we are. We now have a bunch of lines, soon to become screens.
+Let's have a look at the current situation:
+
+<img src="assets/images/screens/segments_1.png" width="50%" style="width:50%; margin-left:25%;" alt="Screens segments - raw">
+
+Pretty boring, right? Well, we are only just getting started. Once we have all
+those lines we need to cut them (at least for the majority of pieces). This
+involves first and foremost figuring out which segments intersect with each
+other. Classic implementations of this problem uses a sweep-line algorithm to
+avoid comparing everything against everything, but I was a bit too lazy to be so
+sophisticated. In the end I made a pseudo sweep-line implementation where I
+sorted all segments along one axis based on it's lowest end point and then
+compared each segment with the segments following. I then terminated the
+comparisons when the highest end of the first segment was below the lowest end
+of the next segment. This is pretty simple, code-wise, and fast enough for
+Screens (and Memories of Qilin 🙂) which is kind of the sweet spot for getting
+short code for ArtBlocks.
+
+After the intersections have been detected one of the intersecting segments will
+be removed. Then the area around the cut will get pruned (meaning that the
+neighboring segments to the removed one is also removed). Lastly I remove
+screens that has become too short due to all the cutting and pruning. This is
+how it progresses:
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 10px; margin: 20px">
+<div>
+<img src="assets/images/screens/segments_2a" alt="Screens clipping">
+<i>Cutting at intersections</i>
+</div>
+<div>
+<img src="assets/images/screens/segments_2b" alt="Screens pruning">
+<i>Pruning around cut</i>
+</div>
+<div>
+<img src="assets/images/screens/segments_2c" alt="Screens cleaning">
+<i>Removing short screens</i>
+</div>
+</div>
+
+The last part left is to rotate the lines slightly around the x-axis, tilting
+them slightly into the picture plane, giving the characteristic isometric
+perspective. The effect is very slight, but it basically compress everything a
+bit along the y-axis.
+
+<img src="assets/images/screens/segments_3.png" width="50%" style="width:50%; margin-left:25%;" alt="Screens segments - rotated">
+
+Now, up until this point we have only worked with line segments, and we are now
+ready to convert these to the screens we all know and love. This is quite simple
+as all it requires is to extrude the line downwards according to the height of
+the screen. That is, we make a copy of the line segment, move it downwards and
+connect the two segments into a parallelogram. Doing that, we get:
+
+<img src="assets/images/screens/segments_4.png" width="50%" style="width:50%; margin-left:25%;" alt="Screens segments - extruded, no fill">
+
+which is hardly what we expected. This look is largely due to the fact that we
+are simply drawing the outline of each screen, and all the screens outside the
+viewport are showing themselves because nothing is occluding them. If we fill
+all screens with white we can remove this:
+
+<img src="assets/images/screens/segments_5.png" width="50%" style="width:50%; margin-left:25%;" alt="Screens segments - extruded, filled">
+
+Hmm... it's still not right. It doesn't resemble our pattern at all. The reason
+is that we are drawing each segment in the order it is created - not based on
+its location in space. Intuitively we want to draw the segments farthest away
+first so that they get correctly occluded by segments in front of them. While
+this seems simple in theory, sorting segments in a way so that no segment
+overlaps a segment coming after it is not trivial. In some cases it is fine just
+sorting by e.g. the lowest y-value in the segment, but it can easily break down
+when segments get close to each other. Consider each of these three examples.
+There is no single consistent way to sort all of them correctly by comparing the
+coordinates of the end points:
+
+<img src="assets/images/screens/sort issues.png" width="90%" style="width:90%; margin-left:5%;" alt="segment sorting issues">
+
+What we are dealing with is a 2D version of how to figure out a drawing order of
+triangles in 3D space so that those closest by is always drawn last. As you can
+imagine, this problem was pretty important for 3D games and I was inspired by
+the approach taken by John Carmack in the original Doom game, namely that of
+binary space partition (BSP) trees. In the simplest form, I take a root segment,
+and divide all other segments based on which side of the line supporting the
+root segment it lies. I then recursively do that until I have a binary tree.
+This tree can now be sorted based on which child lies on the visible or
+invisible side of their root line based on a given vantage point and you end up
+with a draw order:
+
+<img src="assets/images/screens/segments_6.png" width="50%" style="width:50%; margin-left:25%;" alt="Screens segments - sorted">
+
+We have now arrived at our destination in terms of figuring out the screens...
+on to the colors!
+
+### A splash of color
+
+Colors are a big part of the screens series --- both because the different
+palettes adds so much ambiance to the piece (hardly unique to Screens), but also
+because the coloring is integral to the rendering since it defines the layers.
+We already saw in the section on [rendering](#rendering) that each color is
+rendered as a black and white layer, which then gets converted into color as it
+is applied to the master image. The rendering of this layer is without much
+fanfare. Each screen is assigned two colors for each of its sides. When
+rendering a layer for a specific color we look at which side of the small
+segment faces us and chose the two colors corresponding to that side. Then, if
+we are currently rendering a color not present in the two colors we paint it
+white. If the current colour matches the lightest of the two we paint it black.
+Lastly, if it matches the darkest of the two we paint it a shade of grey
+relative to the segments location along the screen. The end result for our
+current example is:
+
+<img src="assets/images/screens/layers.png" width="100%" style="width:100%; margin-left:0%;" alt="Screens layers">
+
+If we were to use these directly we would get this...
+
+<img src="assets/images/screens/final_no_texture.png" width="50%" style="width:50%; margin-left:25%;" alt="Screens no texture">
+
+Now, while this is fun to look at it is just soo boring compared to the textured
+version, so how do we get there?
+
+### Texturing like a pro
+
+The texture in screens is arguable the reason the whole series exists. While
+Screens is hardly *just* about texture, I started to design it because I wanted
+a venue for the texture in a long form format, having played with it in a more
+hand-held fashion in my Constructive series. So, what is this texture?
+
+It leans heavily into how you would apply blue-noise dithering. This type of
+dithering uses a blue noise texture of the same size as your image (if you don't
+know what blue noise it, just think of it as a fancier cousin of white noise)
+and for each pixel checks whether the source image value is higher or lower than
+that of the blue noise pixel. If it is higher you make the pixel white, if it is
+darker you make it black. In the plot below you can see the noise as the gray
+background curve. The higher the curve the lighter the pixel value. The gradient
+is then the line cutting through it diagonally from pure dark in the lower left
+corner, to pure white in the upper right corner. We can then see that everywhere
+the gradient line is below the curve we get a black color and everywhere it is
+above we get a white color and this will end up as a binary approximation of the
+gradient.
+
+<img src="assets/images/screens/thresholding.png" width="100%" style="width:100%; margin-left:0%;" alt="thresholding">
+
+Now, there are two issues with using blue noise dithering. First, aesthetically
+I didn't want a pixel level dithering. I wanted my grains to have dimensions and
+shape. Second, blue noise takes *forever* to generate at high resolution (we are
+talking hours).
+
+However, high-frequency simplex noise have a lot of the same characteristics as
+blue noise, can be generated on demand in a shader, and is resolution
+independent. So, we simply use that instead...
+
+<img src="assets/images/screens/blue_vs_simplex.png" width="100%" style="width:100%; margin-left:0%;" alt="blue noise vs simplex noise for thresholding">
+
+We see that we substitute the peculiarly pleasant, but also artificially looking
+pattern from the blue noise, with something much more organic looking from the
+simplex noise. And, as stated above, the grain created by simplex noise can be
+rendered at any size while blue noise is forever confined to the size of a
+pixel.
+
+There are a bit more to the texture used in Screens than that, but those are
+technicalities. I modify the simplex noise in slight ways to make it a bit more
+organic and give it some macro features, and if splotches are on I set some
+areas to 1 and some to zero based on thresholding another simplex noise of lower
+frequency.
+
+In the end this is how I transform those clean screens shown above, into the
+grainy, messy, joy that you know and love from the project. And with that last
+technicality we arrive at the final piece:
+
+<img src="assets/images/screens/final.png" width="50%" style="width:50%; margin-left:25%;" alt="0x3f6014f3724dd546fcfd9f6dd9f2731bedece5ae37620c2789b7d936ebea50d3">
+
+## Parting thoughts
+
+So, we arrive at our final destination. The last words have been finally said
+(from me, at least), about the provenance, context, and technical side of
+Screens. I am thoroughly thrilled that so many people have taken this series to
+heart and finds joy browsing the collection, perhaps even buying a piece for
+themselves. There is no greater privilege as an artist than to be allowed some
+room inside the consciousness of others and I can't thank you enough ❤️
