@@ -19,9 +19,7 @@ project. To buy a Screens piece, use a secondary market site such as
 
 </iframe>
 
-<a href="https://www.artblocks.io/token/255000000" style="margin-left: 25%;"><i>Screens
-
-#0</i></a>
+<a href="https://www.artblocks.io/token/255000000" style="margin-left: 25%;"><i>Screens #0</i></a>
 
 ### Additional ressources
 
@@ -44,8 +42,7 @@ where strong geometric compositions, strong simple colour palettes, gradients
 using a rendering technique mimicking screen printing.
 
 <img src="assets/images/constructive11.jpg" width="50%" style="width:50%; margin-left:25%;" alt="constructive 11">
-<a href="https://foundation.app/@thomasp85/foundation/72856" style="margin-left: 25%;"><i>Constructive
-11</i></a>
+<a href="https://foundation.app/@thomasp85/foundation/72856" style="margin-left: 25%;"><i>Constructive 11</i></a>
 
 Constructive was very much a handheld series. While it is generative in nature,
 the macro composition was decided beforehand. I did enjoy the result immensely
@@ -101,9 +98,7 @@ screen and the template is then merged into a master image.
 <img src="assets/images/screens/process.png" width="100%" style="width:100%;" alt="The making of #923">
 
 <img src="assets/images/screens/255000923.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #923">
-<a href="https://www.artblocks.io/token/255000923" style="margin-left: 25%;"><i>Screens
-
-#923 --- finale</i></a>
+<a href="https://www.artblocks.io/token/255000923" style="margin-left: 25%;"><i>Screens #923 --- finale</i></a>
 
 I had to make some concessions as to how close I could follow the print making
 technique, mostly when it comes to the alignment shifts. The first iteration was
@@ -815,17 +810,13 @@ happens.
 Take the case of #957 - the space station.
 
 <img src="assets/images/screens/255000957.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957">
-<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens
-
-#957</i></a>
+<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens #957</i></a>
 
 Classic hero, right? Wrong! In reality it is an antagonists... We can see this
 if we zoom out:
 
 <img src="assets/images/screens/255000957_zoom.jpeg" width="50%" style="width:50%; margin-left:25%;" alt="Screens #957 - Zoomed">
-<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens
-
-#957 --- Zoomed out</i></a>
+<a href="https://www.artblocks.io/token/255000957" style="margin-left: 25%;"><i>Screens #957 --- Zoomed out</i></a>
 
 This is what happens if an artist gives into and embraces chaos. So is 957 a
 hero or antagonists? Who cares... The traits in Screens are more about the
@@ -900,17 +891,17 @@ neighboring segments to the removed one is also removed). Lastly I remove
 screens that has become too short due to all the cutting and pruning. This is
 how it progresses:
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap: 10px; margin: 20px">
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 10px; margin: 20px">
 <div>
-<img src="assets/images/screens/segments_2a" alt="Screens clipping">
+<img src="assets/images/screens/segments_2a.png" alt="Screens clipping">
 <i>Cutting at intersections</i>
 </div>
 <div>
-<img src="assets/images/screens/segments_2b" alt="Screens pruning">
+<img src="assets/images/screens/segments_2b.png" alt="Screens pruning">
 <i>Pruning around cut</i>
 </div>
 <div>
-<img src="assets/images/screens/segments_2c" alt="Screens cleaning">
+<img src="assets/images/screens/segments_2c.png" alt="Screens cleaning">
 <i>Removing short screens</i>
 </div>
 </div>
