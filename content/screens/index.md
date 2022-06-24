@@ -23,6 +23,8 @@ project. To buy a Screens piece, use a secondary market site such as
 
 ### Additional ressources
 
+-   [Screen Print ordering](https://screenprint.data-imaginist.com/) --- Order your 
+    free print accompanying your NFT. More info at the [bottom of this page]()
 -   [Screens Layers](https://www.data-imaginist.com/screenslayer) --- Experience
     the build-up of a random Screens piece from the collection.
 -   [Screens Surfer](https://www.data-imaginist.com/screensurfer) --- Browse
@@ -1042,3 +1044,18 @@ Screens. I am thoroughly thrilled that so many people have taken this series to
 heart and finds joy browsing the collection, perhaps even buying a piece for
 themselves. There is no greater privilege as an artist than to be allowed some
 room inside the consciousness of others and I can't thank you enough ❤️
+
+## Screen Prints
+Wait, there is more...
+
+If you happen to own a Screens NFT it would be my pleasure to send you a signed
+unique A2 print of your piece, free of charge, to anywhere in the world. The offer 
+is limited to one print per Screens - once a print have been claimed for a Screens
+no more will be made of that piece.
+
+In order to claim your print head to https://screenprint.data-imaginist.com/ and
+place your order! If you are shopping for Screens and want to check whether a 
+specific piece have had its print claimed, consult the list below which will show
+all printed Screens.
+
+* _no prints claimed yet_
