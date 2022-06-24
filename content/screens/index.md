@@ -24,7 +24,7 @@ project. To buy a Screens piece, use a secondary market site such as
 ### Additional ressources
 
 -   [Screen Print ordering](https://screenprint.data-imaginist.com/) --- Order your 
-    free print accompanying your NFT. More info at the [bottom of this page]()
+    free print accompanying your NFT. More info at the [bottom of this page](#screen-prints)
 -   [Screens Layers](https://www.data-imaginist.com/screenslayer) --- Experience
     the build-up of a random Screens piece from the collection.
 -   [Screens Surfer](https://www.data-imaginist.com/screensurfer) --- Browse
