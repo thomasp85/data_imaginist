@@ -1058,4 +1058,15 @@ place your order! If you are shopping for Screens and want to check whether a
 specific piece have had its print claimed, consult the list below which will show
 all printed Screens.
 
-* _no prints claimed yet_
+* [46](https://www.artblocks.io/token/255000046)
+* [83](https://www.artblocks.io/token/255000083)
+* [86](https://www.artblocks.io/token/255000086)
+* [104](https://www.artblocks.io/token/255000104)
+* [106](https://www.artblocks.io/token/255000106)
+* [113](https://www.artblocks.io/token/255000113)
+* [193](https://www.artblocks.io/token/255000193)
+* [293](https://www.artblocks.io/token/255000293)
+* [473](https://www.artblocks.io/token/255000473)
+* [552](https://www.artblocks.io/token/255000552)
+* [797](https://www.artblocks.io/token/255000797)
+* [975](https://www.artblocks.io/token/255000975)
