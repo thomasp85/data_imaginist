@@ -1058,6 +1058,7 @@ place your order! If you are shopping for Screens and want to check whether a
 specific piece have had its print claimed, consult the list below which will show
 all printed Screens.
 
+* [29](https://www.artblocks.io/token/255000029)
 * [46](https://www.artblocks.io/token/255000046)
 * [83](https://www.artblocks.io/token/255000083)
 * [86](https://www.artblocks.io/token/255000086)
