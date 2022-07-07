@@ -1059,6 +1059,7 @@ specific piece have had its print claimed, consult the list below which will sho
 all printed Screens.
 
 * [2](https://www.artblocks.io/token/255000002)
+* [18](https://www.artblocks.io/token/255000018)
 * [29](https://www.artblocks.io/token/255000029)
 * [46](https://www.artblocks.io/token/255000046)
 * [83](https://www.artblocks.io/token/255000083)
