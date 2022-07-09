@@ -1071,5 +1071,4 @@ all printed Screens.
 * [293](https://www.artblocks.io/token/255000293)
 * [473](https://www.artblocks.io/token/255000473)
 * [552](https://www.artblocks.io/token/255000552)
-* [797](https://www.artblocks.io/token/255000797)
 * [975](https://www.artblocks.io/token/255000975)
