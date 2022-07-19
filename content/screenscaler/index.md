@@ -21,6 +21,7 @@ function generate() {
   req.open( "GET", "https://token.artblocks.io/" + token, false);
   req.send(null);
   let token_info = JSON.parse(req.responseText);
+  document.getElementById("drawing_board").scrollIntoView({ behavior: 'smooth', block: 'center' });
   let tokenData = {hash: token_info.token_hash, tokenId: token_info.tokenID};
   render_screen(tokenData, scale);
 }
