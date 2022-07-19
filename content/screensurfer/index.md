@@ -20,6 +20,7 @@ function generate() {
     let n = parseInt(Math.floor(Math.random()*16));
     h+= n.toString(16);
   }
+  document.getElementById("drawing_board").scrollIntoView({ behavior: 'smooth', block: 'center' });
   let tokenData = {hash: h, tokenId: 1000};
   render_screen(tokenData);
 }
