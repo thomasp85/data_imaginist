@@ -1,6 +1,6 @@
 ---
 title: "Screens Banners"
-description: "Generate Screens at custom aspect ratios
+description: "Generate Screens at custom aspect ratios"
 date: '2022-01-31'
 large_thumb: yes
 img:
