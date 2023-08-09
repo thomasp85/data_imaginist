@@ -1166,7 +1166,6 @@ all printed Screens.
 * [464](https://www.artblocks.io/token/255000464)
 * [467](https://www.artblocks.io/token/255000467)
 * [473](https://www.artblocks.io/token/255000473)
-* [476](https://www.artblocks.io/token/255000476)
 * [485](https://www.artblocks.io/token/255000485)
 * [496](https://www.artblocks.io/token/255000496)
 * [503](https://www.artblocks.io/token/255000503)
