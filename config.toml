@@ -94,3 +94,8 @@ baseName = "feed"
 mediatype = "application/rss"
 baseName = "feed_r"
 noUgly = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

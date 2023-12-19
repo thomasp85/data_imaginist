@@ -1,0 +1,112 @@
+---
+title: A new focus on tidygraph
+description: >
+  A new tidygraph release is out. Read here what's new in v1.3.0
+author: Thomas Lin Pedersen
+date: '2023-12-18'
+slug: a-new-focus-on-tidygraph
+large_thumb: yes
+img:
+  thumb: assets/images/tidygraph_logo.png
+categories:
+  - R
+tags:
+  - tidygraph
+  - announcement
+  - package
+---
+
+```{r, include=FALSE}
+set.seed(1)
+```
+
+I'm pleased to announce a new release of [tidygraph](https://tidygraph.data-imaginist.com). It has been a while since something major has happened to the package, reflecting the stable nature of it, but this time I felt like doing a bit more than just brush it of for the occasional upstream dependency change. So, while it is in no way a grandiose release, it does contain enough new stuff to warrant a small blog post. If you are a tidygraph user you should definitely read on, otherwise perhaps explore the [project website](https://tidygraph.data-imaginist.com) first and become a user.
+
+## Let us focus on the news
+
+One new feature I'm particularly exited about is the inclusion of a new `focus()`/`unfocus()` pair of verbs. Part of my excitement is that this was one of my original ideas for the package but was scraped prior to release and then left to linger. The other reason is of course that it is super useful. So what does it do?
+
+Let's start with the why. For classic tabular data you generally expect all data to be equally important during computations. Each row is an observation that needs to be treated with the same care. You perhaps do some filtering but for the resulting filter, it again holds that each data is equally important. For such data the vectorised approach of R (and thus dplyr) makes perfect sense. We tend to want to calculate stuff for each row. The same is not always true for graph data. We might have nodes that are the main focus of our attention and nodes that are simply auxillary. But performing a filter will alter our graph, and that might change our calculations due to the connectedness of our data. For many calculations this is of little concern as the algorithms are so performant, meaning the vectorised paradigm of tidygraph is fine - we simply ignore it. But, what if we have a huge graph and an algorithm that scales exponentially with the number of edges and we really are only interested in the result of a few nodes or edges?
+
+Enter the `focus()` verb. It allows you to perform a temporary filtering of the nodes or edges you are working on without removing the underlying graph structure. In practise it means that any tidygraph algorithms will only be called on the nodes or edges that are in focus but the algorithms will have access to the full graph and will thus return the same result for the focused nodes/edges irrespective of whether the focus was applied or not.
+
+```{r}
+library(tidygraph)
+graph <- play_forestfire(1e5, 0.1) |> 
+  mutate(important = dplyr::row_number() <= 5) |> 
+  focus(important) |> 
+  mutate(efficiency = node_efficiency()) |> 
+  unfocus()
+
+graph |> 
+  as_tibble() |> 
+  slice(1:10)
+```
+
+In the above code we calculate the local efficiency around each node, but since we are only interested in this measure for the first 5 nodes we focus on these and avoid computing it for the remaining 99995 nodes, gaining quite a speed boost. One (huge) caveat is that it is algorithm-dependent whether focusing on a subset provides a performance gain. Some algorithms work in a way were everything is calculated together, e.g. those that rely on convolutions of the distance matrix etc. In these cases no performance gain will be seen.
+
+Focus can be applied both to nodes and edges depending on which one is activated. The focus is the weakest of all graph states and a graph will be unfocused if you either activate, group, or morph a graph so think of it as the most temporary state of them all.
+
+## Iterating on old ideas
+
+Another old feature idea of mine that finally materialized is a set of `iterate_*()` verbs. Those are quite a bit simpler but useful nonetheless if you want to encode simple simulations on graphs using tidygraph syntax. You can think of these as functional equivalents of `while () {}` and `for () {}` so you can incorporate them into a pipe. As an example let's consider a simulation that removes an edge unless it isolates one of its nodes:
+
+```{r}
+unwire <- function(graph) {
+  edge <- graph |> 
+    activate(nodes) |> 
+    mutate(well_connected = centrality_degree() > 1) |> 
+    activate(edges) |> 
+    mutate(can_remove = .N()$well_connected[from] & .N()$well_connected[to],
+           will_remove = dplyr::row_number() == sample(dplyr::row_number(), 1L, prob = can_remove)) |> 
+    pull(will_remove)
+  graph |> 
+    activate(edges) |> 
+    filter(!edge)
+}
+```
+
+We can use this function 20 times on our graph with the `iterate_n()` verbs like so:
+
+```{r}
+create_notable('meredith') |> 
+  iterate_n(20, unwire)
+```
+
+Alternatively we can set up a condition to test for after each iteration that determines if iteration continues. Below we run the `unwire()` function until the graph has been split up into two components.
+
+```{r}
+create_notable('meredith') |> 
+  iterate_while(graph_component_count() == 1, unwire) |> 
+  ggraph::autograph()
+```
+
+## Catching up
+
+It's been a while since tidygraph has been updated with interfaces into new features from igraph. This release fixes that somewhat by providing the following new functions:
+
+-   `edge_is_bridge()` will test for whether edges are bridges (their removal will result in splitting up a component into two
+
+-   `edge_is_feedback_arc()` queries whether edges are part of the feedback arc set
+
+-   `graph_is_eulerian()` and `edge_rank_eulerian()` provides access to eulerian path and cycle calculations
+
+-   `graph_efficiency()` and `node_efficiency()` provides access to global and local efficiency calculations
+
+-   `group_leiden()` and `group_fluid()` provides access to the new `cluster_leiden()` and `cluster_fluid_communities()` community detection algorithms
+
+-   `group_color()` provides an interface to graph coloring. While not really a clustering algorithm the output matches closely with those as it provides a single id to each node
+
+-   `centrality_harmonic()` supersedes `centrality_closeness_harmonic()` using an efficient C implementation over the flexible but slower implementation from the netrankr package
+
+-   `random_walk_rank()` provides access to random walks on both edges and nodes
+
+-   `to_largest_component()` and `to_random_spanning_tree()` are two new morphers
+
+-   `node_is_connected()` tests whether nodes are connected to all or any of the nodes in a given set
+
+Apart from changes in igraph, tidygraph also needs to stay somewhat current to another package, namely dplyr. In this release we have added support for the various `slice_*()` types so that you can now use e.g. `slice_min()` or `slice_sample()` on tbl_graph objects. And while not directly dplyr (but tidyr) you can now use `replace_na()` and `drop_na()` with tbl_graph objects as well.
+
+## Wrapping up
+
+Mature packages are a weird thing as a developer. You seldom spend much time with them as they are working as intended, even if they are a cornerstone of some of your work. Tidygraph definitely falls into this spot. It was nice to get to relearn it a bit as I prepared this release and I hope the new additions will spark joy. Take care
