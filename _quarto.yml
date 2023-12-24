@@ -2,6 +2,7 @@ project:
   type: website
   post-render:
     - "cp -rn static/. _site/"
+    - "cp assets/img/{left.png,middle.png,right.png} _site/assets/img/"
 
 execute:
   freeze: auto
