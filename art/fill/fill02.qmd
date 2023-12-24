@@ -1,0 +1,10 @@
+---
+title: "Fill 02"
+card-style: summary_large_image
+image: fill02.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](fill02.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

@@ -1,0 +1,10 @@
+---
+title: "Winds 2020"
+card-style: summary_large_image
+image: winds2020.jpg
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](winds2020.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

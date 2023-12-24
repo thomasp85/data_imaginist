@@ -1,0 +1,10 @@
+---
+title: "Phases 705"
+card-style: summary_large_image
+image: phases705.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](phases705.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

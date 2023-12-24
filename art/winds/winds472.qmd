@@ -1,0 +1,10 @@
+---
+title: "Winds 472"
+card-style: summary_large_image
+image: winds472.jpg
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](winds472.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

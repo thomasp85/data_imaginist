@@ -1,0 +1,27 @@
+---
+title: "About"
+image: assets/img/head.jpeg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/thomasp85
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/thomasp85
+    - icon: instagram
+      text: Instagram
+      href: https://www.instagram.com/thomasp85_
+    - icon: github
+      text: Github
+      href: https://github.com
+---
+
+Hi!
+
+My name is Thomas Lin Pedersen. I'm a software engineer from Denmark having a blast developing open source tools (mainly for [R](https://cran.r-project.org)) together with my colleagues in the Tidyverse team at [Posit, PBC](https://posit.co).
+
+My main focus is developing tools for data visualization and I'm responsible for most of the R graphic stack, from high-level tools such as ggplot2 and patchwork and all the way down to the nitty-gritty lower level with font rendering and graphics devices such as ragg and textshaping. If you've made graphics in R, my code has probably been involved at some point.
+
+On the side I'm an avid generative artist that uses code and randomness to create intricate pieces. My art has been exhibited in Venice, London, and New York among other places.

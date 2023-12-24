@@ -1,0 +1,38 @@
+project:
+  type: website
+  post-render:
+    - "cp -rn static/. _site/"
+
+execute:
+  freeze: auto
+
+website:
+  title: "Data Imaginist"
+  site-url: "https://data-imaginist.com"
+  navbar:
+    logo: assets/img/logo_small.png
+    right:
+      - text: Art
+        menu:
+          - text: Prints
+            file: art/index.qmd
+          - text: NFTs
+            file: nft/index.qmd
+      - about.qmd
+      - icon: github
+        href: https://github.com/
+      - icon: twitter
+        href: https://twitter.com
+  page-footer: "Copyright 2023, Thomas Lin Pedersen"
+  twitter-card: true
+  open-graph: true
+
+format:
+  html:
+    theme:
+      - minty
+      - custom.scss
+
+editor: visual
+
+highlight-style: "zenburn"

@@ -1,0 +1,10 @@
+---
+title: "Storms 3118"
+card-style: summary_large_image
+image: storms3118.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](storms3118.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

@@ -1,0 +1,10 @@
+---
+title: "Folding Flow 62"
+card-style: summary_large_image
+image: folding flow 62.jpg
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](folding flow 62.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

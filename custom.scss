@@ -1,0 +1,185 @@
+/*-- scss:defaults --*/
+$primary:               rgb(74, 70, 69) !default;
+$secondary:             #EB5D40 !default;
+$light:                 #FAF5E6;
+$headings-font-family:  Comfortaa;
+$headings-font-weight:  300 !default;
+$font-family-base:      Faustina, serif;
+$font-weight-base:      400;
+$code-font-family:      Fira Code, monospace;
+$link-color:            $secondary;
+
+/*-- scss:rules --*/
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Faustina:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;700&display=swap');
+
+// General
+body {
+  background-image: url('/assets/img/middle.png'), url('/assets/img/left.png'), url('/assets/img/right.png');
+  background-repeat: repeat-y;
+  background-position: center top, left top, right top;
+  background-size: 860px, 500px, 500px;
+  color: $primary;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 30px;
+  margin-bottom: 25px;
+}
+
+a {
+  text-decoration: none;
+  -webkit-text-decoration: none;
+  -moz-text-decoration: none;
+  -ms-text-decoration: none;
+  -o-text-decoration: none;
+}
+
+code {
+  font-family: $code-font-family;
+}
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  font-weight: $headings-font-weight;
+  color: $primary;
+}
+
+// Footer
+.nav-footer {
+  font-family: $headings-font-family;
+  background-color: transparent;
+}
+
+// Post headers
+header {
+  font-family: $headings-font-family;
+  text-align: center;
+}
+div.quarto-categories {
+  justify-content: center;
+}
+.quarto-title .quarto-categories .quarto-category {
+  padding: 0 .75em;
+  border: none;
+  border-radius: 0.5rem;
+  background: $secondary;
+  color: white
+}
+#title-block-header.quarto-title-block.default .quarto-title-meta {
+  display: block;
+}
+
+main#quarto-document-content {
+  img {
+    max-width: 100%;
+  }
+}
+
+// Pagination:
+ul.pagination {
+  width: 100%;
+  justify-content: center;
+  li.page-item {
+    font-family: $headings-font-family;
+    padding-right: 0.15em;
+    .page-link {
+      padding: .375rem .75rem .23rem .75rem;
+    }
+  }
+  li.page-item:first-child {
+    .page-link {
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+  }
+  li.page-item:last-child {
+    .page-link {
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
+}
+
+// Background
+@media (max-width: 700px) {
+  body {
+    background-image: none;
+    background-size: 0;
+  }
+}
+
+#quarto-document-content {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 60px 40px 0 40px;
+}
+
+// Post listing
+.listing-date {
+  font-family: $headings-font-family;
+  text-align: right;
+}
+
+div.quarto-post {
+  border-bottom: none;
+  .metadata {
+    flex-basis: 20%;
+  }
+  h3 {
+    font-weight: 400;
+  }
+}
+
+// Code blocks in old, non-rerendered posts
+pre.r {
+  background-color: rgb(48, 48, 48);
+  border-radius: 4.25px;
+  padding: 5.95px;
+  color: lightgrey;
+}
+
+// Art Print page
+body:has(div.page-layout-custom) {
+  background: white;
+}
+#quarto-content.page-layout-custom {
+  padding: 77px 40px 17px 40px;
+  header {
+    text-align: left;
+    .quarto-title {
+      h1, p {
+        display: inline;
+      }
+      h1 {
+        margin-right: 0.5em;
+      }
+    }
+  }
+  .headspace {
+    height: 76.5px;
+  }
+}
+.quarto-grid-item {
+  border-radius: 0.5rem;
+  .card-img-top, .card-img {
+    border-radius: 0;
+    border-top-left-radius: calc(0.5rem - 1px);
+    border-top-right-radius: calc(0.5rem - 1px);
+  }
+  .card-text p {
+    margin: 0;
+  }
+}
+
+// Misc
+div.quarto-about-jolla .about-link {
+  font-family: $headings-font-family;
+  color: $secondary;
+  border: none;
+}
+
+body#portfolio {
+  background-image: none;
+  background-size: 0;
+}

@@ -1,0 +1,274 @@
+---
+title: "Data Driven Christmas Card Animation with Voronoi Tiles"
+description: "In this post I'm going to show you how to make a Christmas card that will bring joy to even the geekiest of data scientists"
+date: '2016-12-21'
+slug: 'Data-driven-x-mas-card'
+categories: [design, ggforce, tweenr]
+image: "/assets/img/2016-12-21-Data-driven-x-mas-card/heart.png"
+aliases: 
+  - ../../2016/Data-driven-x-mas-card/index.html
+---
+
+<p>I recently published a bit of self-promotion in the form of an animation based on the new <code>geom_voronoi_tile()</code> and <code>geom_voronoi_segment()</code> functions in <code>ggforce</code>:</p>
+
+{{< tweet thomasp85 809896220906897408 >}}
+
+<p>This prompted someone to ask for the source code and I off-handedly said I would make a blog post about. So here we are, but I'm not going to show you how I made that animation (sorry). Instead I'm going to show you how to make your very own animated Christmas card using <code>ggplot2</code>, <code>ggforce</code>, and <code>tweenr</code> (as well as <code>mgcv</code> and <code>deldir</code> for some computations).</p>
+
+<p>Let's set the scene: we are going to do a cyclic animation switching between a heart, the word "merry", and the word "x-mas". Each shape will be made up of voronoi tiles with the colour of the tile defining the shape. The shapes has been created in Illustrator and exported to a json representation using a <a href="https://github.com/elcontraption/illustrator-point-exporter">script</a>.</p>
+
+<p>Let's start by importing the shapes and do a sanity check:</p>
+
+```{=html}
+<pre class="r"><code>library(jsonlite)
+library(ggplot2)
+greet &lt;- fromJSON(readLines(&#39;http://www.data-imaginist.com/assets/data/x-mas.json&#39;))
+layer_names &lt;- greet$layers$name
+heart &lt;- greet$layers$paths[[which(layer_names == &#39;Heart&#39;)]]$points
+merry &lt;- greet$layers$paths[[which(layer_names == &#39;Merry&#39;)]]$points
+x_mas &lt;- greet$layers$paths[[which(layer_names == &#39;X-MAS&#39;)]]$points
+range &lt;- greet$layers$paths[[which(layer_names == &#39;back&#39;)]]$points[[1]]
+
+ggplot(as.data.frame(heart[[1]])) + 
+    geom_polygon(aes(V1, V2))</code></pre>
+```
+<p><img src="/post/2016-12-21-Data-driven-x-mas-card_files/figure-html/unnamed-chunk-3-1.png" width="672"/></p>
+
+<p>That seems sort-of right. The shape is on its head since Illustrator measures its coordinates from the top-left corner and down and not from the bottom-left corner and up. Well simply use <code>scale_y_reverse()</code> later to circumvent this.</p>
+
+<p>Now that we have our shapes it is time to draw them with points. To do this we'll sample 25.000 points within the plot area and check which ones falls into the different shapes. There are many ways to test whether a point lies inside a shape - I'll use the <code>in.out()</code> function from the <code>mgcv</code> package.</p>
+
+```{=html}
+<pre class="r"><code>library(mgcv)
+heart_points &lt;- data.frame(
+    x = runif(25000, min = min(range[,1]), max = max(range[, 1])),
+    y = runif(25000, min = min(range[,2]), max = max(range[, 2])),
+    colour = &#39;green&#39;,
+    stringsAsFactors = FALSE
+)
+heart_points$colour[
+    in.out(
+        do.call(rbind, lapply(heart, rbind, c(NA, NA))), 
+        cbind(heart_points$x, heart_points$y)
+    )
+] &lt;- &#39;red&#39;
+
+merry_points &lt;- data.frame(
+    x = runif(25000, min = min(range[,1]), max = max(range[, 1])),
+    y = runif(25000, min = min(range[,2]), max = max(range[, 2])),
+    colour = &#39;red&#39;,
+    stringsAsFactors = FALSE
+)
+merry_points$colour[
+    in.out(
+        do.call(rbind, lapply(merry, rbind, c(NA, NA))), 
+        cbind(merry_points$x, merry_points$y)
+    )
+] &lt;- &#39;green&#39;
+
+xmas_points &lt;- data.frame(
+    x = runif(25000, min = min(range[,1]), max = max(range[, 1])),
+    y = runif(25000, min = min(range[,2]), max = max(range[, 2])),
+    colour = &#39;red&#39;,
+    stringsAsFactors = FALSE
+)
+xmas_points$colour[
+    in.out(
+        do.call(rbind, lapply(x_mas, rbind, c(NA, NA))), 
+        cbind(xmas_points$x, xmas_points$y)
+    )
+] &lt;- &#39;green&#39;
+
+ggplot(merry_points) + 
+    geom_point(aes(x, y, colour = colour))</code></pre>
+```
+<p><img src="/post/2016-12-21-Data-driven-x-mas-card_files/figure-html/unnamed-chunk-4-1.png" width="672"/></p>
+
+<p>We could call this a day and continue with all those points, but we wont. First, because voronoi tessellation (as implemented in <code>deldir</code>) does not scale well to these number of points, and second, because the tiles would be so small that they are almost indistinguishable from each other.</p>
+
+<p>To fix this we are going to remove a lot of the points that do not help in defining the shapes. In order to determine which points are safe to remove we are going to calculate the delaunay triangulation (the "inverse" of a voronoi tesselation) and find out which points only have neighbors of the same colour. We are going to remove as many random point so well end up with 1.000 points of each colour:</p>
+
+```{=html}
+<pre class="r"><code>library(deldir)
+library(ggforce)
+
+heart_vor &lt;- deldir(heart_points$x, heart_points$y)
+heart_con &lt;- split(c(heart_points$colour[heart_vor$delsgs$ind2], 
+                     heart_points$colour[heart_vor$delsgs$ind1]), 
+                   c(heart_vor$delsgs$ind1, heart_vor$delsgs$ind2))
+heart_boring &lt;- lengths(lapply(heart_con, unique)) == 1
+heart_remove &lt;- c(
+    sample(which(heart_boring &amp; heart_points$colour == &#39;red&#39;), 
+           sum(heart_boring &amp; heart_points$colour == &#39;red&#39;) - 
+               (1000 - sum(!heart_boring &amp; heart_points$colour == &#39;red&#39;))),
+    sample(which(heart_boring &amp; heart_points$colour == &#39;green&#39;), 
+           sum(heart_boring &amp; heart_points$colour == &#39;green&#39;) - 
+               (1000 - sum(!heart_boring &amp; heart_points$colour == &#39;green&#39;)))
+)
+heart_points &lt;- heart_points[-heart_remove, ]
+
+merry_vor &lt;- deldir(merry_points$x, merry_points$y)
+merry_con &lt;- split(c(merry_points$colour[merry_vor$delsgs$ind2], 
+                     merry_points$colour[merry_vor$delsgs$ind1]), 
+                   c(merry_vor$delsgs$ind1, merry_vor$delsgs$ind2))
+merry_boring &lt;- lengths(lapply(merry_con, unique)) == 1
+merry_remove &lt;- c(
+    sample(which(merry_boring &amp; merry_points$colour == &#39;red&#39;), 
+           sum(merry_boring &amp; merry_points$colour == &#39;red&#39;) - 
+               (1000 - sum(!merry_boring &amp; merry_points$colour == &#39;red&#39;))),
+    sample(which(merry_boring &amp; merry_points$colour == &#39;green&#39;), 
+           sum(merry_boring &amp; merry_points$colour == &#39;green&#39;) - 
+               (1000 - sum(!merry_boring &amp; merry_points$colour == &#39;green&#39;)))
+)
+merry_points &lt;- merry_points[-merry_remove, ]
+
+xmas_vor &lt;- deldir(xmas_points$x, xmas_points$y)
+xmas_con &lt;- split(c(xmas_points$colour[xmas_vor$delsgs$ind2], 
+                    xmas_points$colour[xmas_vor$delsgs$ind1]), 
+                  c(xmas_vor$delsgs$ind1, xmas_vor$delsgs$ind2))
+xmas_boring &lt;- lengths(lapply(xmas_con, unique)) == 1
+xmas_remove &lt;- c(
+    sample(which(xmas_boring &amp; xmas_points$colour == &#39;red&#39;), 
+           sum(xmas_boring &amp; xmas_points$colour == &#39;red&#39;) - 
+               (1000 - sum(!xmas_boring &amp; xmas_points$colour == &#39;red&#39;))),
+    sample(which(xmas_boring &amp; xmas_points$colour == &#39;green&#39;), 
+           sum(xmas_boring &amp; xmas_points$colour == &#39;green&#39;) - 
+               (1000 - sum(!xmas_boring &amp; xmas_points$colour == &#39;green&#39;)))
+)
+xmas_points &lt;- xmas_points[-xmas_remove, ]
+
+ggplot(xmas_points) + 
+    geom_voronoi_tile(aes(x, y, fill = colour), colour = &#39;black&#39;)</code></pre>
+```
+<p><img src="/post/2016-12-21-Data-driven-x-mas-card_files/figure-html/unnamed-chunk-5-1.png" width="672"/></p>
+
+<p>Now we're getting somewhere!</p>
+
+<p>The next step is to match the points from each stage together so we know which one moves where. For the transition between the heart and the text I'm fine with it being random, but for the transition between "merry" and "x-mas" I want it to seem as smooth as possible. This requires that each point in <code>merry_points</code> get matched to its nearest neighbor of equal colour in the <code>xmas_points</code> data.frame. As some points might compete for the nearest neighbor some will have to settle for neighbors a bit farther away. While it might be possible to optimise the choice of neighbor we are just going to go through each in turn so the points occuring first in the data.frame will get first pick:</p>
+
+```{=html}
+<pre class="r"><code>heart_points &lt;- heart_points[order(heart_points$colour), ]
+heart_points$id &lt;- seq_len(nrow(heart_points))
+merry_points &lt;- merry_points[order(merry_points$colour), ]
+merry_points$id &lt;- seq_len(nrow(merry_points))
+xmas_points &lt;- xmas_points[order(xmas_points$colour), ]
+
+eu_dist &lt;- function(x, y) {
+    ifelse(
+        merry_points$colour[x] != xmas_points$colour[y], 
+        1e5, 
+        sqrt((merry_points$x[x] - xmas_points$x[y])^2 + 
+                 (merry_points$y[x] - xmas_points$y[y])^2)
+    )
+}
+distance &lt;- outer(seq_len(nrow(merry_points)), 
+                  seq_len(nrow(merry_points)), 
+                  eu_dist
+)
+
+pair &lt;- Reduce(function(l, r) {
+    pair_order &lt;- order(distance[r, ])
+    c(l, pair_order[which(!pair_order %in% l)[1]])
+}, seq_len(nrow(merry_points)), init = integer())
+
+xmas_points$id[pair] &lt;- seq_len(nrow(xmas_points))
+xmas_points &lt;- xmas_points[order(xmas_points$id), ]</code></pre>
+```
+<p>Now each data.frame is lined up so the point encoded in row 1 is the same across all. The last bit of work we need to do is to interpolate the transition between each stage. This could be done in one line of code with <code>tweenr</code> using <code>tween_states()</code> but I dont want all points to start and end their movements at the same time. Thus we need to do something a bit more custom:</p>
+
+```{=html}
+<pre class="r"><code>library(tweenr)
+tween_points &lt;- function(from, to, length, stagger) {
+    leave &lt;- sample(seq_len(stagger), nrow(from), replace = TRUE)
+    arive &lt;- sample(seq_len(stagger), nrow(from), replace = TRUE)
+    x &lt;- tween_t(Map(function(.f, .t) c(.f, .t), .f = from$x, .t = to$x), 
+                 length - leave - arive)
+    y &lt;- tween_t(Map(function(.f, .t) c(.f, .t), .f = from$y, .t = to$y), 
+                 length - leave - arive)
+    points &lt;- Map(function(x, y, l, a) {
+        data.frame(x = x, y = y)[c(rep(1, l), seq_along(x), rep(length(x), a)), ]
+    }, x = x, y = y, l = leave, a = arive)
+    points &lt;- do.call(rbind, points)
+    points$frame &lt;- rep(seq_len(length), nrow(from))
+    cbind(
+        points, 
+        from[rep(seq_len(nrow(from)), each = length), !names(from) %in% c(&#39;x&#39;, &#39;y&#39;)])
+}</code></pre>
+```
+<p>This function takes two data.frames along with the total transition length and a <code>stagger</code> value that encodes the maximum offset in time each transition can have in terms of starting and ending. It then interpolates the <code>x</code> and <code>y</code> columns between the two data.frames, adding a <code>frame</code> column to the end result.</p>
+
+<p>Let's put it to good use. Our animation will take 12 seconds at a frame rate of 24 fps making a total of 288 frames and 96 frames for each stage along with the transition to it. We'll split it up so that each stage is hold for 36 frames, ending up with 60 frames for each transition. We'll allow the start and end time to vary with 20 frames each:</p>
+
+```{=html}
+<pre class="r"><code>n_frames_still &lt;- 36
+n_frames_trans &lt;- 60
+n_frames_stagger &lt;- 20
+n_frames_stage &lt;- 96
+
+heart_to_merry &lt;- tween_points(heart_points, 
+                               merry_points, 
+                               n_frames_trans, 
+                               n_frames_stagger)
+merry_to_xmas &lt;- tween_points(merry_points, 
+                              xmas_points, 
+                              n_frames_trans, 
+                              n_frames_stagger)
+xmas_to_heart &lt;- tween_points(xmas_points, 
+                              heart_points, 
+                              n_frames_trans, 
+                              n_frames_stagger)</code></pre>
+```
+<p>In addition to this we need to repeat each stage 36 times and offset the frame count. In the end we'll combine everything into one data.frame:</p>
+
+```{=html}
+<pre class="r"><code>heart_still &lt;- heart_points[rep(seq_len(nrow(heart_points)), n_frames_still), ]
+heart_still$frame &lt;- rep(seq_len(n_frames_still), each = nrow(heart_points))
+heart_to_merry$frame &lt;- heart_to_merry$frame + n_frames_still
+
+merry_still &lt;- merry_points[rep(seq_len(nrow(merry_points)), n_frames_still), ]
+merry_still$frame &lt;- rep(seq_len(n_frames_still), each = nrow(merry_points)) + n_frames_stage
+merry_to_xmas$frame &lt;- merry_to_xmas$frame + n_frames_stage + n_frames_still
+
+xmas_still &lt;- xmas_points[rep(seq_len(nrow(xmas_points)), n_frames_still), ]
+xmas_still$frame &lt;- rep(seq_len(n_frames_still), each = nrow(xmas_points)) + 2*n_frames_stage
+xmas_to_heart$frame &lt;- xmas_to_heart$frame + 2*n_frames_stage + n_frames_still
+
+frames &lt;- rbind(
+    heart_still,
+    heart_to_merry,
+    merry_still,
+    merry_to_xmas,
+    xmas_still,
+    xmas_to_heart
+)</code></pre>
+```
+<p>We now have everything in place to create our animation - we just need to define the plotting function (take note that we specify the bounding rectangle as the range of our data might change between frames):</p>
+
+```{=html}
+<pre class="r"><code>christmas_card &lt;- function(data) {
+    bound &lt;- c(range(range[,1]), range(-range[,2]))
+    ggplot(data, aes(x = x, y = y)) + 
+        geom_voronoi_tile(aes(fill = colour), bound = bound) + 
+        geom_voronoi_segment(alpha = 0.3, bound = bound) + 
+        scale_y_reverse() + 
+        scale_fill_manual(values = c(&#39;forestgreen&#39;, &#39;firebrick&#39;)) + 
+        labs(caption = &#39;www.data-imaginist.com&#39;) + 
+        coord_fixed(expand = FALSE) + 
+        theme_void() + 
+        theme(legend.position = &#39;none&#39;)
+}
+plot(christmas_card(heart_points))</code></pre>
+```
+<p><img src="/post/2016-12-21-Data-driven-x-mas-card_files/figure-html/unnamed-chunk-10-1.png" width="672"/></p>
+
+<p>Now it is just a matter of looping over each frame and plotting that data. Normally <code>gganimate</code> would be useful for this but it does not always play nice when data is heavily transformed by the stat function (as is the case with <code>geom_voronoi_tile()</code> and <code>geom_voronoi_segment()</code>). We'll just do it the oldschool way (if you're running this yourself wrap the following expression in <code>animation::saveGIF()</code>):</p>
+
+```{=html}
+<pre class="r"><code>for (i in seq_len(max(frames$frame))) {
+    data &lt;- frames[frames$frame == i, ]
+    plot(christmas_card(data))
+}</code></pre>
+```
+<p><img src="/post/2016-12-21-Data-driven-x-mas-card_files/figure-html/unnamed-chunk-11.gif" width="672"/></p>
+
+<p>Merry Christmas!</p>

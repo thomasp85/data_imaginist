@@ -1,0 +1,144 @@
+---
+title: "When A Fire Starts to Burn - Fiery 1.0 released"
+description: "The R webserver framework fiery has just been updated to v1.0"
+date: '2017-08-16'
+slug: 'When-a-fire-starts-to-burn'
+categories: [fiery, webserver, http]
+card-style: summary_large_image
+image: "/assets/img/fiery_logo.png"
+aliases: 
+  - ../../2017/When-a-fire-starts-to-burn/index.html
+---
+
+<p><img src="/assets/img/fiery_f.jpeg" align="right" style="width:50%;max-width:200px"/></p>
+
+<p>I'm pleased to announce that <code>fiery</code> has been updated to version 1.0 and is now available on CRAN. As the version bump suggests, this is a rather major update to the package, fixing and improving upon the framework based on my experience with it, as well as introducing a number of breaking changes. Below, I will go through the major points of the update, but also give an overview of the framework itself, as I did not have this blog when it was first released and information on the framework is thus scarce on the internet (except this <a href="https://rud.is/b/2016/07/05/a-simple-prediction-web-service-using-the-new-firery-package/">nice little post</a> by Bob Rudis).</p>
+
+::: {#significant-changes-in-v1.0 .section .level2}
+<h2>Significant changes in v1.0</h2>
+
+<p>The new version of <code>fiery</code> introduces both small and large changes. I'll start by listing the breaking changes that one should be aware of in existing <code>fiery</code> servers, and then continue to describe other major changes.</p>
+
+::: {#embracing-reqres-breaking .section .level3}
+<h3>Embracing reqres <em>BREAKING</em></h3>
+
+<p>My <code>reqres</code> package was <a href="../2017-08-13-Introducing-reqres">recently released</a> and has been adopted by <code>fiery</code> as the interface for working with HTTP messaging. I have been a bit torn on whether to build <code>reqres</code> into <code>fiery</code> or simply let <a href="https://github.com/thomasp85/routr"><code>routr</code></a> use it internally, but in the end the benefits of a more powerful interface to HTTP requests and responses far outweighed the added dependency and breaking change.</p>
+
+<p>The change means that everywhere a request object is handed on to an event handler (e.g. handlers listening to the <code>request</code> event) it is no longer passing a rook environment but a <code>Request</code> object. The easiest fix in existing code is to simply extract the rook environment from the <code>Request</code> object using the <code>origin</code> field (this, of course, will not allow you to experience the joy of <code>reqres</code>).</p>
+
+<p>The change to <code>reqres</code> also brings other, smaller, changes to the code base. <code>header</code> event handlers are now expected to return either <code>TRUE</code> or <code>FALSE</code> to indicate whether to proceed or terminate, respectively. Prior to v1.0 they were expected to return either <code>NULL</code> or a rook complaint list response, but as responses are now linked to requests, returning them does not make sense. In the same vein, the return values of <code>request</code> event handlers are ignored and the response is not passed to <code>after-request</code> event handlers as the response can be extracted directly from the request.</p>
+:::
+
+::: {#arguments-from-before-request-and-before-message-event-handlers-breaking .section .level3}
+<h3>Arguments from <em>before-request</em> and <em>before-message</em> event handlers <em>BREAKING</em></h3>
+
+<p>The <code>before-request</code> and <code>before-message</code> events are fired prior to the actual HTTP request and WebSocket message handling. The return values from any handler is passed on as arguments to the <code>request</code> and <code>message</code> handlers respectively and these events can thus be used to inject data into the main request and message handling. Prior to v1.0 these values were passed in directly as named arguments, but will now be passed in as a list in the <code>arg_list</code> argument. This is much easier and consistent to work with. An example of the change is:</p>
+
+```{=html}
+<pre class="r"><code># Old interface
+app &lt;- Fire$new()
+app$on(&#39;before-request&#39;, function(...) {
+    list(arg1 = &#39;Hello&#39;, arg2 = &#39;World&#39;)
+})
+app$on(&#39;request&#39;, function(arg1, arg2, ...) {
+    message(arg1, &#39; &#39;, arg2)
+})
+
+# New interface
+app &lt;- Fire$new()
+app$on(&#39;before-request&#39;, function(...) {
+    list(arg1 = &#39;Hello&#39;, arg2 = &#39;World&#39;)
+})
+app$on(&#39;request&#39;, function(arg_list, ...) {
+    message(arg_list$arg1, &#39; &#39;, arg_list$arg2)
+})</code></pre>
+```
+<p>As can be seen the code ends up being a bit more verbose, but the argument list will be much more predictable.</p>
+:::
+
+::: {#embracing-snake_case-breaking .section .level3}
+<h3>Embracing snake_case <em>BREAKING</em></h3>
+
+<p>When I first started developing <code>fiery</code> I was young and confused (😜). Bottom line I don't think my naming scheme was very elegant. While consistent (snake_case for methods and camelCase for fields), this mix is a bit foreign and I've decided to use this major release to clean up in the naming and use snake_case consistently throughout <code>fiery</code>. This has the effect of renaming the <code>triggerDir</code> field to <code>trigger_dir</code> and <code>refreshRate</code> to <code>refresh_rate</code>. Furthermore this change is taken to its conclusion by also changing the plugin interface and require plugins to expose an <code>on_attach()</code> method rather than an <code>onAttach()</code> method.</p>
+:::
+
+::: {#keeping-the-event-cycle-in-non-blocking-mode .section .level3}
+<h3>Keeping the event cycle in non-blocking mode</h3>
+
+<p><code>fiery</code> supports running the server in both a blocking and a non-blocking way (that is, whether control should be returned to the user after the server is started, or not). Before v1.0 the two modes were not equal in their life cycle events as only the blocking server had support for <code>cycle-start</code> and <code>cycle-end</code> events as well as handling of timed, delayed, and async evaluation. This has changed and the lifetime of an app running in the two different modes are now the same. To achieve this <code>fiery</code> uses the <a href="https://github.com/r-lib/later"><code>later</code></a> package to continually schedule cycle evaluation for execution. This means that no matter the timing, cycles will only be executed if the R process is idle, and it also has the slight inconvenience of not allowing to stop a server as part of a cycle event (Bug report here: <a href="https://github.com/rstudio/httpuv/issues/78" class="uri">https://github.com/rstudio/httpuv/issues/78</a>). Parallel to the refresh rate of a blocking server, the refresh rate of a non-blocking server can be set using the <code>refresh_rate_nb</code> field. By default it is longer than that of a blocking server, to give the R process more room to receive instructions from the console.</p>
+:::
+
+::: {#mounting-a-server .section .level3}
+<h3>Mounting a server</h3>
+
+<p>With v1.0 it is now possible to specify the root of a <code>fiery</code> server. The root is the part of the URL path that is stripped from the path before sending requests on to the handler. This means that it is possible to create sub-app in <code>fiery</code> that do not care at which location they are run. If e.g. the root is set to <code>/demo/app</code> then requests made for <code>/demo/app/...</code> will look like <code>/...</code> internally, and switching the location of the app does not require any change in the underlying app logic or routing. The root defaults to <code>''</code> (nothing), but can be changed with the <code>root</code> field.</p>
+:::
+
+::: {#package-documentation .section .level3}
+<h3>Package documentation</h3>
+
+<p>Documentation can never by too good. The state of affairs for documenting classes based on reference semantics is not perfect in R, and I still struggle with the best setup. Still, the current iteration of the documentation is a vast improvement, compared to the previous release. Notable changes include separate entries for documentation of events and plugins.</p>
+:::
+
+::: {#grab-bag .section .level3}
+<h3>Grab bag</h3>
+
+<p>The host and port can now be set during construction using the <code>host</code> and <code>port</code> arguments in <code>Fire\$new()</code>. <code>Fire</code> objects now has a print method, making them much nicer to look at. The host, port, and root is now advertised when a server starts. WebSocket connections can now be closed from the server using the <code>close_ws_con</code> method.</p>
+:::
+:::
+
+::: {#a-fiery-overview .section .level2}
+<h2>A Fiery Overview</h2>
+
+<p>As promised in the beginning, I'll end with giving an overview of how <code>fiery</code> is used. I'll do this by updating Bob's prediction server to the bright future where <code>routr</code> and <code>reqres</code> makes life easy for you:</p>
+
+<p>We'll start by making our fancy AI-machine-learning model of linear regressiveness:</p>
+
+```{=html}
+<pre class="r"><code>set.seed(1492) x &lt;- rnorm(15) y &lt;- x + rnorm(15) fit &lt;- lm(y ~ x) saveRDS(fit, &quot;model.rds&quot;)</code></pre>
+```
+<p>With this at our disposable, we can begin to build up our app:</p>
+
+```{=html}
+<pre class="r"><code>library(fiery) library(routr) app &lt;- Fire$new()
+
+# When the app starts, we'll load the model we saved. Instead of
+
+# polluting our namespace we'll use the internal data store
+
+app$on(&#39;start&#39;, function(server, ...) { server$set_data('model', readRDS('model.rds')) message('Model loaded') })
+
+# Just for show off, we'll make it so that the model is atomatically
+
+# passed on to the request handlers
+
+app$on(&#39;before-request&#39;, function(server, ...) { list(model = server$get_data('model')) })
+
+# Now comes the biggest deviation. We'll use routr to define our request
+
+# logic, as this is much nicer
+
+router \<- RouteStack$new() route &lt;- Route$new() router\$add_route(route, 'main')
+
+# We start with a catch-all route that provides a welcoming html page
+
+route$add_handler(&#39;get&#39;, &#39;*&#39;, function(request, response, keys, ...) { response$type \<- 'html' response$status &lt;- 200L response$body \<- '\<h1\>All your AI are belong to us\</h1\>' TRUE }) \# Then on to the /info route route$add_handler(&#39;get&#39;, &#39;/info&#39;, function(request, response, keys, ...) { response$status \<- 200L response$body &lt;- structure(R.Version(), class = &#39;list&#39;) response$format(json = reqres::format_json()) TRUE }) \# Lastly we add the /predict route route$add_handler(&#39;get&#39;, &#39;/predict&#39;, function(request, response, keys, arg_list, ...) { response$body \<- predict( arg_list$model, data.frame(x=as.numeric(request$query$val)), se.fit = TRUE ) response$status \<- 200L response$format(json = reqres::format_json()) TRUE }) # And just to show off reqres file handling, we&#39;ll add a route # for getting a model plot route$add_handler('get', '/plot', function(request, response, keys, arg_list, ...) { f_path \<- tempfile(fileext = '.png') png(f_path) plot(arg_list$model) dev.off() response$status \<- 200L response\$file \<- f_path TRUE })
+
+# Finally we attach the router to the fiery server
+
+app\$attach(router)
+
+app\$ignite(block = FALSE)</code>
+
+</pre>
+```
+```{=html}
+<pre><code>## Fire started at 127.0.0.1:8080</code></pre>
+```
+```{=html}
+<pre><code>## message: Model loaded</code></pre>
+```
+<p>As can be seen, <code>routr</code> makes the request logic nice and compartmentalized, while <code>reqres</code> makes it easy to work with HTTP messages. What is less apparent is the work that <code>fiery</code> is doing underneath, but that is exactly the point. While it is possible to use a lot of the advanced features in <code>fiery</code>, you don't have to - often it is as simple as building up a router and attaching it to a <code>fiery</code> instance. Even WebSocket messaging can be offloaded to the router if you so wish.</p>
+
+<p>Of course a simple prediction service is easy to build up in most frameworks - it is the To-Do app of data science web server tutorials. I hope to get the time to create some more fully fledged example apps soon. Next up in the <code>fiery</code> stack pipeline is getting <code>routr</code> on CRAN as well and then begin working on some of the plugins that will facilitate security, authentication, data storage, etc.</p>
+:::

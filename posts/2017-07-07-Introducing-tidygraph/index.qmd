@@ -1,0 +1,668 @@
+---
+title: "Introducing tidygraph"
+description: "Towards a tidy API for relational data"
+date: '2017-07-07'
+slug: 'Introducing-tidygraph'
+categories: [tidygraph, network, graph]
+card-style: summary_large_image
+image: "/assets/img/tidygraph_logo.png"
+aliases: 
+  - ../../2017/Introducing-tidygraph/index.html
+---
+
+<p>I'm very pleased to announce that my new package <code>tidygraph</code> is now <a href="https://CRAN.R-project.org/package=tidygraph">available on CRAN</a>. As the name suggests, <code>tidygraph</code> is an entry into the tidyverse that provides a tidy framework for all things relational (networks/graphs, trees, etc.). <code>tidygraph</code> is a relatively big package in terms of exported functions (280 exported symbols) so all functions will not be covered in this release note. I will however provide an overview of all the areas that <code>tidygraph</code>touches upon so you should have a pretty good grasp on what the package can do for you.</p>
+
+::: {#tidy-network-data .section .level2}
+<h2>Tidy network data?</h2>
+
+<p>There's a discrepancy between relational data and the tidy data idea, in that relational data cannot in any meaningful way be encoded as a single tidy data frame. On the other hand, both node and edge data by itself fits very well within the tidy concept as each node and edge is, in a sense, a single observation. Thus, a close approximation of tidyness for relational data is two tidy data frames, one describing the node data and one describing the edge data.</p>
+
+::: {#the-tbl_graph-object .section .level3}
+<h3>The tbl_graph object</h3>
+
+<p>Underneath the hood of <code>tidygraph</code> lies the well-oiled machinery of igraph, ensuring efficient graph manipulation. Rather than keeping the node and edge data in a list and creating <code>igraph</code> objects on the fly when needed, <code>tidygraph</code> subclasses <code>igraph</code> with the <code>tbl_graph</code> class and simply exposes it in a tidy manner. This ensures that all your beloved algorithms that expects <code>igraph</code> objects still works with <code>tbl_graph</code> objects. Further, <code>tidygraph</code> is very careful not to override any of <code>igraph</code>s exports so the two packages can coexist quite happily.</p>
+
+<p>To underline the tidyness of the <code>tbl_graph</code> class the print method shows the object as two tibbles along with additional network information.</p>
+
+```{=html}
+<pre class="r"><code>library(tidygraph)
+create_ring(10)
+#&gt; # A tbl_graph: 10 nodes and 10 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 10 x 0 (active)
+#&gt; #
+#&gt; # Edge Data: 10 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     2
+#&gt; 2     2     3
+#&gt; 3     3     4
+#&gt; # ... with 7 more rows</code></pre>
+```
+<p><code>tbl_graph</code> objects can be created directly using the <code>tbl_graph()</code> function that takes a node data.frame and an edge data.frame. On top of that, <code>tidygraph</code> also provides coercion from a huge amount of relational data structures. The following list gives the packages/classes that can currently be converted to <code>tbl_graph</code>s, using the <code>as_tbl_graph</code> function:</p>
+
+<ul>
+
+<li><code>data.frame</code>, <code>list</code>, <code>matrix</code> from <code>base</code></li>
+
+<li><code>igraph</code> from <code>igraph</code></li>
+
+<li><code>network</code> from <code>network</code></li>
+
+<li><code>dendrogram</code> and <code>hclust</code> from <code>stats</code></li>
+
+<li><code>Node</code> from <code>data.tree</code></li>
+
+<li><code>phylo</code> and <code>evonet</code> from <code>ape</code></li>
+
+<li><code>graphNEL</code>, <code>graphAM</code>, <code>graphBAM</code> from <code>graph</code> (in Bioconductor)</li>
+
+</ul>
+
+<p>For all of the coercions you can expect that data on the nodes and edges are kept and available after conversion to <code>tbl_graph</code>:</p>
+
+```{=html}
+<pre class="r"><code>iris_clust &lt;- hclust(dist(iris[1:4]))
+iris_tree &lt;- as_tbl_graph(iris_clust)
+iris_tree
+#&gt; # A tbl_graph: 299 nodes and 298 edges
+#&gt; #
+#&gt; # A rooted tree
+#&gt; #
+#&gt; # Node Data: 299 x 4 (active)
+#&gt;      height  leaf  label members
+#&gt;       &lt;dbl&gt; &lt;lgl&gt; &lt;fctr&gt;   &lt;int&gt;
+#&gt; 1 0.0000000  TRUE    108       1
+#&gt; 2 0.0000000  TRUE    131       1
+#&gt; 3 0.2645751 FALSE              2
+#&gt; 4 0.0000000  TRUE    103       1
+#&gt; 5 0.0000000  TRUE    126       1
+#&gt; 6 0.0000000  TRUE    130       1
+#&gt; # ... with 293 more rows
+#&gt; #
+#&gt; # Edge Data: 298 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     3     1
+#&gt; 2     3     2
+#&gt; 3     7     5
+#&gt; # ... with 295 more rows</code></pre>
+```
+<p>Lastly, <code>tidygraph</code> also wraps the multitude of graph constructors available in <code>igraph</code> and exports them under the <code>create\_*()*</code> family of functions for deterministic constructors (e.g. the call to <code>create_ring(10)</code> above) and the <code>play\_()</code> family for constructors that incorporate sampling (e.g. <code>play_erdos_renyi()</code> for creating graphs with a fixed edge probability). All of these functions provide a consistent argument naming scheme to make them easier to use and understand.</p>
+:::
+
+::: {#meet-a-new-verb .section .level3}
+<h3>Meet a new verb...</h3>
+
+<p>There are many ways a multitable setup could fit into the tidyverse. There could be an added qualifier to the verbs such as <code>mutate_nodes()</code> and <code>filter_edges()</code> or each verb could take an additional argument specifying what is targeted e.g. <code>arrange(..., target = 'nodes')</code>. Both of these approachable are viable but would require a huge amount of typing as well as being taxing to support down the line.</p>
+
+<p>The approach used by <code>tidygraph</code> is to let the data object itself carry around a pointer to the active data frame that should be the target of manipulation. This pointer is changed using the <code>activate()</code> verb, which, on top of changing which part of the data is being worked on, also changes the print output to show the currently active data on top:</p>
+
+```{=html}
+<pre class="r"><code>iris_tree %&gt;% activate(edges)
+#&gt; # A tbl_graph: 299 nodes and 298 edges
+#&gt; #
+#&gt; # A rooted tree
+#&gt; #
+#&gt; # Edge Data: 298 x 2 (active)
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     3     1
+#&gt; 2     3     2
+#&gt; 3     7     5
+#&gt; 4     7     6
+#&gt; 5     8     4
+#&gt; 6     8     7
+#&gt; # ... with 292 more rows
+#&gt; #
+#&gt; # Node Data: 299 x 4
+#&gt;      height  leaf  label members
+#&gt;       &lt;dbl&gt; &lt;lgl&gt; &lt;fctr&gt;   &lt;int&gt;
+#&gt; 1 0.0000000  TRUE    108       1
+#&gt; 2 0.0000000  TRUE    131       1
+#&gt; 3 0.2645751 FALSE              2
+#&gt; # ... with 296 more rows</code></pre>
+```
+<p>As can be seen, <code>activate()</code> takes a single argument specifying the part of the data that should be targeted for subsequent operations as an unquoted symbol. <code>tidygraph</code> continues the naming conventions from <code>ggraph</code> using <code>nodes</code> and <code>edges</code> to denote the entities and their connections respectively, but <code>vertices</code> and <code>links</code> are allowed synonyms inside <code>activate()</code>.</p>
+
+<p>The current active data can always be extracted as a tibble using <code>as_tibble()</code></p>
+
+```{=html}
+<pre class="r"><code>as_tibble(iris_tree)
+#&gt; # A tibble: 299 x 4
+#&gt;       height  leaf  label members
+#&gt;        &lt;dbl&gt; &lt;lgl&gt; &lt;fctr&gt;   &lt;int&gt;
+#&gt;  1 0.0000000  TRUE    108       1
+#&gt;  2 0.0000000  TRUE    131       1
+#&gt;  3 0.2645751 FALSE              2
+#&gt;  4 0.0000000  TRUE    103       1
+#&gt;  5 0.0000000  TRUE    126       1
+#&gt;  6 0.0000000  TRUE    130       1
+#&gt;  7 0.3464102 FALSE              2
+#&gt;  8 0.5196152 FALSE              3
+#&gt;  9 0.5567764 FALSE              5
+#&gt; 10 0.0000000  TRUE    119       1
+#&gt; # ... with 289 more rows</code></pre>
+```
+:::
+:::
+
+::: {#the-dplyr-verbs .section .level2}
+<h2>The dplyr verbs</h2>
+
+<p>Using <code>activate()</code> it is possible to use the well known <code>dplyr</code> verbs as one would expect without much hassle:</p>
+
+```{=html}
+<pre class="r"><code>iris_tree &lt;- iris_tree %&gt;% 
+    activate(nodes) %&gt;% 
+    mutate(Species = ifelse(leaf, as.character(iris$Species)[label], NA)) %&gt;% 
+    activate(edges) %&gt;% 
+    mutate(to_setose = .N()$Species[to] == &#39;setosa&#39;)
+iris_tree
+#&gt; # A tbl_graph: 299 nodes and 298 edges
+#&gt; #
+#&gt; # A rooted tree
+#&gt; #
+#&gt; # Edge Data: 298 x 3 (active)
+#&gt;    from    to to_setose
+#&gt;   &lt;int&gt; &lt;int&gt;     &lt;lgl&gt;
+#&gt; 1     3     1      TRUE
+#&gt; 2     3     2      TRUE
+#&gt; 3     7     5      TRUE
+#&gt; 4     7     6      TRUE
+#&gt; 5     8     4      TRUE
+#&gt; 6     8     7        NA
+#&gt; # ... with 292 more rows
+#&gt; #
+#&gt; # Node Data: 299 x 5
+#&gt;      height  leaf  label members Species
+#&gt;       &lt;dbl&gt; &lt;lgl&gt; &lt;fctr&gt;   &lt;int&gt;   &lt;chr&gt;
+#&gt; 1 0.0000000  TRUE    108       1  setosa
+#&gt; 2 0.0000000  TRUE    131       1  setosa
+#&gt; 3 0.2645751 FALSE              2    &lt;NA&gt;
+#&gt; # ... with 296 more rows</code></pre>
+```
+<p>In the above the <code>.N()</code> function is used to gain access to the node data while manipulating the edge data. Similarly <code>.E()</code> will give you the edge data and <code>.G()</code> will give you the <code>tbl_graph</code> object itself.</p>
+
+<p>Some verbs have effects outside of the currently active data. <code>filter()</code>/<code>slice()</code> on node data will remove the edges terminating at the removed nodes and <code>arrange()</code> on nodes will change the indexes of the <code>to</code> and <code>from</code> column in the edge data.</p>
+
+<p>While one might expect all of <code>dplyr</code>s verbs to be supported in that manner, there is a clear limitation in the relational data structure that requires rows to maintain their identity. Thus, <code>summarise()</code> and <code>do()</code> are not allowed as there is no clear interpretation of how alterations on the node and edge data with these verbs should be interpreted. If these operations are required I suggest applying them to a tibble representation and then joining the result back in.</p>
+
+<p>Speaking of joining, all joins from <code>dplyr</code> are supported. Nodes and edges are added and removed as required by the join. New edge data to be joined in must have a <code>to</code> and <code>from</code> column referencing valid nodes in the existing graph.</p>
+
+```{=html}
+<pre class="r"><code>library(dplyr)
+iris_sum &lt;- iris %&gt;% 
+    group_by(Species) %&gt;% 
+    summarise_all(mean) %&gt;% 
+    ungroup()
+iris_tree &lt;- iris_tree %&gt;% 
+    activate(nodes) %&gt;% 
+    left_join(iris_sum)
+iris_tree
+#&gt; # A tbl_graph: 299 nodes and 298 edges
+#&gt; #
+#&gt; # A rooted tree
+#&gt; #
+#&gt; # Node Data: 299 x 9 (active)
+#&gt;      height  leaf  label members Species Sepal.Length Sepal.Width
+#&gt;       &lt;dbl&gt; &lt;lgl&gt; &lt;fctr&gt;   &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+#&gt; 1 0.0000000  TRUE    108       1  setosa        5.006       3.428
+#&gt; 2 0.0000000  TRUE    131       1  setosa        5.006       3.428
+#&gt; 3 0.2645751 FALSE              2    &lt;NA&gt;           NA          NA
+#&gt; 4 0.0000000  TRUE    103       1  setosa        5.006       3.428
+#&gt; 5 0.0000000  TRUE    126       1  setosa        5.006       3.428
+#&gt; 6 0.0000000  TRUE    130       1  setosa        5.006       3.428
+#&gt; # ... with 293 more rows, and 2 more variables: Petal.Length &lt;dbl&gt;,
+#&gt; #   Petal.Width &lt;dbl&gt;
+#&gt; #
+#&gt; # Edge Data: 298 x 3
+#&gt;    from    to to_setose
+#&gt;   &lt;int&gt; &lt;int&gt;     &lt;lgl&gt;
+#&gt; 1     3     1      TRUE
+#&gt; 2     3     2      TRUE
+#&gt; 3     7     5      TRUE
+#&gt; # ... with 295 more rows</code></pre>
+```
+::: {#expanding-the-vocabulary .section .level3}
+<h3>Expanding the vocabulary</h3>
+
+<p>On top of what has been showed so far, <code>tidygraph</code> provides an assortment of graph specific verbs that can be used to power your analysis and manipulation. Analogous to <code>bind_rows()</code>, <code>tidygraph</code> provides three functions to expand your data: <code>bind_nodes()</code> and <code>bind_edges()</code> append nodes and edges to the graph respectively. As with the join functions <code>bind_edges()</code> must contain valid <code>from</code> and <code>to</code> columns. <code>bind_graphs()</code> allows you to combine multiple graphs in the same graph structure resulting in each original graph to become a component in the returned graph.</p>
+
+<p>While <code>bind_graphs()</code> cannot be used to create edges between the merged graphs <code>graph_join()</code> can do just that. It merges nodes using a <code>full_join()</code> semantic and keeps the individual edges from both graphs:</p>
+
+```{=html}
+<pre class="r"><code>library(ggraph)
+gr1 &lt;- create_notable(&#39;bull&#39;) %&gt;% 
+    mutate(name = letters[1:5])
+gr2 &lt;- create_ring(5) %&gt;% 
+    mutate(name = letters[4:8])
+
+# Plot
+gr1 %&gt;% bind_graphs(gr2) %&gt;% 
+    ggraph(layout = &#39;kk&#39;) + 
+    geom_edge_link() + 
+    geom_node_point(size = 8, colour = &#39;steelblue&#39;) +
+    geom_node_text(aes(label = name), colour = &#39;white&#39;, vjust = 0.4) + 
+    ggtitle(&#39;Binding graphs&#39;) + 
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-8-1.png" width="672"/></p>
+
+```{=html}
+<pre class="r"><code>gr1 %&gt;% graph_join(gr2) %&gt;% 
+    ggraph(layout = &#39;kk&#39;) + 
+    geom_edge_link() + 
+    geom_node_point(size = 8, colour = &#39;steelblue&#39;) +
+    geom_node_text(aes(label = name), colour = &#39;white&#39;, vjust = 0.4) + 
+    ggtitle(&#39;Joining graphs&#39;) + 
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-8-2.png" width="672"/></p>
+
+<p>The standard <code>dplyr</code> verbs protects the <code>to</code> and <code>from</code> columns in the edge data in order to avoid accidental modification of the graph topology. If changing of the terminal nodes are necessary the <code>reroute()</code> verb will come in handy:</p>
+
+```{=html}
+<pre class="r"><code>gr1 &lt;- create_star(6, directed = TRUE)
+layout &lt;- create_layout(gr1, layout = &#39;fr&#39;)
+gr1 &lt;- gr1 %&gt;% 
+    mutate(x = layout$x, y = layout$y, graph = &#39;original&#39;)
+gr2 &lt;- gr1 %&gt;% 
+    mutate(graph = &#39;reverse&#39;) %&gt;% 
+    activate(edges) %&gt;% 
+    reroute(from = to, to = from)
+gr3 &lt;- gr1 %&gt;% 
+    mutate(graph = &#39;using subset&#39;) %&gt;% 
+    activate(edges) %&gt;% 
+    reroute(from = to + 1, subset = to &lt; 4)
+ggraph(bind_graphs(gr1, gr2, gr3), layout = &#39;nicely&#39;) + 
+    geom_edge_link(arrow = arrow()) + 
+    facet_nodes(~graph) + 
+    theme_graph(foreground = &#39;steelblue&#39;)</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-9-1.png" width="672"/></p>
+
+<p>As can be seen, reroute works pretty much as a <code>to</code> and <code>from</code> specific <code>mutate()</code>, with the added benefit of incorporating a subset operator if only a few edges should be changed.</p>
+:::
+:::
+
+::: {#making-the-most-of-graphs .section .level2}
+<h2>Making the most of graphs</h2>
+
+<p>While being able to use the <code>dplyr</code> verbs on relational data is nice and all, one of the reasons we are dealing with graph data in the first place is because we need some graph-based algorithms for solving our problem at hand. If we need to break out of the tidy workflow every time this was needed we wouldn't have gained much. Because of this <code>tidygraph</code> has wrapped more or less all of <code>igraph</code>s algorithms in different ways, ensuring a consistent syntax as well as output that fits into the tidy workflow. In the following we're going to take a look at these.</p>
+
+<p>Central to all of these functions is that they know about which graph is being computed on (in the same way that <code>n()</code> knows about which tibble is currently in scope). Furthermore they always return results matching the node or edge position so they can be used directly in <code>mutate()</code> calls.</p>
+
+::: {#node-and-edge-types .section .level3}
+<h3>Node and edge types</h3>
+
+<p>On the top of our list of things we might be interested to know about is whether nodes or edges are of specific types such as <em>leaf</em>, <em>sink</em>, <em>loop</em>, etc. All of these functions return a logical vector indicating if the node or edge belong to the specified group. To easily find functions that queries types, all functions are prefixed with <code>node_is\_</code>/<code>edge_is\_</code>.</p>
+
+```{=html}
+<pre class="r"><code>create_tree(20, 3) %&gt;% 
+    mutate(leaf = node_is_leaf(), root = node_is_root()) %&gt;% 
+    ggraph(layout = &#39;tree&#39;) +
+    geom_edge_diagonal() +
+    geom_node_point(aes(filter = leaf), colour = &#39;forestgreen&#39;, size = 10) +
+    geom_node_point(aes(filter = root), colour = &#39;firebrick&#39;, size = 10) +
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-10-1.png" width="672"/></p>
+
+<p>Another example could be to remove loop edges using <code>filter(!edge_is_loop())</code>.</p>
+:::
+
+::: {#centrality .section .level3}
+<h3>Centrality</h3>
+
+<p>One of the simplest concepts when computing graph based values is that of <em>centrality</em>, i.e. how central is a node or edge in the graph. As this definition is inherently vague, a lot of different centrality scores exists that all treat the concept of <em>central</em> a bit different. One of the famous ones is the pagerank algorithm that was powering Google Search in the beginning. <code>tidygraph</code> currently has 11 different centrality measures and all of these are prefixed with <code>centrality\_\*</code> for easy discoverability. All of them returns a numeric vector matching the nodes (or edges in the case of <code>centrality_edge_betweenness()</code>).</p>
+
+```{=html}
+<pre class="r"><code>play_smallworld(1, 100, 3, 0.05) %&gt;% 
+    mutate(centrality = centrality_authority()) %&gt;% 
+    ggraph(layout = &#39;kk&#39;) + 
+    geom_edge_link() + 
+    geom_node_point(aes(size = centrality, colour = centrality)) + 
+    scale_color_continuous(guide = &#39;legend&#39;) + 
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-11-1.png" width="672"/></p>
+
+<p>It is quite difficult to a priori decide which centrality measure makes most sense for a problem at hand so having easy access to a large range of them in a common syntax is a boon.</p>
+:::
+
+::: {#clustering .section .level3}
+<h3>Clustering</h3>
+
+<p>Another common operation is to group nodes based on the graph topology, sometimes referred to as <em>community detection</em> based on its commonality in social network analysis. All clustering algorithms from <code>igraph</code> is available in <code>tidygraph</code> using the <code>group\_\*</code> prefix. All of these functions return an integer vector with nodes (or edges) sharing the same integer being grouped together.</p>
+
+```{=html}
+<pre class="r"><code>play_islands(5, 10, 0.8, 3) %&gt;% 
+    mutate(community = as.factor(group_infomap())) %&gt;% 
+    ggraph(layout = &#39;kk&#39;) + 
+    geom_edge_link(aes(alpha = ..index..), show.legend = FALSE) + 
+    geom_node_point(aes(colour = community), size = 7) + 
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-12-1.png" width="672"/></p>
+:::
+
+::: {#node-pairs .section .level3}
+<h3>Node pairs</h3>
+
+<p>Some statistics are a measure between two nodes, such as distance or similarity between nodes. In a tidy context one of the ends must always be the node defined by the row, while the other can be any other node. All of the node pair functions are prefixed with <code>node\_\*</code> and ends with <code>\_from</code>/<code>\_to</code> if the measure is not symmetric and <code>\_with</code> if it is; e.g. there's both a <code>node_max_flow_to()</code> and <code>node_max_flow_from()</code> function while only a single <code>node_cocitation_with()</code> function. The other part of the node pair can be specified as an integer vector that will get recycled if needed, or a logical vector which will get recycled and converted to indexes with <code>which()</code>. This means that output from node type functions can be used directly in the calls, e.g.</p>
+
+```{=html}
+<pre class="r"><code>play_geometry(50, 0.25) %&gt;% 
+    mutate(dist_to_center = node_distance_to(node_is_center())) %&gt;% 
+    ggraph(layout = &#39;kk&#39;) + 
+    geom_edge_link() + 
+    geom_node_point(aes(size = dist_to_center), colour = &#39;steelblue&#39;) + 
+    scale_size_continuous(range = c(6, 1)) + 
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-13-1.png" width="672"/></p>
+:::
+
+::: {#searches .section .level3}
+<h3>Searches</h3>
+
+<p>An integral type of operation on graphs is to perform a search, that is, start from one node and then traverse the edges until all nodes has been visited. The most common approaches are either <em>breath first search</em> where all neighbors of a node is visited before moving on to the next node, or <em>depth first serch</em> where you move along to the next node immediately and only backtracks and visit other neighbors when you've hit a dead end. Different statistics from these searches are available in <code>tidygraph</code> through the <code>bfs\_*()*</code> and <code>dfs\_()</code> family of functions e.g. the distance to the start node along the search can be obtained with <code>bfs_dist()</code>/<code>dfs_dist()</code>. The root node can be specified in the same way as with node pairs. Sorting based on a search from the node with highest centrality can thus be done with:</p>
+
+```{=html}
+<pre class="r"><code>play_geometry(50, 0.25) %&gt;% 
+    mutate(order = bfs_rank(which.max(centrality_alpha())))
+#&gt; # A tbl_graph: 50 nodes and 227 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 50 x 3 (active)
+#&gt;            x          y order
+#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+#&gt; 1 0.01637861 0.11280499    49
+#&gt; 2 0.01721270 0.19181732    50
+#&gt; 3 0.02015524 0.74802650    46
+#&gt; 4 0.04361792 0.09377818    48
+#&gt; 5 0.04622344 0.95686281    47
+#&gt; 6 0.07677761 0.46011354    41
+#&gt; # ... with 44 more rows
+#&gt; #
+#&gt; # Edge Data: 227 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     2
+#&gt; 2     1     4
+#&gt; 3     2     4
+#&gt; # ... with 224 more rows</code></pre>
+```
+:::
+
+::: {#local-measures .section .level3}
+<h3>Local measures</h3>
+
+<p>Often we find ourselves interested in the local neighborhood of a node for various reasons. We might want to know the average degree around a node or the number of triangles each node participate in. The <code>local\_\*()</code> family of functions provide access to a range of node measures that are dependent on the local neighborhood of each node.</p>
+
+```{=html}
+<pre class="r"><code># Weight the node degree by the average degree of its neighboors
+play_smallworld(1, 100, 3, 0.05) %&gt;% 
+    mutate(weighted_degree = centrality_degree() / local_ave_degree())
+#&gt; # A tbl_graph: 100 nodes and 300 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 100 x 1 (active)
+#&gt;   weighted_degree
+#&gt;             &lt;dbl&gt;
+#&gt; 1       0.8064516
+#&gt; 2       1.0000000
+#&gt; 3       0.8064516
+#&gt; 4       1.2075472
+#&gt; 5       0.9729730
+#&gt; 6       0.6153846
+#&gt; # ... with 94 more rows
+#&gt; #
+#&gt; # Edge Data: 300 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     2
+#&gt; 2     2     3
+#&gt; 3     4    97
+#&gt; # ... with 297 more rows</code></pre>
+```
+:::
+
+::: {#all-the-rest .section .level3}
+<h3>All the rest</h3>
+
+<p>While an ontology of graph operations has been attempted in the different functions above, there are some that falls outside. These have been lumped together under the <code>node\_*()*</code> and <code>edge\_()</code> umbrellas and include things such as topological ordering and Burt's constraint among others. All of these functions ensures a mutate-compatible output.</p>
+:::
+
+::: {#graph-measures .section .level3}
+<h3>Graph measures</h3>
+
+<p>Along with computations on the individual nodes and edges it is sometimes necessary to get summary statistics on the graph itself. These can be simple measures such as the number of nodes and edges as well as more involved measures such as assortativity (the propensity of similar nodes to be connected). All of these measures can be calculated through the <code>graph\_\*()</code> function family and they will all return a scalar.</p>
+
+```{=html}
+<pre class="r"><code># Normalise the node pair adhesion with the minimal adhesion of the graph
+play_islands(5, 10, 0.7, 3) %&gt;% 
+    mutate(norm_adhesion = node_adhesion_to(c(50, 1:49)) / graph_adhesion())
+#&gt; # A tbl_graph: 50 nodes and 181 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 50 x 1 (active)
+#&gt;   norm_adhesion
+#&gt;           &lt;dbl&gt;
+#&gt; 1          1.75
+#&gt; 2          2.00
+#&gt; 3          2.25
+#&gt; 4          1.75
+#&gt; 5          1.50
+#&gt; 6          1.50
+#&gt; # ... with 44 more rows
+#&gt; #
+#&gt; # Edge Data: 181 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     2
+#&gt; 2     1     3
+#&gt; 3     2     3
+#&gt; # ... with 178 more rows</code></pre>
+```
+:::
+:::
+
+::: {#mapping-over-nodes .section .level2}
+<h2>Mapping over nodes</h2>
+
+<p>Just to spice it all up a bit <code>tidygraph</code> pulls <code>purrr</code> into the mix and provides some additional graph-centric takes on the familiar <code>map\*()</code>. More specifically <code>tidygraph</code> provides functionality to apply a function over nodes as a breath or depth first search is carried out, while getting access to the result of the computations coming before, as well as mapping over the local neighborhood of each node. All of these function returns a list in their bare bone form, but as with <code>purrr</code> versions exists that ensures the output is of a certain type (e.g. <code>map_bfs_dbl()</code>).</p>
+
+::: {#mapping-over-searches .section .level3}
+<h3>Mapping over searches</h3>
+
+<p>The search maps comes in two flavors. Either the nodes are mapped in the order of the search, or they are mapped in the reverse order. In the first version, each call will have access to the statistics and map results of all the nodes that lies between itself and the root. In the second version each call will have access to the results and statistics of all its offspring. Furthermore the mapping function is passed the graph itself as well as all the search statistics of the node currently being mapped over. An example would be to propagate the <em>species</em> value in our iris clustering upwards as long as theirs agreement between the children. For this to work, we will need the reverse version of a breath first search to make sure that all children have been evaluated prior to mapping over a node:</p>
+
+```{=html}
+<pre class="r"><code>iris_tree &lt;- iris_tree %&gt;% 
+    activate(nodes) %&gt;% 
+    mutate(Species = map_bfs_back_chr(node_is_root(), .f = function(node, path, ...) {
+        nodes &lt;- .N()
+        if (nodes$leaf[node]) return(nodes$Species[node])
+        if (anyNA(unlist(path$result))) return(NA_character_)
+        path$result[[1]]
+    }))
+ggraph(iris_tree, layout = &#39;dendrogram&#39;) + 
+    geom_edge_diagonal2(aes(colour = node.Species)) + 
+    theme_graph()</code></pre>
+```
+<p><img src="/post/2017-07-07-Introducing-tidygraph_files/figure-html/unnamed-chunk-17-1.png" width="672"/></p>
+:::
+
+::: {#mapping-over-neighborhoods .section .level3}
+<h3>Mapping over neighborhoods</h3>
+
+<p>The neighborhood map is exposed through <code>map_local()</code> as well as its type safe versions. The mapping function has a much simpler format as it simply gets passed a subgraph representing the local neighborhood as well as the index of the node in the original graph being mapped over. E.g. to get the number of edges in the local neighborhood around each node, one would simply do:</p>
+
+```{=html}
+<pre class="r"><code>play_smallworld(1, 100, 3, 0.05) %&gt;% 
+    mutate(neighborhood_edges = map_local_dbl(.f = function(neighborhood, ...) {
+        igraph::gsize(neighborhood)
+    }))
+#&gt; # A tbl_graph: 100 nodes and 300 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 100 x 1 (active)
+#&gt;   neighborhood_edges
+#&gt;                &lt;dbl&gt;
+#&gt; 1                 14
+#&gt; 2                 14
+#&gt; 3                 13
+#&gt; 4                 15
+#&gt; 5                 12
+#&gt; 6                 14
+#&gt; # ... with 94 more rows
+#&gt; #
+#&gt; # Edge Data: 300 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     2
+#&gt; 2     2     3
+#&gt; 3     3     4
+#&gt; # ... with 297 more rows</code></pre>
+```
+:::
+:::
+
+::: {#one-last-thing .section .level2}
+<h2>One last thing...</h2>
+
+<p>While the functions discussed above makes it easy to make slight changes to your network topology it is less straightforward to make radical changes. Even more so if the radical changes are only needed temporarily for the sake of a few computations. This is where the new <code>morph()</code> verb comes in handy (along with the accompanying <code>unmorph()</code> and <code>crystallise()</code> verbs). In essence, <code>morph()</code> lets you set up a temporary alternative version of your graph, make computations on it using the standard <code>dplyr</code> verbs, and then merge the changes back in using <code>unmorph()</code>. The types of alternative representations are varied and can be extended by the user. Nodes can be converted to edges and the other way around, both nodes and edges can be combined, and the alternate representation does not need to cover the full original graph. Instead of trying to describe it in words, let's see how it plays out in use:</p>
+
+```{=html}
+<pre class="r"><code>islands &lt;- play_islands(5, 10, 0.8, 3) %&gt;% 
+    mutate(group = group_infomap())
+
+# Get the distance to the central node in each group
+islands &lt;- islands %&gt;% 
+    morph(to_split, group) %&gt;% 
+    mutate(dist_to_center = node_distance_to(node_is_center())) %&gt;% 
+    unmorph()
+islands
+#&gt; # A tbl_graph: 50 nodes and 211 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 50 x 2 (active)
+#&gt;   group dist_to_center
+#&gt;   &lt;int&gt;          &lt;dbl&gt;
+#&gt; 1     5              0
+#&gt; 2     5              0
+#&gt; 3     5              0
+#&gt; 4     5              0
+#&gt; 5     5              0
+#&gt; 6     5              0
+#&gt; # ... with 44 more rows
+#&gt; #
+#&gt; # Edge Data: 211 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     3
+#&gt; 2     2     3
+#&gt; 3     1     4
+#&gt; # ... with 208 more rows
+# Get the number of edges exiting each group
+islands &lt;- islands %&gt;% 
+    morph(to_contracted, group, simplify = FALSE) %&gt;% 
+    activate(edges) %&gt;% 
+    filter(!edge_is_loop()) %&gt;% 
+    activate(nodes) %&gt;% 
+    mutate(exiting_group = centrality_degree(mode = &#39;out&#39;)) %&gt;% 
+    unmorph()
+islands
+#&gt; # A tbl_graph: 50 nodes and 211 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 50 x 3 (active)
+#&gt;   group dist_to_center exiting_group
+#&gt;   &lt;int&gt;          &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1     5              0            12
+#&gt; 2     5              0            12
+#&gt; 3     5              0            12
+#&gt; 4     5              0            12
+#&gt; 5     5              0            12
+#&gt; 6     5              0            12
+#&gt; # ... with 44 more rows
+#&gt; #
+#&gt; # Edge Data: 211 x 2
+#&gt;    from    to
+#&gt;   &lt;int&gt; &lt;int&gt;
+#&gt; 1     1     3
+#&gt; 2     2     3
+#&gt; 3     1     4
+#&gt; # ... with 208 more rows
+# Calculate an edge centrality score by converting to the linegraph
+islands &lt;- islands %&gt;% 
+    morph(to_linegraph) %&gt;% 
+    activate(nodes) %&gt;% 
+    mutate(edge_centrality = centrality_pagerank()) %&gt;% 
+    unmorph()
+islands
+#&gt; # A tbl_graph: 50 nodes and 211 edges
+#&gt; #
+#&gt; # An undirected simple graph with 1 component
+#&gt; #
+#&gt; # Node Data: 50 x 3 (active)
+#&gt;   group dist_to_center exiting_group
+#&gt;   &lt;int&gt;          &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1     5              0            12
+#&gt; 2     5              0            12
+#&gt; 3     5              0            12
+#&gt; 4     5              0            12
+#&gt; 5     5              0            12
+#&gt; 6     5              0            12
+#&gt; # ... with 44 more rows
+#&gt; #
+#&gt; # Edge Data: 211 x 3
+#&gt;    from    to edge_centrality
+#&gt;   &lt;int&gt; &lt;int&gt;           &lt;dbl&gt;
+#&gt; 1     1     3     0.005117026
+#&gt; 2     2     3     0.005079217
+#&gt; 3     1     4     0.004657749
+#&gt; # ... with 208 more rows</code></pre>
+```
+<p>As can be seen, the morph syntax both handles multiple graphs, collapsed nodes and changing edges to nodes, without any change in the mental model of the operations. All morphing functions are prefixed with <code>to\_\*</code> for easy discovery and includes minimum spanning trees, complement graph, dominator tree etc. In the case where you are interested to continue working with the morphed representation as a proper <code>tbl_graph</code> you can use the <code>cystallise()</code> verbs that removes any link to the original graph and returns a tibble with a row per graph in the morphed representation (as a morph can result in multiple graphs):</p>
+
+```{=html}
+<pre class="r"><code>islands %&gt;% 
+    morph(to_split, group) %&gt;% 
+    crystallise()
+#&gt; # A tibble: 5 x 2
+#&gt;       name           graph
+#&gt;      &lt;chr&gt;          &lt;list&gt;
+#&gt; 1 group: 1 &lt;S3: tbl_graph&gt;
+#&gt; 2 group: 2 &lt;S3: tbl_graph&gt;
+#&gt; 3 group: 3 &lt;S3: tbl_graph&gt;
+#&gt; 4 group: 4 &lt;S3: tbl_graph&gt;
+#&gt; 5 group: 5 &lt;S3: tbl_graph&gt;</code></pre>
+```
+:::
+
+::: {#wrapping-it-all-up .section .level2}
+<h2>Wrapping it all up</h2>
+
+<p>I hope I have given you a small glimpse of what <code>tidygraph</code> is all about. If working with network data in the past has felt intimidating and strange <code>tidygraph</code> might feel more at home, but even if you're a seasoned pro within network analysis the package should provide a powerful but streamlined interface to many operations.</p>
+
+::: {#roadmap .section .level3}
+<h3>Roadmap</h3>
+
+<p>The next goal of my quest to revamp relational data analysis in R will be to "rebuild" <code>ggraph</code> around <code>tidygraph</code>. This is not to say that the two are incompatible at the moment --- there's full support through <code>ggraph</code>s support for <code>igraph</code> --- rather I want to only support <code>tbl_graph</code> in the future as all relevant data structures can be converted to this common format through <code>as_tbl_graph()</code>.</p>
+
+<p>For <code>tidygraph</code> itself, I have some more ideas I want to explore. Currently missing from the whole package is any notion of modelling and it will be interesting to see how this can fit in. Further, I have this wild idea about providing a <code>tidygraph</code> link to graph databases such as Neo4J in the same way as <code>dbplyr</code> provides an interface to SQL databases. Lastly, the current focus has been on supporting the algorithms provided by <code>igraph</code>. While an extensive package, <code>igraph</code> does not implement everything and there might be stuff lacking that should be added down the line.</p>
+
+<p>Take care...</p>
+:::
+:::

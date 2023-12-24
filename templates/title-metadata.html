@@ -1,0 +1,19 @@
+<div class="quarto-title-meta">
+  $if(date)$
+  <div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">$date$$if(date-modified)$<span class="date-modified"> (modified: $date-modified$)</span>$endif$
+      </p>
+    </div>
+  </div>
+  $endif$
+</div>
+
+$if(keywords)$
+<div>
+  <div class="keywords">
+    <div class="block-title">$labels.keywords$</div>
+    <p>$for(keywords)$$it$$sep$, $endfor$</p>
+  </div>
+</div>
+$endif$

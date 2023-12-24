@@ -1,0 +1,10 @@
+---
+title: "Phases 2423"
+card-style: summary_large_image
+image: phases2423.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](phases2423.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

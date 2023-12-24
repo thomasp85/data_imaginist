@@ -1,0 +1,10 @@
+---
+title: "Unfold 01"
+card-style: summary_large_image
+image: unfold01.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](unfold01.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

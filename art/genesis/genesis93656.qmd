@@ -1,0 +1,10 @@
+---
+title: "Genesis 93656"
+card-style: summary_large_image
+image: genesis93656.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](genesis93656.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

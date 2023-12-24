@@ -1,0 +1,10 @@
+---
+title: "Phases 9032"
+card-style: summary_large_image
+image: phases9032.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](phases9032.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

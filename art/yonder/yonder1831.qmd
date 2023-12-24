@@ -1,0 +1,10 @@
+---
+title: "Yonder 1831"
+card-style: summary_large_image
+image: yonder1831.jpg
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](yonder1831.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

@@ -1,0 +1,17 @@
+---
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: false
+  sort-ui: false
+  filter-ui: false
+  fields: [date, title, description]
+  date-format: medium
+page-layout: full
+title-block-banner: false
+---
+
+![](assets/img/logo.png){fig-align="center" width="200"}
+
+#### Visualization and Beyond... {style="text-align: center; color: grey; margin-bottom: 60px;"}

@@ -1,0 +1,10 @@
+---
+title: "Storms 351"
+card-style: summary_large_image
+image: storms351.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](storms351.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

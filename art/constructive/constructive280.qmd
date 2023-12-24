@@ -1,0 +1,10 @@
+---
+title: "Constructive 280"
+card-style: summary_large_image
+image: constructive280.jpg
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](constructive280.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

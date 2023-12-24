@@ -1,0 +1,10 @@
+---
+title: "Genesis 100100"
+card-style: summary_large_image
+image: genesis100100.png
+page-layout: custom
+---
+
+[\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
+
+![](genesis100100.png){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}

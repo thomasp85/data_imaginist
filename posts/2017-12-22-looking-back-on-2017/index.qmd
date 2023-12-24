@@ -1,0 +1,77 @@
+---
+title: Looking Back on 2017
+description: "Everything that ever happened in 2017 - Eyes of the beholder may apply"
+date: '2017-12-22'
+slug: looking-back-on-2017
+categories: [ggraph, ggforce, tidygraph, lime, particles, fiery, reqres, routr, plotcon]
+card-style: summary_large_image
+image: "/assets/img/fill03.png"
+aliases: 
+  - ../../2017/looking-back-on-2017/index.html
+---
+
+<p>Say what you will about 2017 - it sure made an impact. In the broader view I'm pretty sure all sensible people can agree that that impact was predominantly negative, but even so, small pockets of good can happen. So, here's a short post about all (the predominantly good) that happened in my life in this year.</p>
+
+<p>As you can guess this post will be unusually self-centered, so if that is not your thing feel free to give this post a pass...</p>
+
+::: {#kicking-it-off .section .level2}
+<h2>Kicking it off</h2>
+
+<p>2016 ended with me getting fired from my first "real" job after my PhD. While that in isolation would appear as a horrible start on the year, it really was not. A number of issues on the job had made me questioning the position and a badly handled firing further cemented that this was really no a place I should waste my time on. Once ego always takes a hit by the inherint rejection in a firing, but this was smoothed out by me being offered a new, interesting, job a couple of days after I announced me re-entry on the job market.</p>
+
+<p>So, I started 2017 in a rather good mood and with lot of sparetime on my hand. I decided that this was a rather unique opportunity to finally get <code>ggraph</code> ready for release. <code>ggraph</code> is definetly one of the bigger projects I have done, and a lot of stuff was still missing before it was CRAN ready - A month payed leave was exactly what I needed for this. As the start of my new position in SKAT was drawing nearer I did my best to get <code>ggraph</code> done and it so happened that it got released in CRAN the day before I started on the new job. I was rather overwhelmed with the recpetion, and also very proud. I honestly believe <code>ggraph</code> to be the best way to visualise static networks and this is a fantastic feeling to have with something you've made yourself.</p>
+
+<p><code>ggraph</code> also sparked of two other projects that came to take a chunk of my 2017. If you want to get Hadley to use your new shiny ggplot2 extension you better make sure the input data is tidy. At that point in time graph data was by no means tidy so following a discussion with Hadley I set out to right this wrong - thus <code>tidygraph</code> was born. Later on Hadley (sense a pattern) needed a better layout for directed acyclic graphs, and kindly requested a port of the D3 force algorithm. This initiated the development of the (yet not on CRAN) <code>particles</code> package.</p>
+
+<p>I also got to speak about <code>ggraph</code> publicly as I had been invited to PlotCon on the day I got fired (strange coincidences), so in the late spring I found myself in San Francisco speaking for the first time about my spare time projects. If you're interested the in the presentation, it has been made available on YouTube...</p>
+
+<p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/OP3Iwu3uDuo?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen>
+
+</iframe>
+
+</p>
+:::
+
+::: {#along-came-a-job .section .level2}
+<h2>Along came a job</h2>
+
+<p>While all of this was going on, I had the fortune of having started in a really cool group at SKAT, handling all the advanced analytics going on in the danish tax authorities. One of the biggest coming challanges for our work, was the new changes to EUs directives regarding use of algorithms in decision making. Going forward every citizen in EU has the right to an explanation about algorithmic decision regarding themselves. This provides a challange for complex algorithmes whose workings are more akin to a black box. Someone in the Python world had id figured out though, with the <code>lime</code> library, and one of my first tasks was to port this code to R. I quickly gained the help of Michaël Benesty, and together we got that package going.</p>
+
+<p>Over the summer I began looking at my <code>fiery</code> web server framework again. I never had the time for this I'd hoped when I released it the summer before and I had a lot of ideas for improving and expanding the framework. This coincidet nicely with our office looking for a new infrastructure for deploying our models internally in SKAT. I could thus devote a part of my work time along with my sparetime in getting this package to the next level. This resulted in the release of two new packages and an extensive update to <code>fiery</code> itself. <code>reqres</code> was born with the intent of making HTTP messages more convenient to work with, and <code>routr</code> was a way to ease routing of requests.</p>
+:::
+
+::: {#autumn .section .level2}
+<h2>Autumn</h2>
+
+<p>I must admit I felt a bit exhausted after this flurry of releases. I had a lot of ideas for improvements to both <code>tweenr</code>, <code>ggforce</code>, and <code>ggraph</code> as well as expanding on the <code>fiery</code> ecosystem and an as-yet-unannounced internet service I would like to build, but while I began working on new <code>ggforce</code> stuff that effort somewhat halted. I moved my blog to <code>blogdown</code>, I made some logos, I fixed some issues and created some PRs to <code>ggplot2</code> but mainly I just did nothing. Whereas before I had cherished the unique times where I had time to put in development of my projects, these times were now filled with rewatching Archer and Rich & Morty. I felt guilty for not spending my time doing the stuff I had set out to do but every time I sat down to do some coding I was bummed out by the less-than-interesting chores related to maintaining packages. I might be victim of setting too many things free on the world, but on the other hand I can't help it, and in this autumn I definetly payed the prize.</p>
+
+<p>I think it would be unfair to those that are suffering from acute burnout to call what I was feeling "burnout", but it was definietly an early sign of it. The best would probably be to take a vacation, as many well-meaning twitter friends suggested, but the vacation-solution requires the means to take vacation. Further, I needed a way to handle this on the long term as I'm unlikely to really slow down (I have a depression induced fear of leaving this world without setting a mark, somehow).</p>
+
+<p>One thing I did find joy in in this period was development of generative art, using the tools I've been developing over the last 1 1/2 years. This really started during the summer before my "down period", but I was allowing myself more time for it as my urge for package development was vaning. I have to say that I'm very proud of the pieces I've produced...</p>
+
+::: figure
+<img src="/assets/img/unfold02.png" alt="unfold02"/>
+
+<p class="caption">
+
+unfold02
+
+</p>
+:::
+:::
+
+::: {#patching-myself-up .section .level2}
+<h2>Patching myself up</h2>
+
+<p>While I cannot claim that I have found a permanent solution to my problem of staying motivated amidst increasing package maintenance needs, I did end up succeeding with a particularly stupid approach: Create a new package... This obviously doesn't scale well, but for the immidiate future it seems to work.</p>
+
+<p>The package in question is called <code>patchwork</code> and is the fruit of some thoughts that had been rumaging around in my head during the autumn, and a solution to a need I feel gets expressed quite often despite several solutions already available: How to combine multiple ggplots in the same graphics. The package is not done yet but the reception suggest that it has struck a nerve among some. It will get its own blogpost come release so for now, if you're more interested have a look in the <a href="http://github.com/thomasp85/patchwork">github repository</a>.</p>
+
+<p>So, I leave 2017 a bit as I entered it. Hopeful and in good mood. 2018 already seems like a blast of a year, as I'll be speaking at both Rstudio::conf and useR (keynoting the latter no less - still can't get over that). There are sure to come some bumps on the way, and I'll defenitly need a better way of coping with all my ideas, but those details will hopefully be sorted out in due time...</p>
+
+<p>hopefully...</p>
+
+<p>Merry Christmas!</p>
+:::

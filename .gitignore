@@ -7,3 +7,5 @@ public/*
 blogdown/*
 .DS_Store
 resources/*
+/.quarto/
+/_site/
