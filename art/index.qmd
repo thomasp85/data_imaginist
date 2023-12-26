@@ -17,7 +17,7 @@ listing:
 ---
 
 ::: grid
-::: g-col-4
+::: {.g-col-xl-4 .g-col-md-6 .g-col-12}
 ## Purchase
 
 If you are interested in buying one of my pieces, then please contact me by email ([thomasp85\@gmail.com](mailto:thomasp85@gmail.com){.email}), through [Twitter](https://twitter.com/thomasp85), or [Instagram](https://instagram.com/thomasp85_). I print myself (with some help for A1 and A0) on high quality paper using pigment ink. The price is US\$100 for A4, US\$150 for A3, US\$450 for A1, and US\$650 for A0, plus shipping.
@@ -31,11 +31,11 @@ The process of generative art is dual, in that it both requires the development 
 All my systems and visualisations are programmed in [R](https://cran.r-project.org), an open source programming language for statistics and data analysis. I've developed and released many tools that are central to my work, and help maintain others. Some of the packages I use most often are [ggplot2](https://ggplot2.tidyverse.org), [ggforce](https://ggforce.data-imaginist.com), [ambient](https://ambient.data-imaginist.com), [particles](https://github.com/thomasp85/particles), [tidygraph](https://github.com/thomasp85/tidygraph), and [ggraph](https://ggraph.data-imaginist.com). I do not share the code I use to create my pieces. The main reason for this is that I don't think it would be beneficial to anyone. People interested in getting started with generative art would become to focused on my ideas instead of developing their own. Knowing the answer is the killer of creativity.
 :::
 
-::: g-col-8
+::: {.g-col-xl-8 .g-col-md-6 .g-col-12}
 ::: headspace
 :::
 
-::: {#series-list}
+::: {#series-list style="container-type: inline-size;"}
 :::
 :::
 :::

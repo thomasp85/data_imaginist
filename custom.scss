@@ -115,6 +115,11 @@ ul.pagination {
   margin-right: auto;
   padding: 60px 40px 0 40px;
 }
+@media (max-width: 576px) {
+  #quarto-document-content {
+    padding: 60px 0 0 0;
+  }
+}
 
 // Post listing
 .listing-date {
@@ -170,6 +175,18 @@ body:has(div.page-layout-custom) {
   }
   .card-text p {
     margin: 0;
+  }
+}
+@container (max-width: 768px) {
+  .quarto-listing-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5em;
+  }
+}
+@container (max-width: 576px) {
+  .quarto-listing-cols-3 {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5em;
   }
 }
 
