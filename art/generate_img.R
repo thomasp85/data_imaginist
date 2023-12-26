@@ -17,11 +17,11 @@ for (image in all_images) {
   image: {img}
   page-layout: custom
   ---
-  
+
   [\\< Back](index.qmd){{.btn .btn-secondary .btn role="button"}}
 
-  ![]({img}){{style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}}
-  
+  ![]({img}){{.full-art-display}}
+
   ')
   cat(content, file = qmd_file)
 }

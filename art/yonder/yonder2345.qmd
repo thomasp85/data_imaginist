@@ -7,4 +7,4 @@ page-layout: custom
 
 [\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
 
-![](yonder2345.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}
+![](yonder2345.jpg){.full-art-display}

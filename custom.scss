@@ -189,6 +189,12 @@ body:has(div.page-layout-custom) {
     gap: 1.5em;
   }
 }
+.full-art-display {
+  max-height:100vh;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
 
 // Misc
 div.quarto-about-jolla .about-link {

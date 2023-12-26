@@ -7,4 +7,4 @@ page-layout: custom
 
 [\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
 
-![](folding flow 12.jpg){style="height:100vh;display:block;margin-left:auto;margin-right:auto;"}
+![](folding flow 12.jpg){.full-art-display}
