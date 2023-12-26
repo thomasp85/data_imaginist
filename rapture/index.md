@@ -2,12 +2,10 @@
 title: "Rapture"
 description: "Herein I describe the provenance of the Rapture series, my though process, and some technical details about how it is made."
 date: '2021-08-23'
-large_thumb: yes
-img:
-  thumb: assets/images/rapture_0.png
+image: assets/img/rapture_0.png
 ---
 
-![Rapture \#0](/assets/images/rapture_0.png)
+![Rapture #0](/assets/img/rapture_0.png)
 
 Welcome to the Rapture! This site gives an overview of my generative art series *Rapture* which was released on [ArtBlocks](https://artblocks.io/project/141) on August 23rd as a series of 1000 unique pieces from the same algorithm. Here, I will talk a bit about the history of Rapture, my thoughts on the project as a whole, as well as some of the technical details of how the pieces are created. In the end there will also be information about how to order prints if you are the owner of a Rapture piece.
 
@@ -15,17 +13,17 @@ Welcome to the Rapture! This site gives an overview of my generative art series 
 
 Rapture is the culmination of work that began back in 2019 as I was taking up generative art again after a hiatus. The first piece from this work was genesis112:
 
-![genesis112](https://www.data-imaginist.com/art/005_genesis/genesis112_hu940eda6aa68a41b4b0a8e759d476cd8d_143478_0x1000_resize_box_2.png "genesis112")
+![genesis112](https://www.data-imaginist.com/art/genesis/genesis112.png "genesis112")
 
 Following this came a string of pieces in the genesis series where I explored different aspects of this flow and the rendering technique that came with it. After genesis I developed the technique further with phases, where the flow was now considered a border between two fluids, mixing together. While the rendering and some of the calculations where different, the flow was intact:
 
-![phases705](https://www.data-imaginist.com/art/006_phases/phases705_hu248415ca3909e719104e1fbf6b6627e2_102556_0x1000_resize_box_2.png "phases705")
+![phases705](https://www.data-imaginist.com/art/phases/phases705.png "phases705")
 
 The same type of flow can also be seen in both the storms and prism series, but with some very different rendering techniques:
 
-![![prism11](https://www.data-imaginist.com/art/009_prism/prism11_hu15289d2f1463b5da795637ea5a2d64b3_23591896_0x1000_resize_box_2.png "prism11")storms3118](https://www.data-imaginist.com/art/007_storms/storms3118_hub2dbdbce8d1d82a484ac168016d906aa_1838520_0x1000_resize_box_2.png "storms3118")
+![storms3118](https://www.data-imaginist.com/art/storms/storms3118.png "storms3118")
 
-![prism11](https://www.data-imaginist.com/art/009_prism/prism11_hu15289d2f1463b5da795637ea5a2d64b3_23591896_0x1000_resize_box_2.png "prism11")
+![prism11](https://www.data-imaginist.com/art/prism/prism11.png "prism11")
 
 While I've created a lot of series not incorporating this flow type, I seem to always get back to it.
 
@@ -33,11 +31,11 @@ Rapture is my definitive version of this. As such, it reaches all the way back t
 
 The first piece saved from what ended up being the Rapture algorithm shows the lineage much stronger than the final pieces:
 
-![Rapture: Early render](/assets/images/rapture_first_save.png "Rapture: Early render")
+![Rapture: Early render](/assets/img/rapture_first_save.png "Rapture: Early render")
 
 This is a very clear successor to genesis338 in everything but the color choice:
 
-![genesis338](https://www.data-imaginist.com/art/005_genesis/genesis338_hu19fc60717d90451585acb0fb6a565bcb_106689_0x1000_resize_box_2.png "genesis338")
+![genesis338](https://www.data-imaginist.com/art/genesis/genesis338.png "genesis338")
 
 In the end I abandoned the idea of doing a full-on genesis tribute for this project, a choice I'm very happy with now.
 
@@ -63,45 +61,45 @@ When it comes to rendering the deformed polygons the way it was done in the gene
 
 If you are the owner of a Rapture piece you are eligible to order a signed print of it. Only one print per piece will be made, so if you bought the piece on secondary make sure to check the list below to see if the print for your piece has already been claimed. Prints will be offered in A2 size. For square Rapture pieces this translates to 420mm/16.5" on both sides. For portrait and landscape Rapture pieces this translates to 420x594mm/16.5x23.4". If you are the type of person that care about paper (I salute you), then I can tell that the pieces will be printed on Hahnemüehle Fine Art Baryta Satin.
 
-Prints will be US$ 250 plus shipping and can be ordered by sending a mail to [thomasp85@gmail.com](mailto:thomasp85@gmail.com). Upon ordering I will need to verify that you are in fact the owner of the piece.
+Prints will be US\$ 250 plus shipping and can be ordered by sending a mail to [thomasp85\@gmail.com](mailto:thomasp85@gmail.com). Upon ordering I will need to verify that you are in fact the owner of the piece.
 
 ### Completed prints
 
-- [#2](https://artblocks.io/token/14100002)
-- [#9](https://artblocks.io/token/14100009)
-- [#97](https://artblocks.io/token/141000097)
-- [#163](https://artblocks.io/token/141000163)
-- [#187](https://artblocks.io/token/141000187)
-- [#199](https://artblocks.io/token/141000199)
-- [#206](https://artblocks.io/token/141000206)
-- [#213](https://artblocks.io/token/141000213)
-- [#215](https://artblocks.io/token/141000215)
-- [#217](https://artblocks.io/token/141000217)
-- [#262](https://artblocks.io/token/141000262)
-- [#322](https://artblocks.io/token/141000322)
-- [#342](https://artblocks.io/token/141000342)
-- [#391](https://artblocks.io/token/141000391)
-- [#427](https://artblocks.io/token/141000427)
-- [#472](https://artblocks.io/token/141000472)
-- [#481](https://artblocks.io/token/141000481)
-- [#500](https://artblocks.io/token/141000500)
-- [#509](https://artblocks.io/token/141000509)
-- [#518](https://artblocks.io/token/141000518)
-- [#542](https://artblocks.io/token/141000542)
-- [#544](https://artblocks.io/token/141000544)
-- [#548](https://artblocks.io/token/141000548)
-- [#569](https://artblocks.io/token/141000569)
-- [#579](https://artblocks.io/token/141000579)
-- [#652](https://artblocks.io/token/141000652)
-- [#672](https://artblocks.io/token/141000672)
-- [#673](https://artblocks.io/token/141000673)
-- [#691](https://artblocks.io/token/141000691)
-- [#717](https://artblocks.io/token/141000717)
-- [#719](https://artblocks.io/token/141000719)
-- [#746](https://artblocks.io/token/141000746)
-- [#763](https://artblocks.io/token/141000763)
-- [#794](https://artblocks.io/token/141000794)
-- [#795](https://artblocks.io/token/141000795)
-- [#911](https://artblocks.io/token/141000911)
-- [#915](https://artblocks.io/token/141000915)
-- [#972](https://artblocks.io/token/141000972)
+-   [#2](https://artblocks.io/token/14100002)
+-   [#9](https://artblocks.io/token/14100009)
+-   [#97](https://artblocks.io/token/141000097)
+-   [#163](https://artblocks.io/token/141000163)
+-   [#187](https://artblocks.io/token/141000187)
+-   [#199](https://artblocks.io/token/141000199)
+-   [#206](https://artblocks.io/token/141000206)
+-   [#213](https://artblocks.io/token/141000213)
+-   [#215](https://artblocks.io/token/141000215)
+-   [#217](https://artblocks.io/token/141000217)
+-   [#262](https://artblocks.io/token/141000262)
+-   [#322](https://artblocks.io/token/141000322)
+-   [#342](https://artblocks.io/token/141000342)
+-   [#391](https://artblocks.io/token/141000391)
+-   [#427](https://artblocks.io/token/141000427)
+-   [#472](https://artblocks.io/token/141000472)
+-   [#481](https://artblocks.io/token/141000481)
+-   [#500](https://artblocks.io/token/141000500)
+-   [#509](https://artblocks.io/token/141000509)
+-   [#518](https://artblocks.io/token/141000518)
+-   [#542](https://artblocks.io/token/141000542)
+-   [#544](https://artblocks.io/token/141000544)
+-   [#548](https://artblocks.io/token/141000548)
+-   [#569](https://artblocks.io/token/141000569)
+-   [#579](https://artblocks.io/token/141000579)
+-   [#652](https://artblocks.io/token/141000652)
+-   [#672](https://artblocks.io/token/141000672)
+-   [#673](https://artblocks.io/token/141000673)
+-   [#691](https://artblocks.io/token/141000691)
+-   [#717](https://artblocks.io/token/141000717)
+-   [#719](https://artblocks.io/token/141000719)
+-   [#746](https://artblocks.io/token/141000746)
+-   [#763](https://artblocks.io/token/141000763)
+-   [#794](https://artblocks.io/token/141000794)
+-   [#795](https://artblocks.io/token/141000795)
+-   [#911](https://artblocks.io/token/141000911)
+-   [#915](https://artblocks.io/token/141000915)
+-   [#972](https://artblocks.io/token/141000972)
