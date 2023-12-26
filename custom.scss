@@ -162,6 +162,9 @@ body:has(div.page-layout-custom) {
       }
     }
   }
+  #title-block-header.quarto-title-block.default .quarto-title-meta {
+    display: none;
+  }
   .headspace {
     height: 76.5px;
   }
