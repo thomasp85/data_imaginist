@@ -15,6 +15,22 @@ website:
   navbar:
     logo: assets/img/logo_small.png
     right:
+      - text: Main Packages
+        menu:
+          - text: gganimate
+            href: https://gganimate.com
+          - text: patchwork
+            href: https://patchwork.data-imaginist.com
+          - text: ggraph
+            href: https://ggraph.data-imaginist.com
+          - text: tidygraph
+            href: https://tidygraph.data-imaginist.com
+          - text: ggforce
+            href: https://ggforce.data-imaginist.com
+          - text: ggfx
+            href: https://ggfx.data-imaginist.com
+          - text: euclid
+            href: https://r-euclid.com
       - text: Art
         menu:
           - text: Prints
