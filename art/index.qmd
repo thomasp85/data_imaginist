@@ -5,7 +5,7 @@ hide-description: true
 layout: art
 description: "A gallery of some of my work. Contact me if you are interested in a purchase."
 card-style: summary_large_image
-image: assets/img/card.jpg
+image: winds/winds2020jpg
 page-layout: custom
 listing:
   id: series-list

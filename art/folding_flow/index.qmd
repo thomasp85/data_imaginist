@@ -6,7 +6,7 @@ date: '2021-05-01'
 hide-description: true
 layout: art
 card-style: summary_large_image
-image: "folding flow 3.jpg"
+image: folding_flow_3.jpg
 page-layout: custom
 listing:
   id: project-list
@@ -18,6 +18,6 @@ listing:
   grid-item-align: center
 ---
 
-[\< Back](../index.qmd){.btn .btn-secondary .btn-sm .btn role="button"} 
+[\< Back](../index.qmd){.btn .btn-secondary .btn-sm .btn role="button"}
 
 {{< meta description >}}

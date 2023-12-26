@@ -1,10 +1,10 @@
 ---
 title: "Folding Flow 62"
 card-style: summary_large_image
-image: folding flow 62.jpg
+image: folding_flow_62.jpg
 page-layout: custom
 ---
 
 [\< Back](index.qmd){.btn .btn-secondary .btn role="button"}
 
-![](folding flow 62.jpg){.full-art-display}
+![](folding_flow_62.jpg){.full-art-display}

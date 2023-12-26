@@ -18,6 +18,6 @@ listing:
   grid-item-align: center
 ---
 
-[\< Back](../index.qmd){.btn .btn-secondary .btn-sm .btn role="button"} 
+[\< Back](../index.qmd){.btn .btn-secondary .btn-sm .btn role="button"}
 
 {{< meta description >}}
