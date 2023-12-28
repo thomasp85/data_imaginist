@@ -1,2 +1,18 @@
 # Redirects from what the browser requests to what we serve
 /screens           https://thomaslinpedersen.art/work/screens 301!
+/screensurfer      https://thomaslinpedersen.art/work/screens/screensurfer 301!
+/screenslayer      https://thomaslinpedersen.art/work/screens/screenslayer 301!
+/screenscaler      https://thomaslinpedersen.art/work/screens/screenscaler 301!
+/screensail        https://thomaslinpedersen.art/work/screens/screensail 301!
+/screenshow        https://thomaslinpedersen.art/work/screens/screenshow 301!
+/rapture           https://thomaslinpedersen.art/work/rapture 301!
+/raptureshow       https://thomaslinpedersen.art/work/rapture/raptureshow 301!
+/rapturegm         https://thomaslinpedersen.art/work/rapture/rapturegm 301!
+/inprecision       https://thomaslinpedersen.art/work/inprecision 301!
+/inprecisionshow   https://thomaslinpedersen.art/work/inprecision/inprecisionshow 301!
+/pulp              https://thomaslinpedersen.art/work/pulp 301!
+/pulpshow          https://thomaslinpedersen.art/work/pulp/pulpshow 301!
+/metaverse         https://thomaslinpedersen.art/work/metaverse 301!
+/detachment        https://thomaslinpedersen.art/work/detachment 301!
+/art               https://thomaslinpedersen.art 301!
+/nft               https://thomaslinpedersen.art 301!
