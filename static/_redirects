@@ -1,2 +1,2 @@
 # Redirects from what the browser requests to what we serve
-/screens                https://thomaslinpedersen.art/work/screens
+/screens           https://thomaslinpedersen.art/work/screens 301!
