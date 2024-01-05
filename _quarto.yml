@@ -32,11 +32,7 @@ website:
           - text: euclid
             href: https://r-euclid.com
       - text: Art
-        menu:
-          - text: Prints
-            file: art/index.qmd
-          - text: NFTs
-            file: nft/index.qmd
+        href: https://thomaslinpedersen.art
       - about.qmd
       - icon: github
         href: https://github.com/thomasp85
