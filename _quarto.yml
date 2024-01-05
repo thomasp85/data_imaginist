@@ -1,7 +1,7 @@
 project:
   type: website
   post-render:
-    - "cp -rn static/. _site/"
+    - "cp -r static/. _site/"
     - "cp assets/img/left.png _site/assets/img/"
     - "cp assets/img/middle.png _site/assets/img/"
     - "cp assets/img/right.png _site/assets/img/"
@@ -38,6 +38,8 @@ website:
         href: https://github.com/thomasp85
       - icon: twitter
         href: https://twitter.com/thomasp85
+      - icon: rss
+        href: index.xml
   page-footer: "Copyright 2023, Thomas Lin Pedersen"
   twitter-card: true
   open-graph: true

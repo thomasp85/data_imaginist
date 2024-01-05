@@ -8,6 +8,7 @@ listing:
   filter-ui: false
   fields: [date, title, description]
   date-format: medium
+  feed: true
 page-layout: full
 title-block-banner: false
 ---

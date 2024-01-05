@@ -6,7 +6,7 @@ date: '2023-12-18'
 slug: a-new-focus-on-tidygraph
 card-style: summary_large_image
 image: assets/img/tidygraph_logo.png
-
+categories:
   - tidygraph
   - announcement
   - package
