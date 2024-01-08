@@ -7,7 +7,7 @@ description: >
 date: '2021-03-31'
 slug: say-goodbye-to-good-taste
 card-style: summary_large_image
-image: assets/img/ggfx_logo.png
+image: /assets/img/ggfx_logo.png
 categories:
   - package
   - announcement

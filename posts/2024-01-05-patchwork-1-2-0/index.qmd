@@ -4,7 +4,7 @@ description: >
   patchwork 1.2.0 is out with two outstanding new features. Read on to learn more
 date: '2024-01-08'
 card-style: summary_large_image
-image: assets/img/patchwork_logo.png
+image: /assets/img/patchwork_logo.png
 categories:
   - patchwork
   - announcement
