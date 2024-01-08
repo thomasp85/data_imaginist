@@ -11,6 +11,8 @@ categories:
   - package
 ---
 
+![](/assets/img/patchwork_logo.png){style="display:none;"}
+
 What is that? Another blog post not even a month after the last? This feels like 2017. Maybe I'm a bit extra attentive because I've had fun porting over my blog to quarto and also finally building a proper [site for my generative art](https://thomaslinpedersen.art) rather than lumping it into my R/OSS blog. Or maybe I just finally have interesting to share for the first time in a while...
 
 That *interesting* thing today is a new release of [patchwork](https://patchwork.data-imaginist.com) — my package for easily combining multiple plots into complex and well-aligned compositions. It is not the grandest of releases — after all the package does what it does well — but it does provide two new features that I've been looking forward to:
