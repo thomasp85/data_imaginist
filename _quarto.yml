@@ -46,6 +46,9 @@ website:
 
 format:
   html:
+    include-in-header:
+      - text: |
+          <a rel="me" href="https://fosstodon.org/@thomasp85">Mastodon</a>
     theme:
       - minty
       - custom.scss
